@@ -1,0 +1,11 @@
+Notable changes from previous release:
+
+In development:
+
+Version 1.4:
+	* Split pyeemd to a separate project
+	* Python 3 support
+	* Use find_library from ctypes to find libeemd
+	* Switch to setuptools
+
+For older changes, please see ChangeLog of libeemd.

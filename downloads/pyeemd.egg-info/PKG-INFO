@@ -1,0 +1,11 @@
+Metadata-Version: 2.1
+Name: pyeemd
+Version: 1.4
+Summary: Ensemble Empirical Mode Decomposition with Python
+Home-page: https://bitbucket.org/luukko/libeemd
+Author: Perttu Luukko
+Author-email: perttu.luukko@iki.fi
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN
+Provides-Extra: utils

@@ -2,6 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="144aeda8-086a-4b59-b43a-e83e36ee8dd3" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/openDAPaccessXarray.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/complex_transects.py" beforeDir="false" afterPath="$PROJECT_DIR$/complex_transects.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/downloadThredds.py" beforeDir="false" afterPath="$PROJECT_DIR$/downloadThredds.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/latestFRFevolution.py" beforeDir="false" afterPath="$PROJECT_DIR$/latestFRFevolution.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sandBarTool/morphLib.py" beforeDir="false" afterPath="$PROJECT_DIR$/sandBarTool/morphLib.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/testbedutils/geoprocess.py" beforeDir="false" afterPath="$PROJECT_DIR$/testbedutils/geoprocess.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/testbedutils/gridTools.py" beforeDir="false" afterPath="$PROJECT_DIR$/testbedutils/gridTools.py" afterDir="false" />
@@ -19,17 +25,16 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/getdatatestbed" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1RNfWbtlcnFShvMAbgKxrm6vc27" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../drifters" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PythonContentEntriesConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -37,7 +42,7 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.waveScratch">
+  <component name="RunManager" selected="Python.complex_scratch">
     <configuration name="WISscratch" type="PythonConfigurationType" factoryName="Python">
       <module name="duckGeomorph" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -93,27 +98,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/complex_transects.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="true" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="downloadThredds" type="PythonConfigurationType" factoryName="Python">
-      <module name="duckGeomorph" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="$USER_HOME$/anaconda3/bin/python3" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/downloadThredds.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -198,6 +182,27 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/nourished_scratch.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="openDAPaccessXarray" type="PythonConfigurationType" factoryName="Python">
+      <module name="duckGeomorph" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$USER_HOME$/anaconda3/bin/python3" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/openDAPaccessXarray.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -294,28 +299,16 @@
       <item itemvalue="Python.WISscratch" />
       <item itemvalue="Python.complexImageStack" />
       <item itemvalue="Python.complex_scratch" />
-      <item itemvalue="Python.downloadThredds" />
       <item itemvalue="Python.dunex_transects" />
       <item itemvalue="Python.fabricatedTest" />
       <item itemvalue="Python.latestFRF" />
       <item itemvalue="Python.nourished_scratch" />
+      <item itemvalue="Python.openDAPaccessXarray" />
       <item itemvalue="Python.sandbar1dEvolution" />
       <item itemvalue="Python.scratch" />
       <item itemvalue="Python.testeemd" />
       <item itemvalue="Python.waveScratch" />
     </list>
-  </component>
-  <component name="ServiceViewManager">
-    <option name="viewStates">
-      <list>
-        <serviceView>
-          <treeState>
-            <expand />
-            <select />
-          </treeState>
-        </serviceView>
-      </list>
-    </option>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -344,19 +337,24 @@
     </option>
   </component>
   <component name="WindowStateProjectService">
-    <state x="435" y="327" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1578659487983">
-      <screen x="67" y="147" width="1853" height="933" />
+    <state x="277" y="135" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1584809299393">
+      <screen x="0" y="27" width="3360" height="1053" />
     </state>
+    <state x="277" y="135" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.27.3360.1053@0.27.3360.1053" timestamp="1584809299393" />
     <state x="836" y="426" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.30.1920.1080/1920.0.3840.2160@0.30.1920.1080" timestamp="1577800856401" />
     <state x="1775" y="1107" key="#com.intellij.execution.impl.EditConfigurationsDialog/1006.0.1853.2160@1006.0.1853.2160" timestamp="1578345800924" />
     <state x="435" y="327" key="#com.intellij.execution.impl.EditConfigurationsDialog/939.1080.1920.1080/67.147.1853.933@67.147.1853.933" timestamp="1578659487983" />
-    <state x="889" y="436" width="424" height="484" key="FileChooserDialogImpl" timestamp="1579647964985">
+    <state x="889" y="436" width="424" height="484" key="FileChooserDialogImpl" timestamp="1584832181394">
       <screen x="67" y="27" width="1853" height="1053" />
     </state>
+    <state x="1650" y="567" key="FileChooserDialogImpl/0.27.3360.1053@0.27.3360.1053" timestamp="1584804472615" />
     <state x="852" y="449" width="411" height="435" key="FileChooserDialogImpl/0.30.1920.1080/1920.0.3840.2160@0.30.1920.1080" timestamp="1577800848682" />
+    <state x="1916" y="1107" width="374" height="993" key="FileChooserDialogImpl/1006.0.1853.2160@1006.0.1853.2160" timestamp="1582641203189" />
     <state x="852" y="436" key="FileChooserDialogImpl/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1579376815317" />
     <state x="889" y="436" width="424" height="484" key="FileChooserDialogImpl/1920.0.1920.1080/67.27.1853.1053@67.27.1853.1053" timestamp="1579647964985" />
     <state x="3591" y="2579" width="424" height="484" key="FileChooserDialogImpl/2739.2160.1920.1080/0.0.3840.2160@2739.2160.1920.1080" timestamp="1577826473301" />
+    <state x="1920" y="556" key="FileChooserDialogImpl/67.147.3773.1053@67.147.3773.1053" timestamp="1580655801483" />
+    <state x="889" y="436" width="424" height="484" key="FileChooserDialogImpl/67.27.1853.1053@67.27.1853.1053" timestamp="1584832181394" />
     <state x="3623" y="837" width="424" height="484" key="FileChooserDialogImpl/67.57.1853.1053/1920.0.3840.2160@1920.0.3840.2160" timestamp="1577723825701" />
     <state x="889" y="509" width="424" height="484" key="FileChooserDialogImpl/939.1080.1920.1080/67.147.1853.933@67.147.1853.933" timestamp="1578659462899" />
     <state width="894" height="1054" key="XDebugger.FullValuePopup" timestamp="1578341762764">
@@ -364,12 +362,15 @@
     </state>
     <state width="894" height="1054" key="XDebugger.FullValuePopup/1006.0.1853.2160@1006.0.1853.2160" timestamp="1578341762764" />
     <state width="926" height="527" key="XDebugger.FullValuePopup/2739.2160.1920.1080/0.0.3840.2160@2739.2160.1920.1080" timestamp="1577807150358" />
-    <state x="693" y="398" key="com.intellij.ide.util.TipDialog" timestamp="1580328022629">
-      <screen x="67" y="27" width="1853" height="1053" />
+    <state x="693" y="398" key="com.intellij.ide.util.TipDialog" timestamp="1586045847076">
+      <screen x="67" y="27" width="3773" height="1053" />
     </state>
+    <state x="2133" y="398" key="com.intellij.ide.util.TipDialog/0.27.3360.1053@0.27.3360.1053" timestamp="1584723193158" />
+    <state x="1632" y="1478" key="com.intellij.ide.util.TipDialog/1006.0.1853.2160@1006.0.1853.2160" timestamp="1582641043979" />
     <state x="475" y="398" key="com.intellij.ide.util.TipDialog/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1579375954215" />
     <state x="3388" y="2540" key="com.intellij.ide.util.TipDialog/2739.2160.1920.1080/0.0.3840.2160@2739.2160.1920.1080" timestamp="1577801227257" />
-    <state x="693" y="398" key="com.intellij.ide.util.TipDialog/67.27.1853.1053@67.27.1853.1053" timestamp="1580328022629" />
+    <state x="693" y="398" key="com.intellij.ide.util.TipDialog/67.27.1853.1053@67.27.1853.1053" timestamp="1584832168275" />
+    <state x="693" y="398" key="com.intellij.ide.util.TipDialog/67.27.3773.1053@67.27.3773.1053" timestamp="1586045847076" />
     <state x="1232" y="381" key="com.intellij.ide.util.TipDialog/939.1080.1920.1080/1006.0.914.1080@1006.0.914.1080" timestamp="1579100950633" />
     <state x="230" y="474" width="1363" height="1356" key="search.everywhere.popup" timestamp="1578329293632">
       <screen x="1006" y="0" width="1853" height="2160" />

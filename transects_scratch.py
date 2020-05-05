@@ -15,7 +15,7 @@ import sandBarTool.morphLib as mL
 
 
 
-geomorphdir = '/media/dylananderson/Elements/FRF_Geomorph/'
+geomorphdir = '/media/dylananderson/Elements/filteredFRF_Geomorph/'
 
 files = os.listdir(geomorphdir)
 
@@ -64,7 +64,7 @@ def interpBathy(xSub, zSub, x):
     return newBathy
 
 
-subset = files[0:965].copy()
+subset = files[0:969].copy()
 #from palettable.colorbrewer.sequential import Blues_8
 #ax.imshow(data, cmap=Blues_8.mpl_colormap
 

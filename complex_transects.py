@@ -410,8 +410,22 @@ for timestep in range(len(timeind)):
     #         timestep, mode] * np.cos(phitSubset[timestep, mode]) * S[:, mode] * np.cos(theta[:, mode])
 
 
-t1 = 500
+t1 =475
 t2 = -1
+
+plt.style.use('dark_background')
+
+fig = plt.figure()
+ax1 = plt.subplot2grid((1,1),(0,0),rowspan=1,colspan=1)
+#plt.set_cmap('RdBu')#bwr')
+plt.set_cmap('bwr')
+
+tg, xg = np.meshgrid(time, xinterp)
+plt0 = ax1.pcolor(xg,tg,(alllines-np.mean(alllines, axis=0)).T, vmin=-1.6, vmax=1.6)
+fig.colorbar(plt0, ax=ax[0], orientation='horizontal')
+ax1.set_ylim([time[t1], time[t2]])
+ax1.set_title('Cross-shore Surveys (deviation from mean profile)')
+
 
 fig, ax = plt.subplots(1,5)
 #plt.set_cmap('RdBu')#bwr')
@@ -451,252 +465,340 @@ fig.colorbar(plt4, ax=ax[4], orientation='horizontal')
 #plt.tight_layout(pad=0.5)
 
 
-
-wavedir = '/media/dylananderson/Elements/WIS_ST63218/'
-
-# Need to sort the files to ensure correct temporal order...
-files = os.listdir(wavedir)
-files.sort()
-files_path = [os.path.join(os.path.abspath(wavedir), x) for x in files]
-
-wis = Dataset(files_path[0])
-
-def getWIS(file):
-    waves = Dataset(file)
-
-    waveHs = waves.variables['waveHs'][:]
-    waveTp = waves.variables['waveTp'][:]
-    waveTm = waves.variables['waveTm'][:]
-    waveTm1 = waves.variables['waveTm1'][:]
-    waveTm2 = waves.variables['waveTm2'][:]
-    waveMeanDirection = waves.variables['waveMeanDirection'][:]
-    waveMeanDirectionSwell = waves.variables['waveMeanDirectionSwell'][:]
-    timeW = waves.variables['time'][:]
+cpc1 = P2R(Rt[:, 0], phitSubset[:, 0])
+cpc2 = P2R(Rt[:, 1], phitSubset[:, 1])
+cpc3 = P2R(Rt[:, 2], phitSubset[:, 2])
+cpc4 = P2R(Rt[:, 3], phitSubset[:, 3])
+cpc5 = P2R(Rt[:, 4], phitSubset[:, 4])
+cpc6 = P2R(Rt[:, 5], phitSubset[:, 5])
+cpc7 = P2R(Rt[:, 6], phitSubset[:, 6])
 
 
-    output = dict()
-    output['waveHs'] = waveHs
-    output['waveTp'] = waveTp
-    output['waveTm'] = waveTm
-    output['waveTm1'] = waveTm1
-    output['waveTm2'] = waveTm2
-    output['waveMeanDirection'] = waveMeanDirection
-    output['waveMeanDirectionSwell'] = waveMeanDirectionSwell
-    output['t'] = timeW
+CPCs = np.vstack((np.real(cpc1), np.imag(cpc1), np.real(cpc2), np.imag(cpc2), np.real(cpc3), np.imag(cpc3),
+                  np.real(cpc4), np.imag(cpc4), np.real(cpc5), np.imag(cpc5), np.real(cpc6), np.imag(cpc6)))
+CPCs = CPCs.T
 
-    return output
+var_explained = np.array((percentV[0], percentV[0], percentV[1], percentV[1], percentV[2], percentV[2],
+                          percentV[3], percentV[3], percentV[4], percentV[4], percentV[5], percentV[5]))
 
+fig = plt.figure()
 
-Hs = []
-Tm = []
-Dm = []
-timeWave = []
-for i in files_path:
-    waves = getWIS(i)
-    Hs = np.append(Hs,waves['waveHs'])
-    Tm = np.append(Tm,waves['waveTm'])
-    Dm = np.append(Dm,waves['waveMeanDirection'])
-    timeWave = np.append(timeWave,waves['t'])
+plt.plot(np.real(cpc2))
+plt.plot(np.imag(cpc2))
 
 
 
 
 
-# waveNorm = Dm - 72
-# neg = np.where((waveNorm > 180))
-# waveNorm[neg[0]] = waveNorm[neg[0]]-360
-# offpos = np.where((waveNorm>90))
-# offneg = np.where((waveNorm<-90))
-# waveNorm[offpos[0]] = waveNorm[offpos[0]]*0
-# waveNorm[offneg[0]] = waveNorm[offneg[0]]*0
+
+from sklearn.cluster import KMeans
+num_clusters = 10
+
+PCsub = CPCs/var_explained[:,None]
+
+#  KMEANS
+kma = KMeans(n_clusters=num_clusters, n_init=2000).fit(PCsub)
+
+# groupsize
+_, group_size = np.unique(kma.labels_, return_counts=True)
+
+# groups
+d_groups = {}
+for k in range(num_clusters):
+    d_groups['{0}'.format(k)] = np.where(kma.labels_ == k)
+
 #
-# LWP_means = 1025*np.square(Hs)*Tm*(9.81/(64*np.pi))*np.cos(waveNorm*(np.pi/180))*np.sin(waveNorm*(np.pi/180))
-tWave = [DT.datetime.fromtimestamp(x) for x in timeWave]
-
-#fig = plt.figure(figsize=(10,10))
-#plt.plot(tWave,Hs)
-#plt.plot(time,np.ones(len(time),),'.')
-
-HsSurvey = np.nan * np.ones(len(time))
-HsMaxSurvey = np.nan * np.ones(len(time))
-TmSurvey = np.nan * np.ones(len(time))
-DmSurvey = np.nan * np.ones(len(time))
-WPSurvey = np.nan * np.ones(len(time))
-EFSurvey = np.nan * np.ones(len(time))
-EFLSurvey = np.nan * np.ones(len(time))
-
-timeDiff = np.nan * np.ones(len(time))
-counter = 0
-for tt in range(len(time)-1):
-    #within = [date for date in tWave if time[tt] < date < time[tt+1]]
-    withinIndex = np.where((tWave > np.datetime64(time[tt])) & (tWave < np.datetime64(time[tt+1])))
-    if len(withinIndex[0]) < 2:
-        print('index is not working after time {}'.format(time[tt]))
-        print('which is index = {}'.format(tt))
-    else:
-
-        diff = time[tt+1]-time[tt]
-        timeDiff[counter] = diff.days
-        HsSurvey[counter] = np.nanmean(Hs[withinIndex[0]])
-        HsMaxSurvey[counter] = np.nanmax(Hs[withinIndex[0]])
-        TmSurvey[counter] = np.nanmean(Tm[withinIndex[0]])
-        dirs = Dm[withinIndex[0]]-72
-        neg = np.where((dirs > 180))
-        dirs[neg[0]] = dirs[neg[0]]-360
-        waveNorm = dirs
-        offpos = np.where((waveNorm>90))
-        offneg = np.where((waveNorm<-90))
-        waveNorm[offpos[0]] = waveNorm[offpos[0]]*0
-        waveNorm[offneg[0]] = waveNorm[offneg[0]]*0
-        DmSurvey[counter] = np.nanmean(dirs)
-
-        c0 = 9.81*Tm[withinIndex[0]]/(2 * np.pi)
-        HsSquare = np.square(Hs[withinIndex[0]])
-        EF = 1025*9.81*HsSquare*c0/16
-        EFlongshore = (1025*9.81*HsSquare*c0/16)*np.cos(waveNorm*(np.pi/180))*np.sin(waveNorm*(np.pi/180))
-        EFSurvey[counter] = np.sum(EF)
-        EFLSurvey[counter] = np.nanmean(np.abs(EFlongshore))
-        WPSurvey[counter] = np.nanmean(HsSquare*Tm[withinIndex[0]])
-
-
-        # fig10 = plt.figure(figsize=(12, 12))
-        # ax100 = plt.subplot2grid((4, 3), (0, 0), colspan=3, rowspan=1)
-        # ax100.plot(tWave[withinIndex[0][0]:withinIndex[0][-1]], Hs[withinIndex[0][0:-1]])
-        # ax100.set_ylabel('Hs (m)')
-        # ax100.set_title('Duration = {} days'.format(diff.days))
-        # ax100.text(tWave[withinIndex[0][0]], HsSurvey[counter], 'Average Hs = {:.2f}'.format(HsSurvey[counter]))
-        # ax100.plot([tWave[withinIndex[0][0]], tWave[withinIndex[0][-1]]],[HsSurvey[counter],HsSurvey[counter]])
-        # #     ax7.text(320, 0, '{}'.format(timeSubset[timestep]))
-        # ax101 = plt.subplot2grid((4, 3), (1, 0), colspan=3, rowspan=1)
-        # ax101.plot(tWave[withinIndex[0][0]:withinIndex[0][-1]], Tm[withinIndex[0][0:-1]])
-        # ax101.text(tWave[withinIndex[0][0]], TmSurvey[counter], 'Average Tm = {:.2f}'.format(TmSurvey[counter]))
-        # ax101.plot([tWave[withinIndex[0][0]], tWave[withinIndex[0][-1]]],[TmSurvey[counter],TmSurvey[counter]])
-        # ax101.set_ylabel('Tm (s)')
-        # ax103 = plt.subplot2grid((4, 3), (2, 0), colspan=3, rowspan=1)
-        # ax103.plot(tWave[withinIndex[0][0]:withinIndex[0][-1]], dirs[0:-1])
-        # ax103.text(tWave[withinIndex[0][0]], DmSurvey[counter], 'Average Dm = {:.2f}'.format(DmSurvey[counter]))
-        # ax103.plot([tWave[withinIndex[0][0]], tWave[withinIndex[0][-1]]],[DmSurvey[counter],DmSurvey[counter]])
-        # ax103.set_ylabel('Dm (deg N)')
-        # ax102 = plt.subplot2grid((4, 3), (3, 0), colspan=3, rowspan=1)
-        # ax102.plot(xinterp,alllines[tt])
-        # ax102.plot(xinterp,alllines[tt+1])
-        #
-        #
-        #
-        #
-        # if tt < 10:
-        #     plt.savefig('Conditions00'+str(tt)+'.png')
-        #
-        # elif tt < 100:
-        #     plt.savefig('Conditions0'+str(tt)+'.png')
-        #
-        # else:
-        #     plt.savefig('Conditions'+str(tt)+'.png')
-        # plt.close()
-        counter = counter+1
+# # centroids
+# centroids = np.dot(kma.cluster_centers_, EOFsub)
+centroids = kma.cluster_centers_
 
 
 
-#HsReg = HsSurvey.copy()
-HsReg = HsSurvey[~np.isnan(HsSurvey)]
-HsRegMax = HsMaxSurvey[~np.isnan(HsSurvey)]
-TmReg = TmSurvey[~np.isnan(HsSurvey)]
-DmReg = DmSurvey[~np.isnan(HsSurvey)]
-WPReg =WPSurvey[~np.isnan(HsSurvey)]
-EFReg =EFSurvey[~np.isnan(HsSurvey)]
-EFLReg =EFLSurvey[~np.isnan(HsSurvey)]
-
-timeDiff = timeDiff[~np.isnan(HsSurvey)]
-
-wavetime = time[1:len(HsReg)+1]
-
-
-
-
-
-
-cpc1 = P2R(Rt[1:len(HsReg)+1, 0], phitSubset[1:len(HsReg)+1, 0])
-cpc2 = P2R(Rt[1:len(HsReg)+1, 1], phitSubset[1:len(HsReg)+1, 1])
-cpc3 = P2R(Rt[1:len(HsReg)+1, 2], phitSubset[1:len(HsReg)+1, 2])
-
-precpc1 = P2R(Rt[0:len(HsReg), 0], phitSubset[0:len(HsReg), 0])
-precpc2 = P2R(Rt[0:len(HsReg), 1], phitSubset[0:len(HsReg), 1])
-precpc3 = P2R(Rt[0:len(HsReg), 2], phitSubset[0:len(HsReg), 2])
-
-dcpc1 = P2R(Rt[0:len(HsReg)+1, 0], phitSubset[0:len(HsReg)+1, 0])
-dcpc2 = P2R(Rt[0:len(HsReg)+1, 1], phitSubset[0:len(HsReg)+1, 1])
-dcpc3 = P2R(Rt[0:len(HsReg)+1, 2], phitSubset[0:len(HsReg)+1, 2])
-
-realD1Dt = np.real(dcpc1[1:])-np.real(dcpc1[0:-1])
-imagD1Dt = np.imag(dcpc1[1:])-np.imag(dcpc1[0:-1])
-realD2Dt = np.real(dcpc2[1:])-np.real(dcpc2[0:-1])
-imagD2Dt = np.imag(dcpc2[1:])-np.imag(dcpc2[0:-1])
-realD3Dt = np.real(dcpc3[1:])-np.real(dcpc3[0:-1])
-imagD3Dt = np.imag(dcpc3[1:])-np.imag(dcpc3[0:-1])
-# fig4, ax4 = plt.subplots(2,1)
-# ax4[0].plot(time[1:-1],HsSurvey[0:-2])
-# ax4[1].plot(time, np.real(cpc1),'-')
-# ax4[1].plot(time, np.imag(cpc1),'-')
+# from sklearn.cluster import KMeans
+# num_clusters = 20
+# PCsub = np.hstack((np.real(Rt[:,0:10]),phit[:,0:10]))
 #
-# ax4[0].set_xlim([time[t1], time[t2]])
-# ax4[1].set_xlim([time[t1], time[t2]])
-
-PC1 = Rt[0:len(HsReg)+1, 0]*np.sin(phit[0:len(HsReg)+1, 0]) + Rt[0:len(HsReg)+1, 0]*np.cos(phit[0:len(HsReg)+1, 0])
-PC2 = Rt[0:len(HsReg)+1, 1]*np.sin(phit[0:len(HsReg)+1, 1]) + Rt[0:len(HsReg)+1, 1]*np.cos(phit[0:len(HsReg)+1, 1])
-PC3 = Rt[0:len(HsReg)+1, 2]*np.sin(phit[0:len(HsReg)+1, 2]) + Rt[0:len(HsReg)+1, 2]*np.cos(phit[0:len(HsReg)+1, 2])
-
-dPC1 = PC1[1:] - PC1[0:-1]
-dPC2 = PC2[1:] - PC2[0:-1]
-dPC3 = PC3[1:] - PC3[0:-1]
-
-prePC1 = Rt[0:len(HsReg), 0]*np.sin(phit[0:len(HsReg), 0]) + Rt[0:len(HsReg), 0]*np.cos(phit[0:len(HsReg), 0])
-prePC2 = Rt[0:len(HsReg), 1]*np.sin(phit[0:len(HsReg), 1]) + Rt[0:len(HsReg), 1]*np.cos(phit[0:len(HsReg), 1])
-prePC3 = Rt[0:len(HsReg), 2]*np.sin(phit[0:len(HsReg), 2]) + Rt[0:len(HsReg), 2]*np.cos(phit[0:len(HsReg), 2])
-
-t1 = 300
-t2 = -1
-
-fig2, ax2 = plt.subplots(1,4)
-ax2[0].plot(EFReg/timeDiff,wavetime)
-ax2[1].pcolor(xg,tg,eofPred2.T, vmin=-1.25, vmax=1.25)
-ax2[2].plot(Rt[1:len(HsReg)+1,1],wavetime)
-ax2[3].plot(phit[1:len(HsReg)+1,1],wavetime)
-
-ax2[0].set_ylim([wavetime[t1], wavetime[t2]])
-ax2[1].set_ylim([wavetime[t1], wavetime[t2]])
-ax2[2].set_ylim([wavetime[t1], wavetime[t2]])
-ax2[3].set_ylim([wavetime[t1], wavetime[t2]])
-
-
-
-stackRI = np.vstack((realD1Dt, imagD1Dt, np.real(cpc1), np.imag(cpc1))).T
-
-stackRI2 = np.vstack((realD2Dt, imagD2Dt)).T
-
-from sklearn.linear_model import LinearRegression
-
-model1 = LinearRegression()
-
-#model1.fit(HsReg.reshape((-1, 1)),stackRI)
-model1.fit(stackRI, WPReg.reshape((-1, 1)))
+# #  KMEANS
+# kma = KMeans(n_clusters=num_clusters, n_init=2000).fit(PCsub)
+#
+# # groupsize
+# _, group_size = np.unique(kma.labels_, return_counts=True)
+#
+# # groups
+# d_groups = {}
+# for k in range(num_clusters):
+#     d_groups['{0}'.format(k)] = np.where(kma.labels_ == k)
+#
+#
+# # centroids
+# centroids = np.dot(kma.cluster_centers_, EOFsub)
+#
+# # km, x and var_centers
+# km = np.multiply(
+#     centroids,
+#     np.tile(var_anom_std, (num_clusters, 1))
+# ) + np.tile(var_anom_mean, (num_clusters, 1))
+#
+# # sort kmeans
+# kma_order = np.argsort(np.mean(-km, axis=1))
+#
+# # reorder clusters: bmus, km, cenEOFs, centroids, group_size
+# sorted_bmus = np.zeros((len(kma.labels_),), ) * np.nan
+# for i in range(num_clusters):
+#     posc = np.where(kma.labels_ == kma_order[i])
+#     sorted_bmus[posc] = i
+# sorted_km = km[kma_order]
+# sorted_cenEOFs = kma.cluster_centers_[kma_order]
+# sorted_centroids = centroids[kma_order]
+# sorted_group_size = group_size[kma_order]
 
 
-r_sq = model1.score(stackRI, WPReg.reshape((-1, 1)))
 
-X = np.vstack((realD1Dt, imagD1Dt, np.real(cpc1), np.imag(cpc1))).T
-Y = WPReg
-
-#X2 = np.vstack((np.real(precpc2), np.imag(precpc2), HsReg, TmReg, WPReg)).T
-X2 = np.vstack((EFReg/timeDiff, EFLReg/timeDiff, np.real(prePC3))).T
-Y2 = np.abs(np.real(dPC3))
-
-from statsmodels import api
-
-X2 = api.add_constant(X2)
-
-model2 = api.OLS(Y2, X2).fit() ## sm.OLS(output, input)
-predictions = model2.predict(X2)
-model2.summary()
+# wavedir = '/media/dylananderson/Elements/WIS_ST63218/'
+#
+# # Need to sort the files to ensure correct temporal order...
+# files = os.listdir(wavedir)
+# files.sort()
+# files_path = [os.path.join(os.path.abspath(wavedir), x) for x in files]
+#
+# wis = Dataset(files_path[0])
+#
+# def getWIS(file):
+#     waves = Dataset(file)
+#
+#     waveHs = waves.variables['waveHs'][:]
+#     waveTp = waves.variables['waveTp'][:]
+#     waveTm = waves.variables['waveTm'][:]
+#     waveTm1 = waves.variables['waveTm1'][:]
+#     waveTm2 = waves.variables['waveTm2'][:]
+#     waveMeanDirection = waves.variables['waveMeanDirection'][:]
+#     waveMeanDirectionSwell = waves.variables['waveMeanDirectionSwell'][:]
+#     timeW = waves.variables['time'][:]
+#
+#
+#     output = dict()
+#     output['waveHs'] = waveHs
+#     output['waveTp'] = waveTp
+#     output['waveTm'] = waveTm
+#     output['waveTm1'] = waveTm1
+#     output['waveTm2'] = waveTm2
+#     output['waveMeanDirection'] = waveMeanDirection
+#     output['waveMeanDirectionSwell'] = waveMeanDirectionSwell
+#     output['t'] = timeW
+#
+#     return output
+#
+#
+# Hs = []
+# Tm = []
+# Dm = []
+# timeWave = []
+# for i in files_path:
+#     waves = getWIS(i)
+#     Hs = np.append(Hs,waves['waveHs'])
+#     Tm = np.append(Tm,waves['waveTm'])
+#     Dm = np.append(Dm,waves['waveMeanDirection'])
+#     timeWave = np.append(timeWave,waves['t'])
+#
+#
+#
+#
+#
+# # waveNorm = Dm - 72
+# # neg = np.where((waveNorm > 180))
+# # waveNorm[neg[0]] = waveNorm[neg[0]]-360
+# # offpos = np.where((waveNorm>90))
+# # offneg = np.where((waveNorm<-90))
+# # waveNorm[offpos[0]] = waveNorm[offpos[0]]*0
+# # waveNorm[offneg[0]] = waveNorm[offneg[0]]*0
+# #
+# # LWP_means = 1025*np.square(Hs)*Tm*(9.81/(64*np.pi))*np.cos(waveNorm*(np.pi/180))*np.sin(waveNorm*(np.pi/180))
+# tWave = [DT.datetime.fromtimestamp(x) for x in timeWave]
+#
+# #fig = plt.figure(figsize=(10,10))
+# #plt.plot(tWave,Hs)
+# #plt.plot(time,np.ones(len(time),),'.')
+#
+# HsSurvey = np.nan * np.ones(len(time))
+# HsMaxSurvey = np.nan * np.ones(len(time))
+# TmSurvey = np.nan * np.ones(len(time))
+# DmSurvey = np.nan * np.ones(len(time))
+# WPSurvey = np.nan * np.ones(len(time))
+# EFSurvey = np.nan * np.ones(len(time))
+# EFLSurvey = np.nan * np.ones(len(time))
+#
+# timeDiff = np.nan * np.ones(len(time))
+# counter = 0
+# for tt in range(len(time)-1):
+#     #within = [date for date in tWave if time[tt] < date < time[tt+1]]
+#     withinIndex = np.where((tWave > np.datetime64(time[tt])) & (tWave < np.datetime64(time[tt+1])))
+#     if len(withinIndex[0]) < 2:
+#         print('index is not working after time {}'.format(time[tt]))
+#         print('which is index = {}'.format(tt))
+#     else:
+#
+#         diff = time[tt+1]-time[tt]
+#         timeDiff[counter] = diff.days
+#         HsSurvey[counter] = np.nanmean(Hs[withinIndex[0]])
+#         HsMaxSurvey[counter] = np.nanmax(Hs[withinIndex[0]])
+#         TmSurvey[counter] = np.nanmean(Tm[withinIndex[0]])
+#         dirs = Dm[withinIndex[0]]-72
+#         neg = np.where((dirs > 180))
+#         dirs[neg[0]] = dirs[neg[0]]-360
+#         waveNorm = dirs
+#         offpos = np.where((waveNorm>90))
+#         offneg = np.where((waveNorm<-90))
+#         waveNorm[offpos[0]] = waveNorm[offpos[0]]*0
+#         waveNorm[offneg[0]] = waveNorm[offneg[0]]*0
+#         DmSurvey[counter] = np.nanmean(dirs)
+#
+#         c0 = 9.81*Tm[withinIndex[0]]/(2 * np.pi)
+#         HsSquare = np.square(Hs[withinIndex[0]])
+#         EF = 1025*9.81*HsSquare*c0/16
+#         EFlongshore = (1025*9.81*HsSquare*c0/16)*np.cos(waveNorm*(np.pi/180))*np.sin(waveNorm*(np.pi/180))
+#         EFSurvey[counter] = np.sum(EF)
+#         EFLSurvey[counter] = np.nanmean(np.abs(EFlongshore))
+#         WPSurvey[counter] = np.nanmean(HsSquare*Tm[withinIndex[0]])
+#
+#
+#         # fig10 = plt.figure(figsize=(12, 12))
+#         # ax100 = plt.subplot2grid((4, 3), (0, 0), colspan=3, rowspan=1)
+#         # ax100.plot(tWave[withinIndex[0][0]:withinIndex[0][-1]], Hs[withinIndex[0][0:-1]])
+#         # ax100.set_ylabel('Hs (m)')
+#         # ax100.set_title('Duration = {} days'.format(diff.days))
+#         # ax100.text(tWave[withinIndex[0][0]], HsSurvey[counter], 'Average Hs = {:.2f}'.format(HsSurvey[counter]))
+#         # ax100.plot([tWave[withinIndex[0][0]], tWave[withinIndex[0][-1]]],[HsSurvey[counter],HsSurvey[counter]])
+#         # #     ax7.text(320, 0, '{}'.format(timeSubset[timestep]))
+#         # ax101 = plt.subplot2grid((4, 3), (1, 0), colspan=3, rowspan=1)
+#         # ax101.plot(tWave[withinIndex[0][0]:withinIndex[0][-1]], Tm[withinIndex[0][0:-1]])
+#         # ax101.text(tWave[withinIndex[0][0]], TmSurvey[counter], 'Average Tm = {:.2f}'.format(TmSurvey[counter]))
+#         # ax101.plot([tWave[withinIndex[0][0]], tWave[withinIndex[0][-1]]],[TmSurvey[counter],TmSurvey[counter]])
+#         # ax101.set_ylabel('Tm (s)')
+#         # ax103 = plt.subplot2grid((4, 3), (2, 0), colspan=3, rowspan=1)
+#         # ax103.plot(tWave[withinIndex[0][0]:withinIndex[0][-1]], dirs[0:-1])
+#         # ax103.text(tWave[withinIndex[0][0]], DmSurvey[counter], 'Average Dm = {:.2f}'.format(DmSurvey[counter]))
+#         # ax103.plot([tWave[withinIndex[0][0]], tWave[withinIndex[0][-1]]],[DmSurvey[counter],DmSurvey[counter]])
+#         # ax103.set_ylabel('Dm (deg N)')
+#         # ax102 = plt.subplot2grid((4, 3), (3, 0), colspan=3, rowspan=1)
+#         # ax102.plot(xinterp,alllines[tt])
+#         # ax102.plot(xinterp,alllines[tt+1])
+#         #
+#         #
+#         #
+#         #
+#         # if tt < 10:
+#         #     plt.savefig('Conditions00'+str(tt)+'.png')
+#         #
+#         # elif tt < 100:
+#         #     plt.savefig('Conditions0'+str(tt)+'.png')
+#         #
+#         # else:
+#         #     plt.savefig('Conditions'+str(tt)+'.png')
+#         # plt.close()
+#         counter = counter+1
+#
+#
+#
+# #HsReg = HsSurvey.copy()
+# HsReg = HsSurvey[~np.isnan(HsSurvey)]
+# HsRegMax = HsMaxSurvey[~np.isnan(HsSurvey)]
+# TmReg = TmSurvey[~np.isnan(HsSurvey)]
+# DmReg = DmSurvey[~np.isnan(HsSurvey)]
+# WPReg =WPSurvey[~np.isnan(HsSurvey)]
+# EFReg =EFSurvey[~np.isnan(HsSurvey)]
+# EFLReg =EFLSurvey[~np.isnan(HsSurvey)]
+#
+# timeDiff = timeDiff[~np.isnan(HsSurvey)]
+#
+# wavetime = time[1:len(HsReg)+1]
+#
+#
+#
+#
+#
+#
+# cpc1 = P2R(Rt[1:len(HsReg)+1, 0], phitSubset[1:len(HsReg)+1, 0])
+# cpc2 = P2R(Rt[1:len(HsReg)+1, 1], phitSubset[1:len(HsReg)+1, 1])
+# cpc3 = P2R(Rt[1:len(HsReg)+1, 2], phitSubset[1:len(HsReg)+1, 2])
+#
+# precpc1 = P2R(Rt[0:len(HsReg), 0], phitSubset[0:len(HsReg), 0])
+# precpc2 = P2R(Rt[0:len(HsReg), 1], phitSubset[0:len(HsReg), 1])
+# precpc3 = P2R(Rt[0:len(HsReg), 2], phitSubset[0:len(HsReg), 2])
+#
+# dcpc1 = P2R(Rt[0:len(HsReg)+1, 0], phitSubset[0:len(HsReg)+1, 0])
+# dcpc2 = P2R(Rt[0:len(HsReg)+1, 1], phitSubset[0:len(HsReg)+1, 1])
+# dcpc3 = P2R(Rt[0:len(HsReg)+1, 2], phitSubset[0:len(HsReg)+1, 2])
+#
+# realD1Dt = np.real(dcpc1[1:])-np.real(dcpc1[0:-1])
+# imagD1Dt = np.imag(dcpc1[1:])-np.imag(dcpc1[0:-1])
+# realD2Dt = np.real(dcpc2[1:])-np.real(dcpc2[0:-1])
+# imagD2Dt = np.imag(dcpc2[1:])-np.imag(dcpc2[0:-1])
+# realD3Dt = np.real(dcpc3[1:])-np.real(dcpc3[0:-1])
+# imagD3Dt = np.imag(dcpc3[1:])-np.imag(dcpc3[0:-1])
+# # fig4, ax4 = plt.subplots(2,1)
+# # ax4[0].plot(time[1:-1],HsSurvey[0:-2])
+# # ax4[1].plot(time, np.real(cpc1),'-')
+# # ax4[1].plot(time, np.imag(cpc1),'-')
+# #
+# # ax4[0].set_xlim([time[t1], time[t2]])
+# # ax4[1].set_xlim([time[t1], time[t2]])
+#
+# PC1 = Rt[0:len(HsReg)+1, 0]*np.sin(phit[0:len(HsReg)+1, 0]) + Rt[0:len(HsReg)+1, 0]*np.cos(phit[0:len(HsReg)+1, 0])
+# PC2 = Rt[0:len(HsReg)+1, 1]*np.sin(phit[0:len(HsReg)+1, 1]) + Rt[0:len(HsReg)+1, 1]*np.cos(phit[0:len(HsReg)+1, 1])
+# PC3 = Rt[0:len(HsReg)+1, 2]*np.sin(phit[0:len(HsReg)+1, 2]) + Rt[0:len(HsReg)+1, 2]*np.cos(phit[0:len(HsReg)+1, 2])
+#
+# dPC1 = PC1[1:] - PC1[0:-1]
+# dPC2 = PC2[1:] - PC2[0:-1]
+# dPC3 = PC3[1:] - PC3[0:-1]
+#
+# prePC1 = Rt[0:len(HsReg), 0]*np.sin(phit[0:len(HsReg), 0]) + Rt[0:len(HsReg), 0]*np.cos(phit[0:len(HsReg), 0])
+# prePC2 = Rt[0:len(HsReg), 1]*np.sin(phit[0:len(HsReg), 1]) + Rt[0:len(HsReg), 1]*np.cos(phit[0:len(HsReg), 1])
+# prePC3 = Rt[0:len(HsReg), 2]*np.sin(phit[0:len(HsReg), 2]) + Rt[0:len(HsReg), 2]*np.cos(phit[0:len(HsReg), 2])
+#
+# t1 = 300
+# t2 = -1
+#
+# fig2, ax2 = plt.subplots(1,4)
+# ax2[0].plot(EFReg/timeDiff,wavetime)
+# ax2[1].pcolor(xg,tg,eofPred2.T, vmin=-1.25, vmax=1.25)
+# ax2[2].plot(Rt[1:len(HsReg)+1,1],wavetime)
+# ax2[3].plot(phit[1:len(HsReg)+1,1],wavetime)
+#
+# ax2[0].set_ylim([wavetime[t1], wavetime[t2]])
+# ax2[1].set_ylim([wavetime[t1], wavetime[t2]])
+# ax2[2].set_ylim([wavetime[t1], wavetime[t2]])
+# ax2[3].set_ylim([wavetime[t1], wavetime[t2]])
+#
+#
+#
+# stackRI = np.vstack((realD1Dt, imagD1Dt, np.real(cpc1), np.imag(cpc1))).T
+#
+# stackRI2 = np.vstack((realD2Dt, imagD2Dt)).T
+#
+# from sklearn.linear_model import LinearRegression
+#
+# model1 = LinearRegression()
+#
+# #model1.fit(HsReg.reshape((-1, 1)),stackRI)
+# model1.fit(stackRI, WPReg.reshape((-1, 1)))
+#
+#
+# r_sq = model1.score(stackRI, WPReg.reshape((-1, 1)))
+#
+# X = np.vstack((realD1Dt, imagD1Dt, np.real(cpc1), np.imag(cpc1))).T
+# Y = WPReg
+#
+# #X2 = np.vstack((np.real(precpc2), np.imag(precpc2), HsReg, TmReg, WPReg)).T
+# X2 = np.vstack((EFReg/timeDiff, EFLReg/timeDiff, np.real(prePC3))).T
+# Y2 = np.abs(np.real(dPC3))
+#
+# from statsmodels import api
+#
+# X2 = api.add_constant(X2)
+#
+# model2 = api.OLS(Y2, X2).fit() ## sm.OLS(output, input)
+# predictions = model2.predict(X2)
+# model2.summary()
 
 #
 # # For making a bunch of figures with 6 of the CEOFs in magnitude/space dimensions

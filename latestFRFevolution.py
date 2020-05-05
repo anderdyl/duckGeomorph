@@ -8,7 +8,7 @@ from netCDF4 import Dataset
 from glob import glob
 import os
 
-geomorphdir = '/media/dylananderson/Elements/FRF_Geomorph/'
+geomorphdir = '/media/dylananderson/Elements/filteredFRF_Geomorph/'
 
 files = os.listdir(geomorphdir)
 
@@ -76,7 +76,7 @@ ax[0].set_ylim([-8, 4])
 ax[0].set_title('Profile variability in northern edge of property')
 
 # Lets find just the files after January 2018
-recent = np.nonzero((time > DT.datetime(2018, 12, 1)) & (time < DT.datetime(2019, 12, 1)))
+recent = np.nonzero((time > DT.datetime(2018, 12, 1)) & (time < DT.datetime(2020, 5, 1)))
 subset1 = files[recent[0][0]:].copy()
 
 
@@ -98,3 +98,62 @@ ax[1].set_title('Profile variability in 2018')
 
 
 
+
+# plt.rcParams.update({
+#     "lines.color": "white",
+#     "patch.edgecolor": "white",
+#     "text.color": "white",
+#     "axes.facecolor": "black",
+#     "axes.edgecolor": "lightgray",
+#     "axes.labelcolor": "white",
+#     "xtick.color": "white",
+#     "ytick.color": "white",
+#     "grid.color": "lightgray",
+#     "figure.facecolor": "black",
+#     "figure.edgecolor": "black",
+#     "savefig.facecolor": "black",
+#     "savefig.edgecolor": "black"})
+
+
+plt.style.use('dark_background')
+
+
+fig = plt.figure()
+ax1 = plt.subplot2grid((1,1),(0,0),colspan=1,rowspan=1)
+i = -1
+data = getBathy(os.path.join(geomorphdir, subset1[i]), lower=720, upper=750)
+temp = subset1[i].split('_')
+legendLabel = temp[1][0:4] + '-' + temp[1][4:6] + '-' + temp[1][6:9]
+ax1.plot(data['x'], data['z'], label=legendLabel,color='orange')
+ax1.legend(loc='upper right')
+ax1.set_xlim([50, 600])
+ax1.set_ylim([-6, 4])
+ax1.set_xlabel('cross-shore (m)')
+ax1.set_ylabel('elevation (m)')
+#ax1.set_title('Profile variability in 2018')
+
+
+
+
+#recent2 = np.nonzero((time > DT.datetime(2016, 6, 1)) & (time < DT.datetime(2018, 1, 1)))
+recent2 = np.nonzero((time > DT.datetime(2018, 6, 1)) & (time < DT.datetime(2020, 5, 1)))
+
+subset2 = files[recent2[0][0]:].copy()
+del subset2[37:]
+fig2 = plt.figure()
+ax2 = plt.subplot2grid((1,1),(0,0),rowspan=1,colspan=1)
+ax2.set_prop_cycle(plt.cycler('color', plt.cm.rainbow(np.linspace(0, 1, len(subset2)))))
+
+labels = []
+for i in range(len(subset2)):
+
+    data = getBathy(os.path.join(geomorphdir, subset2[i]), lower=720, upper=750)
+    temp = subset2[i].split('_')
+    ax2.plot(data['x'], data['z'], label=temp[1])
+
+ax2.legend(loc='upper right')
+ax2.set_xlim([50, 600])
+ax2.set_ylim([-6, 4])
+ax2.set_xlabel('cross-shore (m)')
+ax2.set_ylabel('elevation (m)')
+ax2.set_title('Profile Variability since June 2019')

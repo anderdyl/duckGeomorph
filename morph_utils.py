@@ -37,6 +37,16 @@ def KMA_simple(xds_PCA, num_clusters, repres=0.95):
     nterm = np.where(APEV <= repres*100)[0][-1]
 
     PCsub = PCs[:, :nterm+1]
+    data = PCsub
+    data_std = np.std(data, axis=0)
+    data_mean = np.mean(data, axis=0)
+
+    # normalize but keep PCs weigth
+    data_norm = np.ones(data.shape)*np.nan
+    for i in range(PCsub.shape[1]):
+        data_norm[:,i] = np.divide(data[:,i]-data_mean[i], data_std[0])
+
+
     EOFsub = EOFs[:nterm+1, :]
 
     # KMEANS
@@ -53,11 +63,14 @@ def KMA_simple(xds_PCA, num_clusters, repres=0.95):
 
     # centroids
     centroids = np.dot(kma.cluster_centers_, EOFsub)
-
+    # centroids
+    # centroids = np.zeros((num_clusters, data.shape[1]))
+    # for k in range(num_clusters):
+    #     centroids[k,:] = np.mean(data[d_groups['{0}'.format(k)],:], axis=1)
     # km, x and var_centers
     km = np.multiply(
         centroids,
-        np.tile(var_anom_std, (num_clusters, 1))
+        np.tile(var_anom_std[0], (num_clusters, 1))
     ) + np.tile(var_anom_mean, (num_clusters, 1))
 
     # sort kmeans

@@ -15,7 +15,7 @@ import sandBarTool.morphLib as mL
 
 
 
-geomorphdir = '/media/dylananderson/Elements/FRF_Geomorph/'
+geomorphdir = '/media/dylananderson/Elements/filteredFRF_Geomorph/'
 
 files = os.listdir(geomorphdir)
 
@@ -78,7 +78,7 @@ def interpBathy2(xSub,zSub,x):
     return newBathy
 
 
-subset = files[0:970].copy()
+subset = files[0:969].copy()
 #from palettable.colorbrewer.sequential import Blues_8
 #ax.imshow(data, cmap=Blues_8.mpl_colormap
 
@@ -87,22 +87,190 @@ colormap = plt.cm.gist_ncar
 import scipy.stats as spstats
 
 labels = []
-xinterp = np.arange(110, 560, 3)
+xinterp = np.arange(108, 608, 2.5)
+#
+# bathy = dict()
+# #alllines = np.empty((len(xinterp),))
+# count = 0
+# count2 = 0
+# count3 = 0
+# count4 = 0
+# count5 = 0
+# worstcount = 0
+# #fig = plt.figure(figsize=(10,10))
+# for i in range(len(subset)):
+#     #data = getBathy(os.path.join(geomorphdir, subset[i]), lower=1070, upper=1100)
+#     #data = getBathy(os.path.join(geomorphdir, subset[i]), lower=750, upper=950)
+#     #data = getBathy(os.path.join(geomorphdir, subset[i]), lower=-10, upper=20)
+#     data = getBathy(os.path.join(geomorphdir, subset[i]), lower=-2, upper=10)
+#
+#     #data = getBathy(os.path.join(geomorphdir, subset[i]), lower=-2, upper=10)
+#
+#     temp = subset[i].split('_')
+#
+#     surveydate = DT.datetime.strptime(temp[1], '%Y%m%d')
+#     elevs = data['z']
+#     cross = data['x']
+#     crossind = np.argsort(data['x'])
+#     crossS = cross[crossind]
+#     elevsS = elevs[crossind]
+#
+#     xSub = np.ma.MaskedArray.filled(crossS, np.nan)
+#     zSub = np.ma.MaskedArray.filled(elevsS, np.nan)
+#
+#     #realValues = ~np.isnan(xSub)
+#
+#     #binnedz, bin_edges, binnumber = spstats.binned_statistic(xSub,zSub, statistic='mean',bins=np.arange(106,566,4))
+#     #bin_width = (bin_edges[1] - bin_edges[0])
+#     #bin_centers = bin_edges[1:] - bin_width / 2
+#     #xMSub = bin_centers
+#     #zMSub = binnedz
+#     #xSubNew = xMSub[~np.isnan(zMSub)]
+#     #zSubNew = zMSub[~np.isnan(zMSub)]
+#
+#     realValues = ~np.isnan(xSub)
+#     xSubNew = xSub[~np.isnan(zSub)]
+#     zSubNew = zSub[~np.isnan(zSub)]
+#
+#
+#
+#     if any(realValues):
+#
+#         if np.nanmax(xSubNew) > 650:
+#
+#             if np.nanmin(xSubNew) < 125:
+#
+#                 if len(xSubNew) > 10:
+#                     #newdata = interpBathy(xSubNew, zSubNew, xinterp)
+#                     #newdata = interpBathy2(newdata['x'], newdata['z'], xinterp)
+#                     newdata = interpBathy2(xSubNew, zSubNew, xinterp)
+#                     nanValues = np.isnan(newdata['z'])
+#
+#                     if any(nanValues):
+#                         #print('Found a transect with nans {}'.format(i))
+#                         print('Trying to extend the lower half of the profile with a linear fit: {}'.format(surveydate))
+#                         if count2 == 0:
+#                             badlines = newdata['z']
+#                             count2 = count2+1
+#                             badtime = surveydate
+#                         else:
+#                             badlines = np.vstack((badlines, newdata['z']))
+#                             count2 = count2+1
+#                             badtime = np.append(badtime, surveydate)
+#
+#                         #print('Threw out a survey with data due to nans: {}'.format(surveydate))
+#                         #plt.plot(xSub,zSub)
+#
+#
+#                         xindex = np.where((xSubNew>=700))
+#
+#                         if len(xindex[0]) > 3:
+#
+#                             xbot = xSubNew[xindex]
+#                             zbot = zSubNew[xindex]
+#                             mb = np.polyfit(xbot, zbot, 1)
+#                             f = np.poly1d(mb)
+#                             maxXind = np.where((xinterp > np.nanmax(xSubNew)))
+#                             newX = xinterp[maxXind]
+#                             newZ = f(newX)
+#                             xSubNew2 = np.append(xSubNew, newX)
+#                             zSubNew2 = np.append(zSubNew, newZ)
+#                             moredata = interpBathy(xSubNew2, zSubNew2, xinterp)
+#                             moredata = interpBathy(moredata['x'], moredata['z'], xinterp)
+#                             #moredata = interpBathy(xSubNew2, moredata['z'], xinterp)
+#
+#                             del xSubNew2, zSubNew2,newZ,newX,f,mb,zbot,xbot
+#
+#                             nanValues2 = np.isnan(moredata['z'])
+#
+#                             if any(nanValues2):
+#                                 print('WHAT HAPPENED AT TRANSECT {}'.format(i))
+#                                 #plt.plot(moredata['x'], moredata['z'], 'r-')
+#                             else:
+#                                 if count == 0:
+#                                     alllines = moredata['z']
+#                                     time = surveydate
+#                                     count = count + 1
+#                                 else:
+#                                     alllines = np.vstack((alllines, moredata['z']))
+#                                     time = np.append(time, surveydate)
+#                                     count = count + 1
+#
+#
+#                                 if count3 == 0:
+#                                     extrapolatedlines = newdata['z']
+#                                     count3 = count3 + 1
+#                                     extrapolatedtime = surveydate
+#                                 else:
+#                                     extrapolatedlines = np.vstack((extrapolatedlines, newdata['z']))
+#                                     count3 = count3 + 1
+#                                     extrapolatedtime = np.append(extrapolatedtime, surveydate)
+#                                 #plt.plot(moredata['x'], moredata['z'], 'k-')
+#                                 del moredata
+#
+#
+#
+#                         elif len(xindex[0]) == 3:
+#                             print('Could not do that: number of points being fit: {}'.format(len(xindex[0])))
+#                             worstcount = worstcount+1
+#                         else:
+#                             print('Could not do that: maximum X value in transect is: {}'.format(np.nanmax(xSub)))
+#                             worstcount = worstcount+1
+#                             #plt.plot(xSub, zSub, 'r-')
+#
+#
+#                     else:
+#                         if count == 0:
+#                             alllines = newdata['z']
+#                             time = surveydate
+#                             count = count+1
+#                         else:
+#                             alllines = np.vstack((alllines, newdata['z']))
+#                             time = np.append(time,surveydate)
+#                             count = count+1
+#                 else:
+#                     print('Data is less than 10 points long at line {}'.format(i))
+#             else:
+#                 print('No data onshore of 125 meters at line {}'.format(i))
+#                 print('Most onshore point at {}'.format(np.nanmin(xSubNew)))
+#                 newdata = interpBathy2(xSubNew, zSubNew, xinterp)
+#
+#                 # if count4 == 0:
+#                 #     noneOnshore = newdata['z']
+#                 #     noOnshoreTime = surveydate
+#                 #     count4 = count4 + 1
+#                 # else:
+#                 #     noneOnshore = np.vstack((noneOnshore, newdata['z']))
+#                 #     noOnshoreTime = np.append(noOnshoreTime, surveydate)
+#                 #     count4 = count4 + 1
+#         else:
+#             print('No data deeper than 500 meters at line {}'.format(i))
+#             print('Most offshore point at {}'.format(np.nanmax(xSubNew)))
+#             newdata = interpBathy2(xSubNew, zSubNew, xinterp)
+#
+#             # if count5 == 0:
+#             #     noneOffshore = newdata['z']
+#             #     noOffshoreTime = surveydate
+#             #     count5 = count5 + 1
+#             # else:
+#             #     noneOffshore = np.vstack((noneOffshore, newdata['z']))
+#             #     noOffshoreTime = np.append(noOffshoreTime, surveydate)
+#             #     count4 = count5 + 1
+#     else:
+#         print('Survey with no data at this line {}'.format(i))
+#
+#         #plt.plot(xSubNew,zSubNew)
+#
+
 
 bathy = dict()
 #alllines = np.empty((len(xinterp),))
 count = 0
 count2 = 0
-count3 = 0
-count4 = 0
-count5 = 0
 worstcount = 0
 #fig = plt.figure(figsize=(10,10))
 for i in range(len(subset)):
-    data = getBathy(os.path.join(geomorphdir, subset[i]), lower=1070, upper=1100)
-    #data = getBathy(os.path.join(geomorphdir, subset[i]), lower=750, upper=950)
-    #data = getBathy(os.path.join(geomorphdir, subset[i]), lower=-10, upper=20)
-
+    data = getBathy(os.path.join(geomorphdir, subset[i]), lower=1080, upper=1100)
     #data = getBathy(os.path.join(geomorphdir, subset[i]), lower=-2, upper=10)
 
     temp = subset[i].split('_')
@@ -110,155 +278,87 @@ for i in range(len(subset)):
     surveydate = DT.datetime.strptime(temp[1], '%Y%m%d')
     elevs = data['z']
     cross = data['x']
-    crossind = np.argsort(data['x'])
-    crossS = cross[crossind]
-    elevsS = elevs[crossind]
-
-    xSub = np.ma.MaskedArray.filled(crossS, np.nan)
-    zSub = np.ma.MaskedArray.filled(elevsS, np.nan)
-
-    #realValues = ~np.isnan(xSub)
-
-    #binnedz, bin_edges, binnumber = spstats.binned_statistic(xSub,zSub, statistic='mean',bins=np.arange(106,566,4))
-    #bin_width = (bin_edges[1] - bin_edges[0])
-    #bin_centers = bin_edges[1:] - bin_width / 2
-    #xMSub = bin_centers
-    #zMSub = binnedz
-    #xSubNew = xMSub[~np.isnan(zMSub)]
-    #zSubNew = zMSub[~np.isnan(zMSub)]
-
+    xSub = np.ma.MaskedArray.filled(cross, np.nan)
+    zSub = np.ma.MaskedArray.filled(elevs, np.nan)
     realValues = ~np.isnan(xSub)
-    xSubNew = xSub[~np.isnan(zSub)]
-    zSubNew = zSub[~np.isnan(zSub)]
-
-
 
     if any(realValues):
 
-        if np.nanmax(xSubNew) > 500:
+        newdata = interpBathy(xSub, zSub, xinterp)
+        nanValues = np.isnan(newdata['z'])
 
-            if np.nanmin(xSubNew) < 125:
-
-                if len(xSubNew) > 10:
-                    #newdata = interpBathy(xSubNew, zSubNew, xinterp)
-                    #newdata = interpBathy2(newdata['x'], newdata['z'], xinterp)
-                    newdata = interpBathy2(xSubNew, zSubNew, xinterp)
-                    nanValues = np.isnan(newdata['z'])
-
-                    if any(nanValues):
-                        #print('Found a transect with nans {}'.format(i))
-                        print('Trying to extend the lower half of the profile with a linear fit: {}'.format(surveydate))
-                        if count2 == 0:
-                            badlines = newdata['z']
-                            count2 = count2+1
-                            badtime = surveydate
-                        else:
-                            badlines = np.vstack((badlines, newdata['z']))
-                            count2 = count2+1
-                            badtime = np.append(badtime, surveydate)
-
-                        #print('Threw out a survey with data due to nans: {}'.format(surveydate))
-                        #plt.plot(xSub,zSub)
-
-
-                        xindex = np.where((xSubNew>=700))
-
-                        if len(xindex[0]) > 3:
-
-                            xbot = xSubNew[xindex]
-                            zbot = zSubNew[xindex]
-                            mb = np.polyfit(xbot, zbot, 1)
-                            f = np.poly1d(mb)
-                            maxXind = np.where((xinterp > np.nanmax(xSubNew)))
-                            newX = xinterp[maxXind]
-                            newZ = f(newX)
-                            xSubNew2 = np.append(xSubNew, newX)
-                            zSubNew2 = np.append(zSubNew, newZ)
-                            moredata = interpBathy(xSubNew2, zSubNew2, xinterp)
-                            moredata = interpBathy(moredata['x'], moredata['z'], xinterp)
-                            #moredata = interpBathy(xSubNew2, moredata['z'], xinterp)
-
-                            del xSubNew2, zSubNew2,newZ,newX,f,mb,zbot,xbot
-
-                            nanValues2 = np.isnan(moredata['z'])
-
-                            if any(nanValues2):
-                                print('WHAT HAPPENED AT TRANSECT {}'.format(i))
-                                #plt.plot(moredata['x'], moredata['z'], 'r-')
-                            else:
-                                if count == 0:
-                                    alllines = moredata['z']
-                                    time = surveydate
-                                    count = count + 1
-                                else:
-                                    alllines = np.vstack((alllines, moredata['z']))
-                                    time = np.append(time, surveydate)
-                                    count = count + 1
-
-
-                                if count3 == 0:
-                                    extrapolatedlines = newdata['z']
-                                    count3 = count3 + 1
-                                    extrapolatedtime = surveydate
-                                else:
-                                    extrapolatedlines = np.vstack((extrapolatedlines, newdata['z']))
-                                    count3 = count3 + 1
-                                    extrapolatedtime = np.append(extrapolatedtime, surveydate)
-                                #plt.plot(moredata['x'], moredata['z'], 'k-')
-                                del moredata
-
-
-
-                        elif len(xindex[0]) == 3:
-                            print('Could not do that: number of points being fit: {}'.format(len(xindex[0])))
-                            worstcount = worstcount+1
-                        else:
-                            print('Could not do that: maximum X value in transect is: {}'.format(np.nanmax(xSub)))
-                            worstcount = worstcount+1
-                            #plt.plot(xSub, zSub, 'r-')
-
-
-                    else:
-                        if count == 0:
-                            alllines = newdata['z']
-                            time = surveydate
-                            count = count+1
-                        else:
-                            alllines = np.vstack((alllines, newdata['z']))
-                            time = np.append(time,surveydate)
-                            count = count+1
-                else:
-                    print('Data is less than 10 points long at line {}'.format(i))
+        if any(nanValues):
+            #print('Found a transect with nans {}'.format(i))
+            print('Trying to extend the lower half of the profile with a linear fit: {}'.format(surveydate))
+            if count2 == 0:
+                badlines = newdata['z']
+                count2 = count2+1
+                badtime = surveydate
             else:
-                print('No data onshore of 125 meters at line {}'.format(i))
-                print('Most onshore point at {}'.format(np.nanmin(xSubNew)))
-                newdata = interpBathy2(xSubNew, zSubNew, xinterp)
+                badlines = np.vstack((badlines, newdata['z']))
+                count2 =count2+1
+                badtime = np.append(badtime,surveydate)
 
-                # if count4 == 0:
-                #     noneOnshore = newdata['z']
-                #     noOnshoreTime = surveydate
-                #     count4 = count4 + 1
-                # else:
-                #     noneOnshore = np.vstack((noneOnshore, newdata['z']))
-                #     noOnshoreTime = np.append(noOnshoreTime, surveydate)
-                #     count4 = count4 + 1
+            #print('Threw out a survey with data due to nans: {}'.format(surveydate))
+            #plt.plot(xSub,zSub)
+
+
+            xindex = np.where((xSub>=650))
+
+            if len(xindex[0]) > 3:
+
+                xbot = xSub[xindex]
+                zbot = zSub[xindex]
+                mb = np.polyfit(xbot, zbot, 1)
+                f = np.poly1d(mb)
+                maxXind = np.where((xinterp > np.nanmax(xSub)))
+                newX = xinterp[maxXind]
+                newZ = f(newX)
+                xSubNew = np.append(xSub, newX)
+                zSubNew = np.append(zSub, newZ)
+                moredata = interpBathy(xSubNew, zSubNew, xinterp)
+
+                del xSubNew, zSubNew,newZ,newX,f,mb,zbot,xbot
+
+                nanValues2 = np.isnan(moredata['z'])
+
+                if any(nanValues2):
+                    print('WHAT HAPPENED AT TRANSECT {}'.format(i))
+                    #plt.plot(moredata['x'], moredata['z'], 'r-')
+                else:
+                    if count == 0:
+                        alllines = moredata['z']
+                        time = surveydate
+                        count = count + 1
+                    else:
+                        alllines = np.vstack((alllines, moredata['z']))
+                        time = np.append(time, surveydate)
+                        count = count + 1
+                    #plt.plot(moredata['x'], moredata['z'], 'k-')
+                    del moredata
+
+
+
+            elif len(xindex[0]) == 3:
+                print('Could not do that: number of points being fit: {}'.format(len(xindex[0])))
+                worstcount = worstcount+1
+            else:
+                print('Could not do that: maximum X value in transect is: {}'.format(np.nanmax(xSub)))
+                worstcount = worstcount+1
+                #plt.plot(xSub, zSub, 'r-')
+
+
         else:
-            print('No data deeper than 500 meters at line {}'.format(i))
-            print('Most offshore point at {}'.format(np.nanmax(xSubNew)))
-            newdata = interpBathy2(xSubNew, zSubNew, xinterp)
-
-            # if count5 == 0:
-            #     noneOffshore = newdata['z']
-            #     noOffshoreTime = surveydate
-            #     count5 = count5 + 1
-            # else:
-            #     noneOffshore = np.vstack((noneOffshore, newdata['z']))
-            #     noOffshoreTime = np.append(noOffshoreTime, surveydate)
-            #     count4 = count5 + 1
+            if count == 0:
+                alllines = newdata['z']
+                time = surveydate
+                count = count+1
+            else:
+                alllines = np.vstack((alllines, newdata['z']))
+                time = np.append(time,surveydate)
+                count = count+1
     else:
         print('Survey with no data at this line {}'.format(i))
-
-        #plt.plot(xSubNew,zSubNew)
 
 
 fig, ax = plt.subplots(2,1)
@@ -473,6 +573,7 @@ cpc5 = P2R(Rt[:, 4], phitSubset[:, 4])
 cpc6 = P2R(Rt[:, 5], phitSubset[:, 5])
 cpc7 = P2R(Rt[:, 6], phitSubset[:, 6])
 
+modes = 6
 
 CPCs = np.vstack((np.real(cpc1), np.imag(cpc1), np.real(cpc2), np.imag(cpc2), np.real(cpc3), np.imag(cpc3),
                   np.real(cpc4), np.imag(cpc4), np.real(cpc5), np.imag(cpc5), np.real(cpc6), np.imag(cpc6)))
@@ -481,36 +582,393 @@ CPCs = CPCs.T
 var_explained = np.array((percentV[0], percentV[0], percentV[1], percentV[1], percentV[2], percentV[2],
                           percentV[3], percentV[3], percentV[4], percentV[4], percentV[5], percentV[5]))
 
+
 fig = plt.figure()
+plt.plot(np.real(cpc1),np.imag(cpc1))
+plt.plot(np.real(cpc2),np.imag(cpc2))
+plt.plot(np.real(cpc3),np.imag(cpc3))
+plt.plot(np.real(cpc4),np.imag(cpc4))
+plt.plot(np.real(cpc5),np.imag(cpc5))
 
-plt.plot(np.real(cpc2))
-plt.plot(np.imag(cpc2))
+fig = plt.figure()
+plt.plot(np.real(cpc1)*var_explained[0],np.imag(cpc1)*var_explained[0])
+plt.plot(np.real(cpc2)*var_explained[2],np.imag(cpc2)*var_explained[2])
+plt.plot(np.real(cpc3)*var_explained[4],np.imag(cpc3)*var_explained[4])
+plt.plot(np.real(cpc4)*var_explained[6],np.imag(cpc4)*var_explained[6])
+plt.plot(np.real(cpc5)*var_explained[8],np.imag(cpc5)*var_explained[8])
 
-
-
-
+temp = CPCs*var_explained
+fig = plt.figure()
+plt.plot(temp[:,0], temp[:,1])
+plt.plot(temp[:,2], temp[:,3])
+plt.plot(temp[:,4], temp[:,5])
+plt.plot(temp[:,6], temp[:,7])
+plt.plot(temp[:,8], temp[:,9])
 
 
 from sklearn.cluster import KMeans
-num_clusters = 10
+numClusters = 15
 
-PCsub = CPCs/var_explained[:,None]
+PCsub = CPCs*var_explained
 
 #  KMEANS
-kma = KMeans(n_clusters=num_clusters, n_init=2000).fit(PCsub)
+kma = KMeans(n_clusters=numClusters, n_init=2000).fit(PCsub)
 
 # groupsize
 _, group_size = np.unique(kma.labels_, return_counts=True)
 
 # groups
 d_groups = {}
-for k in range(num_clusters):
+for k in range(numClusters):
     d_groups['{0}'.format(k)] = np.where(kma.labels_ == k)
 
-#
 # # centroids
 # centroids = np.dot(kma.cluster_centers_, EOFsub)
-centroids = kma.cluster_centers_
+# centroids = kma.cluster_centers_
+centroids = np.zeros((numClusters, PCsub.shape[1]))
+for k in range(numClusters):
+    centroids[k,:] = np.mean(PCsub[d_groups['{0}'.format(k)],:], axis=1)/var_explained
+
+bmus = kma.labels_
+
+    # # reorder clusters: bmus, km, cenEOFs, centroids, group_size
+    # sorted_bmus = np.zeros((len(kma.labels_),),)*np.nan
+    # for i in range(numClusters):
+    #     posc = np.where(kma.labels_ == kma_order[i])
+    #     sorted_bmus[posc] = i
+
+
+from matplotlib import gridspec
+fig2 = plt.figure(figsize=(10,10))
+gs = gridspec.GridSpec(4, 5, wspace=0.0, hspace=0.0)
+gr, gc = 0, 0
+profiles = np.zeros((numClusters,len(xinterp)))
+for i in range(numClusters):
+    #getind = sorted[i]
+    # cpc1RT, cpc1Phi = R2P(complex(centroids[i, 0], centroids[i, 1]))
+    # cpc2RT, cpc2Phi = R2P(complex(centroids[i, 2], centroids[i, 3]))
+    # cpc3RT, cpc3Phi = R2P(complex(centroids[i, 4], centroids[i, 5]))
+    # cpc4RT, cpc4Phi = R2P(complex(centroids[i, 6], centroids[i, 7]))
+    # cpc5RT, cpc5Phi = R2P(complex(centroids[i, 8], centroids[i, 9]))
+    # cpc6RT, cpc6Phi = R2P(complex(centroids[i, 10], centroids[i, 11]))
+
+    cpcRt = np.zeros((modes,))
+    cpcPhi = np.zeros((modes,))
+
+    cpcRt[0], cpcPhi[0] = R2P(complex(centroids[i, 0], centroids[i, 1]))
+    cpcRt[1], cpcPhi[1] = R2P(complex(centroids[i, 2], centroids[i, 3]))
+    cpcRt[2], cpcPhi[2] = R2P(complex(centroids[i, 4], centroids[i, 5]))
+    cpcRt[3], cpcPhi[3] = R2P(complex(centroids[i, 6], centroids[i, 7]))
+    cpcRt[4], cpcPhi[4] = R2P(complex(centroids[i, 8], centroids[i, 9]))
+    cpcRt[5], cpcPhi[5] = R2P(complex(centroids[i, 10], centroids[i, 11]))
+    profile = 0 * np.ones(len(xinterp), )
+    for mode in range(6):
+        profile = profile + cpcRt[mode] * np.sin(cpcPhi[mode]) * S[:, mode] * np.sin(theta[:, mode]) + cpcRt[mode]* np.cos(cpcPhi[mode]) * S[:, mode] * np.cos(theta[:, mode])
+
+    profiles[i,:] = profile+np.mean(alllines,axis=0)
+    #profile = kma.centroids[i,:] * pred_std + pred_mean
+
+    ax = plt.subplot(gs[gr, gc])
+
+    ax.plot(xinterp,profile+np.mean(alllines,axis=0))
+    ax.set_xlim([80, 820])
+    ax.set_ylim([-8, 2.25])
+    #ax.set_title('{}'.format(KMA.group_size.values[i]))
+    ax.text(400,0, group_size[i], fontweight='bold')
+
+    if gc > 0:
+        ax.set_yticks([])
+
+    if gr < (5-1):
+        ax.set_xticks([])
+    #  counter
+    gc += 1
+    if gc >= 5:
+        gc = 0
+        gr += 1
+
+
+import scipy.signal as sig
+deviation = np.zeros((np.shape(profiles)))
+
+for i in range(numClusters):
+    deviation[i,:] = profiles[i,:] - np.mean(alllines,axis=0)
+
+
+
+
+offshorePeaks = np.zeros((numClusters,))
+inshorePeaks = np.zeros((numClusters,))
+inshoreDepth = np.zeros((numClusters,))
+offshoreDepth = np.zeros((numClusters,))
+
+
+fig3 = plt.figure(figsize=(10,10))
+gs = gridspec.GridSpec(4, 5, wspace=0.0, hspace=0.0)
+gr, gc = 0, 0
+for i in range(numClusters):
+    #getind = sorted[i]
+    dev = deviation[i,:]
+    true = profiles[i,:]
+
+    peaks = sig.find_peaks(x=(true), prominence=0.01)
+
+    if len(peaks[0]) > 0:
+        offshorePeaks[i] = np.max(peaks[0])
+        offshoreDepth[i] = true[np.max(peaks[0])]
+
+    if len(peaks[0]) > 1:
+        inshorePeaks[i] = np.min(peaks[0])
+        inshoreDepth[i] = true[np.min(peaks[0])]
+
+    ax = plt.subplot(gs[gr, gc])
+
+    ax.plot(xinterp,true)
+    ax.plot(xinterp[peaks[0]],true[peaks[0]],'ro')
+    ax.set_xlim([80, 820])
+    ax.set_ylim([-8, 2.25])
+    #ax.set_title('{}'.format(KMA.group_size.values[i]))
+    ax.text(400,0, group_size[i], fontweight='bold')
+
+    if gc > 0:
+        ax.set_yticks([])
+
+    if gr < (5-1):
+        ax.set_xticks([])
+    #  counter
+    gc += 1
+    if gc >= 5:
+        gc = 0
+        gr += 1
+
+
+
+
+
+
+
+# totalDepths = offshoreDepth+inshoreDepth
+sortedPeaks = np.sort(offshorePeaks)
+sortedPeakInd = np.argsort(offshorePeaks)
+
+# doubleIndex = np.where((inshorePeaks > 0))
+# singleIndex = np.where((inshorePeaks == 0))
+# sortedInPeaks = np.argsort(offshorePeaks[doubleIndex[0]])
+# sortedOffPeaks = np.argsort(offshorePeaks[singleIndex[0]])
+# sortedPeakInd = np.append(singleIndex[0][sortedOffPeaks],doubleIndex[0][sortedInPeaks])
+
+
+fig3 = plt.figure(figsize=(10,10))
+gs = gridspec.GridSpec(10, 2, wspace=0.0, hspace=0.0)
+gr, gc = 0, 0
+import matplotlib.cm as cm
+colors = cm.rainbow(np.linspace(0, 1, numClusters))
+
+for i in range(numClusters):
+    #getind = sorted[i]
+    dev = deviation[sortedPeakInd[i],:]
+    true = profiles[sortedPeakInd[i],:]
+
+    peaks = sig.find_peaks(x=(true), prominence=0.05)
+
+    #if len(peaks[0]) > 0:
+    #    offshorePeaks[i] = np.max(peaks[0])
+
+    ax = plt.subplot(gs[gr, gc])
+
+    ax.plot(xinterp,true,color=colors[i])
+    #ax.plot(xinterp[peaks[0]],true[peaks[0]],'ro')
+    ax.set_xlim([80, 720])
+    ax.set_ylim([-8, 2.25])
+    #ax.set_title('{}'.format(KMA.group_size.values[i]))
+    ax.text(400,0, group_size[i], fontweight='bold')
+
+    if gc > 0:
+        ax.set_yticks([])
+
+    if gr < (10-1):
+        ax.set_xticks([])
+    #  counter
+    gr += 1
+    if gr >= 10:
+        gc += 1
+        gr = 0
+
+
+
+bmu = np.zeros((len(time),))
+
+for i in range(numClusters):
+    bmuIndex = np.where((bmus == sortedPeakInd[i]))
+    bmu[bmuIndex] = i
+
+fig5 = plt.figure(figsize=(10,5))
+plt.plot(bmu,time,'o')
+plt.show()
+
+
+
+fig6 = plt.figure(figsize=(10,10))
+gs = gridspec.GridSpec(4, 5, wspace=0.0, hspace=0.0)
+gr, gc = 0, 0
+for i in range(numClusters):
+    #getind = sorted[i]
+    bmuIndex = np.where((bmus == sortedPeakInd[i]))
+
+    subset = alllines[bmuIndex,:]
+
+    ax = plt.subplot(gs[gr, gc])
+    for x in range(len(bmuIndex[0])):
+        ax.plot(xinterp,subset[0,x,:])
+
+    ax.set_xlim([80, 820])
+    ax.set_ylim([-8, 2.25])
+    #ax.set_title('{}'.format(KMA.group_size.values[i]))
+    ax.text(400,0, group_size[sortedPeakInd[i]], fontweight='bold')
+
+    if gc > 0:
+        ax.set_yticks([])
+
+    if gr < (5-1):
+        ax.set_xticks([])
+    #  counter
+    gc += 1
+    if gc >= 5:
+        gc = 0
+        gr += 1
+
+
+
+innerBar = np.nan * np.ones((alllines.shape[0],))
+outerBar = np.nan * np.ones((alllines.shape[0],))
+
+zOuterBar = np.nan * np.ones((alllines.shape[0],))
+zInnerBar = np.nan * np.ones((alllines.shape[0],))
+
+innerTrough = np.nan * np.ones((alllines.shape[0],))
+outerTrough = np.nan * np.ones((alllines.shape[0],))
+zOuterTrough = np.nan * np.ones((alllines.shape[0],))
+zInnerTrough = np.nan * np.ones((alllines.shape[0],))
+
+
+for tt in range(alllines.shape[0]):
+    bathy = alllines[tt,:]
+    bathyX = xinterp
+    if bathy[~np.isnan(bathy)].any():
+        fname = "/home/dylananderson/projects/duckGeomorph/sandBarTool/BarId_{}.png".format(time[tt].strftime("%Y%m%d"))
+        #xFRFbar, xFRFtrough = mL.findSandBarAndTrough1D(bathyX, bathy, plotFname=fname, smoothLengthScale=10, profileTrend=np.mean(alllines,axis=0))
+        xFRFbar, xFRFtrough = mL.findSandBarAndTrough1D(bathyX, bathy, plotFname=None, smoothLengthScale=20, profileTrend=np.mean(alllines,axis=0))
+
+        if xFRFbar is not None:
+            #for sandbarX in xFRFbar:
+            #    ax[1].plot(sandbarX, time[tt], 'ro', label='bar')
+
+            if len(xFRFbar) > 1:
+                outerBar[tt] = np.max(xFRFbar)
+                zOuterInd = np.where((np.round(2*np.max(xFRFbar))/2 == bathyX))
+                zOuterBar[tt] = bathy[zOuterInd[0]]
+
+                innerBar[tt] = np.min(xFRFbar)
+                zInnerInd = np.where((np.round(2*np.min(xFRFbar))/2 == bathyX))
+                zInnerBar[tt] = bathy[zInnerInd[0]]
+
+            else:
+                outerBar[tt] = xFRFbar
+                zOuterInd = np.where((np.round(2*xFRFbar)/2 == bathyX))
+                zOuterBar[tt] = bathy[zOuterInd[0]]
+
+        if xFRFtrough is not None:
+            #for troughX in xFRFtrough:
+            #    ax[1].plot(troughX, time[tt], 'bd', label='trough')
+            if len(xFRFtrough) > 1:
+                outerTrough[tt] = np.max(xFRFtrough)
+                zOuterInd = np.where((np.round(2*np.max(xFRFtrough))/2 == bathyX))
+                zOuterTrough[tt] = bathy[zOuterInd[0]]
+
+                innerTrough[tt] = np.min(xFRFtrough)
+                zInnerInd = np.where((np.round(2*np.min(xFRFtrough))/2 == bathyX))
+                zInnerTrough[tt] = bathy[zInnerInd[0]]
+            else:
+                outerTrough[tt] = xFRFtrough
+                zOuterInd = np.where((np.round(2*xFRFtrough)/2 == bathyX))
+                zOuterTrough[tt] = bathy[zOuterInd[0]]
+        #barPatch = mpatches.Patch(color='red', label='sandbar')
+        #troughPatch = mpatches.Patch(color='blue', label='trough')
+
+
+fig2 = plt.figure(figsize=(8,8))
+plt.plot(time,innerBar,'bo')
+plt.plot(time,outerBar,'ro')
+
+
+
+fig11, ax11 = plt.subplots(2,1)
+#ax10 = fig.add_subplot(111)
+#ax10.set_prop_cycle(plt.cycler('color', plt.cm.jet(np.linspace(0, 1, numClusters))))
+import matplotlib.cm as cm
+colors = cm.rainbow(np.linspace(0, 1, numClusters))
+colors2 = cm.gray(np.linspace(0, 1, numClusters))
+for i in range(numClusters):
+    bmuIndex = np.where((bmus == sortedPeakInd[i]))
+    ax11[0].scatter(time[bmuIndex], outerBar[bmuIndex], label=time[i], color = colors[i])
+    ax11[1].scatter(time[bmuIndex], innerBar[bmuIndex], color = colors[i])
+
+ax11[0].set_ylabel('xFRF')
+ax11[1].set_ylabel('xFRF')
+
+
+
+
+
+fig3 = plt.figure(figsize=(10,10))
+gs = gridspec.GridSpec(10, 10, wspace=0.0, hspace=0.0)
+gr, gc = 0, 0
+import matplotlib.cm as cm
+colors = cm.rainbow(np.linspace(0, 1, numClusters))
+
+for i in range(numClusters):
+    #getind = sorted[i]
+    dev = deviation[sortedPeakInd[i],:]
+    true = profiles[sortedPeakInd[i],:]
+
+    peaks = sig.find_peaks(x=(true), prominence=0.05)
+
+    #if len(peaks[0]) > 0:
+    #    offshorePeaks[i] = np.max(peaks[0])
+
+    ax = plt.subplot(gs[gr, gc])
+
+    ax.plot(xinterp,true,color=colors[i])
+    #ax.plot(xinterp[peaks[0]],true[peaks[0]],'ro')
+    ax.set_xlim([80, 720])
+    ax.set_ylim([-8, 2.25])
+    #ax.set_title('{}'.format(KMA.group_size.values[i]))
+    ax.text(400,0, group_size[i], fontweight='bold')
+
+    if gc > 0:
+        ax.set_yticks([])
+
+    if gr < (10-1):
+        ax.set_xticks([])
+    #  counter
+    gr += 1
+    if gr >= 10:
+        gc += 1
+        gr = 0
+
+
+ax15 = plt.subplot(gs[0:5, 3:])
+ax16 = plt.subplot(gs[6:,3:])
+for i in range(numClusters):
+    bmuIndex = np.where((bmus == sortedPeakInd[i]))
+    ax15.scatter(time[bmuIndex], outerBar[bmuIndex], label=time[i], color = colors[i])
+    ax16.scatter(time[bmuIndex], innerBar[bmuIndex], color = colors[i])
+
+ax15.set_ylabel('xFRF')
+ax16.set_ylabel('xFRF')
+ax15.set_title('Offshore Bar')
+ax16.set_title('Onshore Bar')
+
 
 
 

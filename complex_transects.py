@@ -969,7 +969,7 @@ ax16.set_ylabel('xFRF')
 ax15.set_title('Offshore Bar')
 ax16.set_title('Onshore Bar')
 
-
+plt.show()
 
 
 # from sklearn.cluster import KMeans

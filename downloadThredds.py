@@ -8,12 +8,14 @@ from urllib.request import urlretrieve
 
 # Divide the url you get from the data portal into two parts
 # Everything before "catalog/"
-#server_url = 'https://chldata.erdc.dren.mil/thredds/'
-server_url = 'http://thredds.northwestknowledge.net:8080/thredds/'
+server_url = 'https://chldata.erdc.dren.mil/thredds/'
+#server_url = 'http://thredds.northwestknowledge.net:8080/thredds/'
 # Everything after "catalog/"
 #request_url = 'catalog/frf/geomorphology/elevationTransects/survey/'
 #request_url = 'catalog/frf/geomorphology/DEMs/surveyDEM/'
-request_url = 'dodsC/' #agg_macav2metdata_rhsmin_CanESM2_r1i1p1_rcp45_2006_2099_CONUS_daily.nc'
+request_url = 'catalog/frf/oceanography/waves/8m-array/2019/'
+
+#request_url = 'dodsC/' #agg_macav2metdata_rhsmin_CanESM2_r1i1p1_rcp45_2006_2099_CONUS_daily.nc'
 #request_url = 'catalog/wis/Atlantic/ST63218/2005/'
 
 
@@ -41,7 +43,7 @@ def main():
             files.append(citem)
     count = 0
 
-    file_subset = files[0:4]
+    file_subset = files[10:12]
 
     for f in file_subset:
         count += 1
@@ -53,8 +55,8 @@ def main():
         print('Downloaing file %d of %d' % (count, len(file_subset)))
         print(file_url)
         print(file_name)
-        #a = urlretrieve(file_url, file_name)
-        #print(a)
+        a = urlretrieve(file_url, file_name)
+        print(a)
 
     return catalog, files, file_subset
 

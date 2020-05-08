@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="144aeda8-086a-4b59-b43a-e83e36ee8dd3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/complexClustering.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/complex_transects.py" beforeDir="false" afterPath="$PROJECT_DIR$/complex_transects.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/complexClustering.py" beforeDir="false" afterPath="$PROJECT_DIR$/complexClustering.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/downloadThredds.py" beforeDir="false" afterPath="$PROJECT_DIR$/downloadThredds.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sandBarTool/morphLib.py" beforeDir="false" afterPath="$PROJECT_DIR$/sandBarTool/morphLib.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/testbedutils/geoprocess.py" beforeDir="false" afterPath="$PROJECT_DIR$/testbedutils/geoprocess.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/testbedutils/gridTools.py" beforeDir="false" afterPath="$PROJECT_DIR$/testbedutils/gridTools.py" afterDir="false" />
@@ -31,7 +31,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/complexClustering.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/downloadThredds.py" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PythonContentEntriesConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -39,7 +39,7 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.complexClustering">
+  <component name="RunManager" selected="Python.downloadThredds">
     <configuration name="WISscratch" type="PythonConfigurationType" factoryName="Python">
       <module name="duckGeomorph" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -110,6 +110,24 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/complex_transects.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="downloadThredds" type="PythonConfigurationType" factoryName="Python">
+      <module name="duckGeomorph" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="$USER_HOME$/anaconda3/envs/cmtb/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/downloadThredds.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -306,6 +324,7 @@
       <item itemvalue="Python.complexImageStack" />
       <item itemvalue="Python.complex_scratch" />
       <item itemvalue="Python.complexClustering" />
+      <item itemvalue="Python.downloadThredds" />
       <item itemvalue="Python.dunex_transects" />
       <item itemvalue="Python.fabricatedTest" />
       <item itemvalue="Python.latestFRF" />
@@ -343,15 +362,15 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="2078" y="123" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1588882011990">
+    <state x="2078" y="123" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1588890432352">
       <screen x="1920" y="0" width="1920" height="1200" />
     </state>
-    <state x="2078" y="123" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.120.1920.1080/1920.0.1920.1200@1920.0.1920.1200" timestamp="1588882011990" />
+    <state x="2078" y="123" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.120.1920.1080/1920.0.1920.1200@1920.0.1920.1200" timestamp="1588890432352" />
     <state x="277" y="135" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.27.3360.1053@0.27.3360.1053" timestamp="1584809299393" />
-    <state x="2772" y="466" width="424" height="484" key="FileChooserDialogImpl" timestamp="1588882007778">
+    <state x="2772" y="466" width="424" height="484" key="FileChooserDialogImpl" timestamp="1588890425654">
       <screen x="1920" y="0" width="1920" height="1200" />
     </state>
-    <state x="2772" y="466" key="FileChooserDialogImpl/0.120.1920.1080/1920.0.1920.1200@1920.0.1920.1200" timestamp="1588882007778" />
+    <state x="2772" y="466" width="424" height="484" key="FileChooserDialogImpl/0.120.1920.1080/1920.0.1920.1200@1920.0.1920.1200" timestamp="1588890425654" />
     <state x="1650" y="567" key="FileChooserDialogImpl/0.27.3360.1053@0.27.3360.1053" timestamp="1584804472615" />
     <state x="1916" y="1107" width="374" height="993" key="FileChooserDialogImpl/1006.0.1853.2160@1006.0.1853.2160" timestamp="1582641203189" />
     <state x="1920" y="556" key="FileChooserDialogImpl/67.147.3773.1053@67.147.3773.1053" timestamp="1580655801483" />

@@ -759,7 +759,7 @@ sortedPeakInd = np.argsort(offshorePeaks)
 
 
 fig3 = plt.figure(figsize=(10,10))
-gs = gridspec.GridSpec(10, 2, wspace=0.0, hspace=0.0)
+gs = gridspec.GridSpec(15, 1, wspace=0.0, hspace=0.0)
 gr, gc = 0, 0
 import matplotlib.cm as cm
 colors = cm.rainbow(np.linspace(0, 1, numClusters))
@@ -786,15 +786,50 @@ for i in range(numClusters):
     if gc > 0:
         ax.set_yticks([])
 
-    if gr < (10-1):
+    if gr < (15-1):
         ax.set_xticks([])
     #  counter
     gr += 1
-    if gr >= 10:
+    if gr >= 15:
         gc += 1
         gr = 0
 
 
+fig3 = plt.figure(figsize=(10,10))
+gs = gridspec.GridSpec(1, 15, wspace=0.0, hspace=0.0)
+gr, gc = 0, 0
+import matplotlib.cm as cm
+colors = cm.rainbow(np.linspace(0, 1, numClusters))
+
+for i in range(numClusters):
+    #getind = sorted[i]
+    dev = deviation[sortedPeakInd[i],:]
+    true = profiles[sortedPeakInd[i],:]
+
+    peaks = sig.find_peaks(x=(true), prominence=0.05)
+
+    #if len(peaks[0]) > 0:
+    #    offshorePeaks[i] = np.max(peaks[0])
+
+    ax = plt.subplot(gs[gr, gc])
+
+    ax.plot(xinterp,true,color=colors[i])
+    #ax.plot(xinterp[peaks[0]],true[peaks[0]],'ro')
+    ax.set_xlim([80, 720])
+    ax.set_ylim([-8, 2.25])
+    #ax.set_title('{}'.format(KMA.group_size.values[i]))
+    ax.text(400,0, group_size[i], fontweight='bold')
+
+    if gr < 15:
+        ax.set_yticks([])
+
+    if gc > 0:
+        ax.set_xticks([])
+    #  counter
+    gc += 1
+    if gc >= 15:
+        gr += 1
+        gc = 0
 
 bmu = np.zeros((len(time),))
 
@@ -970,25 +1005,52 @@ ax15.set_title('Offshore Bar')
 ax16.set_title('Onshore Bar')
 
 sorted_bmus = np.tile(0,(len(kma.labels_),), )
+sorted_time = np.tile(0,(len(kma.labels_),), )
+
 for i in range(numClusters):
     posc = np.where(kma.labels_ == sortedPeakInd[i])
     sorted_bmus[posc] = int(i)
+    #sorted_time[posc] = time[posc]
 
+fig5 = plt.figure(figsize=(10,5))
+plt.plot(sorted_bmus,time,'o')
+plt.show()
 
 def transition_matrix(transitions):
     n = 1+ max(transitions) #number of states
-
     M = [[0]*n for _ in range(n)]
-
     for (i,j) in zip(transitions,transitions[1:]):
         M[i][j] += 1
-
     #now convert to probabilities:
     for row in M:
         s = sum(row)
         if s > 0:
             row[:] = [f/s for f in row]
     return M
+
+# def transitionDictionary(bmus,dates):
+
+bins = dict()
+date = dict()
+nextbin = dict()
+nextdate = dict()
+prevbin = dict()
+prevdate = dict()
+for xx in range(numClusters):
+    binind = np.where((sorted_bmus==xx))
+    bins[xx] = binind
+    date[xx] = time[binind]
+    nextbinind = np.where((sorted_bmus[0:-1]==xx))
+    K = 1
+    res = [x + K for x in nextbinind]
+    nextbin[xx] = sorted_bmus[res]
+    nextdate[xx] = time[res]
+    prevbinind = np.where((sorted_bmus==xx))
+    res2 = [x - K for x in prevbinind]
+    prevbin[xx] = sorted_bmus[res2]
+    prevdate[xx] = time[res2]
+
+
 
 m = transition_matrix(sorted_bmus)
 for row in m: print(' '.join('{0:.2f}'.format(x) for x in row))
@@ -1002,6 +1064,270 @@ fig = plt.figure(figsize=(10,10))
 ax = plt.subplot2grid((2,2),(0,0),colspan=2,rowspan=2)
 ax.imshow(flatarray,vmin=0,vmax=0.3,cmap='Oranges')
 plt.show()
+
+import h5py
+
+waveFile = '/home/dylananderson/projects/duckGeomorph/8m_edat.mat'
+# waveFile = '/home/dylananderson/projects/duckGeomorph/17m_2D_edat.mat'
+
+waves = dict()
+with h5py.File(waveFile, 'r') as f:
+    for k in f.keys():
+        print(k)
+    waves['hs'] = f['edat/hs'][:]
+    waves['tp'] = f['edat/tp'][:]
+    waves['dm'] = f['edat/dm'][:]
+    waves['time'] = f['edat/time'][:]
+
+from datetime import datetime
+from datetime import timedelta
+def datenum_to_datetime(datenum):
+    """
+    Convert Matlab datenum into Python datetime.
+    :param datenum: Date in datenum format
+    :return:        Datetime object corresponding to datenum.
+    """
+    days = datenum % 1
+    hours = days % 1 * 24
+    minutes = hours % 1 * 60
+    seconds = minutes % 1 * 60
+    return datetime.fromordinal(int(datenum)) \
+           + timedelta(days=int(days)) \
+           + timedelta(hours=int(hours)) \
+           + timedelta(minutes=int(minutes)) \
+           + timedelta(seconds=round(seconds)) \
+           - timedelta(days=366)
+
+timeWave = [datenum_to_datetime(x) for x in waves['time'].flatten()]
+
+# python_datetime = datetime.fromordinal(int(matlab_datenum)) + timedelta(days=matlab_datenum%1) - timedelta(days = 366)
+
+
+
+def getArray(file):
+    waves = Dataset(file)
+
+    waveHs = waves.variables['waveHs'][:]
+    waveTp = waves.variables['waveTp'][:]
+    #waveTm = waves.variables['waveTm'][:]
+    #waveTm1 = waves.variables['waveTm1'][:]
+    #waveTm2 = waves.variables['waveTm2'][:]
+    waveMeanDirection = waves.variables['waveMeanDirection'][:]
+    #waveMeanDirectionSwell = waves.variables['waveMeanDirectionSwell'][:]
+    timeW = waves.variables['time'][:]
+
+
+    output = dict()
+    output['waveHs'] = waveHs
+    output['waveTp'] = waveTp
+    #output['waveTm'] = waveTm
+    #output['waveTm1'] = waveTm1
+    #output['waveTm2'] = waveTm2
+    output['waveMeanDirection'] = waveMeanDirection
+    #output['waveMeanDirectionSwell'] = waveMeanDirectionSwell
+    output['t'] = timeW
+
+    return output
+
+wavedir = '/media/dylananderson/Elements/8mArray/'
+# Need to sort the files to ensure correct temporal order...
+files = os.listdir(wavedir)
+files.sort()
+files_path = [os.path.join(os.path.abspath(wavedir), x) for x in files]
+array8m = Dataset(files_path[0])
+Hs8m = []
+Tp8m = []
+Dm8m = []
+timeWave8m = []
+for i in files_path:
+    waves8m = getArray(i)
+    Hs8m = np.append(Hs8m,waves8m['waveHs'])
+    Tp8m = np.append(Tp8m,waves8m['waveTp'])
+    Dm8m = np.append(Dm8m,waves8m['waveMeanDirection'])
+    timeWave8m = np.append(timeWave8m,waves8m['t'])
+
+ind = np.where((timeWave8m > 1000000))
+hs8m = Hs8m[ind]
+tp8m = Tp8m[ind]
+dm8m = Dm8m[ind]
+t8m = timeWave8m[ind]
+tWave8m = [DT.datetime.fromtimestamp(x) for x in t8m]
+
+
+
+wavedir = '/media/dylananderson/Elements/17mArray/'
+# Need to sort the files to ensure correct temporal order...
+files = os.listdir(wavedir)
+files.sort()
+files_path = [os.path.join(os.path.abspath(wavedir), x) for x in files]
+array17m = Dataset(files_path[0])
+Hs17m = []
+Tp17m = []
+Dm17m = []
+timeWave17m = []
+for i in files_path:
+    waves17m = getArray(i)
+    Hs17m = np.append(Hs17m,waves17m['waveHs'])
+    Tp17m = np.append(Tp17m,waves17m['waveTp'])
+    Dm17m = np.append(Dm17m,waves17m['waveMeanDirection'])
+    timeWave17m = np.append(timeWave17m,waves17m['t'])
+
+ind = np.where((Hs17m > 0))
+hs17m = Hs17m[ind]
+tp17m = Tp17m[ind]
+dm17m = Dm17m[ind]
+t17m = timeWave17m[ind]
+tWave17m = [DT.datetime.fromtimestamp(x) for x in t17m]
+
+
+plt.figure(figsize=(10,10))
+ax = plt.subplot2grid((3,3,),(0,0),rowspan=1,colspan=3)
+ax.plot(timeWave,waves['hs'],label='reconstruction')
+ax.plot(tWave17m,hs17m,label='17mArray')
+ax.plot(tWave8m,hs8m,label='8mArray')
+plt.legend()
+ax2 = plt.subplot2grid((3,3,),(1,0),rowspan=1,colspan=3)
+ax2.plot(timeWave,waves['tp'])
+ax2.plot(tWave17m,tp17m)
+ax2.plot(tWave8m,tp8m)
+ax3 = plt.subplot2grid((3,3,),(2,0),rowspan=1,colspan=3)
+ax3.plot(timeWave,waves['dm'])
+ax3.plot(tWave17m,dm17m)
+ax3.plot(tWave8m,dm8m)
+
+plt.show()
+
+HsArrays = np.append(hs17m,hs8m)
+HsCombined = np.append(waves['hs'], HsArrays)
+TpArrays = np.append(tp17m,tp8m)
+TpCombined = np.append(waves['tp'], TpArrays)
+DmArrays = np.append(dm17m,dm8m)
+DmCombined = np.append(waves['dm'], DmArrays)
+TimeArrays = np.append(tWave17m,tWave8m)
+TimeCombined = np.append(timeWave, TimeArrays)
+
+tC = TimeCombined[np.argsort(TimeCombined)]
+hsC = HsCombined[np.argsort(TimeCombined)]
+tpC = TpCombined[np.argsort(TimeCombined)]
+dmC = DmCombined[np.argsort(TimeCombined)]
+
+plt.figure(figsize=(10,10))
+ax = plt.subplot2grid((3,3,),(0,0),rowspan=1,colspan=3)
+ax.plot(tC,hsC,'-',label='Combined')
+plt.legend()
+ax2 = plt.subplot2grid((3,3,),(1,0),rowspan=1,colspan=3)
+ax2.plot(tC,tpC,'-')
+ax3 = plt.subplot2grid((3,3,),(2,0),rowspan=1,colspan=3)
+ax3.plot(tC,dmC,'.')
+ax3.set_ylim([0, 180])
+plt.show()
+
+# overlap = np.in1d(tWave17m,tWave8m) # length of datetime1, gives True for those elements which exist in datetime2
+# ntWave17m = np.delete(tWave17m,overlap)
+
+
+# bins = dict()
+# date = dict()
+# nextbin = dict()
+# nextdate = dict()
+# prevbin = dict()
+# prevdate = dict()
+wHs = []
+wTp = []
+wT = []
+for xx in range(numClusters):
+    innerListHs = []
+    innerListTp = []
+    innerListT = []
+    for yy in range(numClusters):
+        # if both are equal then the wave conditions didn't cause a transition and
+        # everything between the last two dates should be added to a distribution
+        # if yy is different...
+        wInd = np.where(prevbin[xx]==yy)
+        if len(wInd[0])>0:
+            tempHs = []
+            tempTp = []
+            tempTi = []
+            for tt in range(len(wInd[0])):
+                tempT = np.where((tC < date[xx][wInd[0][tt]]) & (tC > prevdate[xx][wInd[0][tt]]))
+                tempHs = np.append(tempHs,hsC[tempT])
+                tempTp = np.append(tempTp,tpC[tempT])
+                tempTi = np.append(tempTi,tC[tempT])
+
+        else:
+            tempHs = []
+            tempTp = []
+            tempTi = []
+
+        innerListHs.append(tempHs)
+        innerListTp.append(tempTp)
+        innerListT.append(tempTi)
+
+    wHs.append(innerListHs)
+    wTp.append(innerListTp)
+    wT.append(innerListT)
+
+
+
+from scipy.stats.kde import gaussian_kde
+dist_space = np.linspace(0, 3, 50)
+fig = plt.figure(figsize=(10,10))
+
+for xx in range(numClusters):
+    for yy in range(numClusters):
+        ax = plt.subplot2grid((15,15), (yy,xx), rowspan=1, colspan=1)
+        ax.set_xlim([0,3])
+        data = wHs[xx][yy]
+        if len(data)>0:
+            kde = gaussian_kde(data)
+            ax.plot(dist_space, kde(dist_space),linewidth=1)
+            ax.spines['bottom'].set_color([0.5, 0.5, 0.5])
+            ax.spines['top'].set_color([0.5, 0.5, 0.5])
+            ax.spines['right'].set_color([0.5, 0.5, 0.5])
+            ax.spines['left'].set_color([0.5, 0.5, 0.5])
+        else:
+            ax.spines['bottom'].set_color([0.3, 0.3, 0.3])
+            ax.spines['top'].set_color([0.3, 0.3, 0.3])
+            ax.spines['right'].set_color([0.3, 0.3, 0.3])
+            ax.spines['left'].set_color([0.3, 0.3, 0.3])
+            if yy < 14:
+                ax.xaxis.set_ticks([])
+        if yy < 14:
+            ax.xaxis.set_ticklabels([])
+        ax.yaxis.set_ticklabels([])
+        ax.yaxis.set_ticks([])
+plt.show()
+
+
+from scipy.stats.kde import gaussian_kde
+dist_space = np.linspace(0, 18, 20)
+fig = plt.figure(figsize=(10,10))
+
+for xx in range(numClusters):
+    for yy in range(numClusters):
+        ax = plt.subplot2grid((15,15), (yy,xx), rowspan=1, colspan=1)
+        ax.set_xlim([0,18])
+        data = wTp[xx][yy]
+        if len(data)>0:
+            kde = gaussian_kde(data)
+            ax.plot(dist_space, kde(dist_space),linewidth=1)
+            ax.spines['bottom'].set_color([0.5, 0.5, 0.5])
+            ax.spines['top'].set_color([0.5, 0.5, 0.5])
+            ax.spines['right'].set_color([0.5, 0.5, 0.5])
+            ax.spines['left'].set_color([0.5, 0.5, 0.5])
+        else:
+            ax.spines['bottom'].set_color([0.3, 0.3, 0.3])
+            ax.spines['top'].set_color([0.3, 0.3, 0.3])
+            ax.spines['right'].set_color([0.3, 0.3, 0.3])
+            ax.spines['left'].set_color([0.3, 0.3, 0.3])
+            if yy < 14:
+                ax.xaxis.set_ticks([])
+        if yy < 14:
+            ax.xaxis.set_ticklabels([])
+        ax.yaxis.set_ticklabels([])
+        ax.yaxis.set_ticks([])
+plt.show()
+
 
 
 # from sklearn.cluster import KMeans

@@ -78,7 +78,7 @@ def interpBathy2(xSub,zSub,x):
     return newBathy
 
 
-subset = files[0:969].copy()
+subset = files[0:972].copy()
 #from palettable.colorbrewer.sequential import Blues_8
 #ax.imshow(data, cmap=Blues_8.mpl_colormap
 
@@ -102,7 +102,8 @@ xinterp = np.arange(108, 608, 2.5)
 #     #data = getBathy(os.path.join(geomorphdir, subset[i]), lower=1070, upper=1100)
 #     #data = getBathy(os.path.join(geomorphdir, subset[i]), lower=750, upper=950)
 #     #data = getBathy(os.path.join(geomorphdir, subset[i]), lower=-10, upper=20)
-#     data = getBathy(os.path.join(geomorphdir, subset[i]), lower=-2, upper=10)
+#     #data = getBathy(os.path.join(geomorphdir, subset[i]), lower=-2, upper=10)
+#     data = getBathy(os.path.join(geomorphdir, subset[i]), lower=-50, upper=50)
 #
 #     #data = getBathy(os.path.join(geomorphdir, subset[i]), lower=-2, upper=10)
 #
@@ -136,7 +137,7 @@ xinterp = np.arange(108, 608, 2.5)
 #
 #     if any(realValues):
 #
-#         if np.nanmax(xSubNew) > 650:
+#         if np.nanmax(xSubNew) > 610:
 #
 #             if np.nanmin(xSubNew) < 125:
 #
@@ -162,7 +163,7 @@ xinterp = np.arange(108, 608, 2.5)
 #                         #plt.plot(xSub,zSub)
 #
 #
-#                         xindex = np.where((xSubNew>=700))
+#                         xindex = np.where((xSubNew>=600))
 #
 #                         if len(xindex[0]) > 3:
 #
@@ -176,7 +177,7 @@ xinterp = np.arange(108, 608, 2.5)
 #                             xSubNew2 = np.append(xSubNew, newX)
 #                             zSubNew2 = np.append(zSubNew, newZ)
 #                             moredata = interpBathy(xSubNew2, zSubNew2, xinterp)
-#                             moredata = interpBathy(moredata['x'], moredata['z'], xinterp)
+#                             #moredata = interpBathy(moredata['x'], moredata['z'], xinterp)
 #                             #moredata = interpBathy(xSubNew2, moredata['z'], xinterp)
 #
 #                             del xSubNew2, zSubNew2,newZ,newX,f,mb,zbot,xbot
@@ -270,8 +271,8 @@ count2 = 0
 worstcount = 0
 #fig = plt.figure(figsize=(10,10))
 for i in range(len(subset)):
-    data = getBathy(os.path.join(geomorphdir, subset[i]), lower=1080, upper=1100)
-    #data = getBathy(os.path.join(geomorphdir, subset[i]), lower=-2, upper=10)
+    #data = getBathy(os.path.join(geomorphdir, subset[i]), lower=1080, upper=1100)
+    data = getBathy(os.path.join(geomorphdir, subset[i]), lower=-2, upper=10)
 
     temp = subset[i].split('_')
 
@@ -572,15 +573,18 @@ cpc4 = P2R(Rt[:, 3], phitSubset[:, 3])
 cpc5 = P2R(Rt[:, 4], phitSubset[:, 4])
 cpc6 = P2R(Rt[:, 5], phitSubset[:, 5])
 cpc7 = P2R(Rt[:, 6], phitSubset[:, 6])
+cpc8 = P2R(Rt[:, 7], phitSubset[:, 7])
 
-modes = 6
+modes = 8
 
 CPCs = np.vstack((np.real(cpc1), np.imag(cpc1), np.real(cpc2), np.imag(cpc2), np.real(cpc3), np.imag(cpc3),
-                  np.real(cpc4), np.imag(cpc4), np.real(cpc5), np.imag(cpc5), np.real(cpc6), np.imag(cpc6)))
+                  np.real(cpc4), np.imag(cpc4), np.real(cpc5), np.imag(cpc5), np.real(cpc6), np.imag(cpc6),
+                  np.real(cpc7), np.imag(cpc7), np.real(cpc8), np.imag(cpc8),))
 CPCs = CPCs.T
 
 var_explained = np.array((percentV[0], percentV[0], percentV[1], percentV[1], percentV[2], percentV[2],
-                          percentV[3], percentV[3], percentV[4], percentV[4], percentV[5], percentV[5]))
+                          percentV[3], percentV[3], percentV[4], percentV[4], percentV[5], percentV[5],
+                          percentV[6], percentV[6], percentV[7], percentV[7]))
 
 
 fig = plt.figure()
@@ -589,6 +593,8 @@ plt.plot(np.real(cpc2),np.imag(cpc2))
 plt.plot(np.real(cpc3),np.imag(cpc3))
 plt.plot(np.real(cpc4),np.imag(cpc4))
 plt.plot(np.real(cpc5),np.imag(cpc5))
+plt.plot(np.real(cpc6),np.imag(cpc6))
+plt.plot(np.real(cpc7),np.imag(cpc7))
 
 fig = plt.figure()
 plt.plot(np.real(cpc1)*var_explained[0],np.imag(cpc1)*var_explained[0])
@@ -627,6 +633,7 @@ for k in range(numClusters):
 # centroids = kma.cluster_centers_
 centroids = np.zeros((numClusters, PCsub.shape[1]))
 for k in range(numClusters):
+    print(PCsub[d_groups['{0}'.format(k)],0:1])
     centroids[k,:] = np.mean(PCsub[d_groups['{0}'.format(k)],:], axis=1)/var_explained
 
 bmus = kma.labels_
@@ -643,6 +650,8 @@ fig2 = plt.figure(figsize=(10,10))
 gs = gridspec.GridSpec(4, 5, wspace=0.0, hspace=0.0)
 gr, gc = 0, 0
 profiles = np.zeros((numClusters,len(xinterp)))
+magPhaseCentroid = np.zeros((np.shape(centroids)))
+
 for i in range(numClusters):
     #getind = sorted[i]
     # cpc1RT, cpc1Phi = R2P(complex(centroids[i, 0], centroids[i, 1]))
@@ -661,6 +670,15 @@ for i in range(numClusters):
     cpcRt[3], cpcPhi[3] = R2P(complex(centroids[i, 6], centroids[i, 7]))
     cpcRt[4], cpcPhi[4] = R2P(complex(centroids[i, 8], centroids[i, 9]))
     cpcRt[5], cpcPhi[5] = R2P(complex(centroids[i, 10], centroids[i, 11]))
+
+    cpcRt[6], cpcPhi[6] = R2P(complex(centroids[i, 8], centroids[i, 9]))
+    cpcRt[7], cpcPhi[7] = R2P(complex(centroids[i, 10], centroids[i, 11]))
+
+    magPhaseCentroid[i,0:16] = [cpcRt[0], cpcPhi[0], cpcRt[1], cpcPhi[1], cpcRt[2], cpcPhi[2],
+                                cpcRt[3], cpcPhi[3], cpcRt[4], cpcPhi[4], cpcRt[5], cpcPhi[5],
+                                cpcRt[6], cpcPhi[6], cpcRt[7], cpcPhi[7]]
+
+
     profile = 0 * np.ones(len(xinterp), )
     for mode in range(6):
         profile = profile + cpcRt[mode] * np.sin(cpcPhi[mode]) * S[:, mode] * np.sin(theta[:, mode]) + cpcRt[mode]* np.cos(cpcPhi[mode]) * S[:, mode] * np.cos(theta[:, mode])
@@ -695,8 +713,11 @@ for i in range(numClusters):
     deviation[i,:] = profiles[i,:] - np.mean(alllines,axis=0)
 
 
+# magEOF1cen = magPhaseCentroid[:,2]
+# phaseEOF1cen = magPhaseCentroid[:,3]*180/np.pi
 
 
+zeroShoreline = np.zeros((numClusters,))
 offshorePeaks = np.zeros((numClusters,))
 inshorePeaks = np.zeros((numClusters,))
 inshoreDepth = np.zeros((numClusters,))
@@ -711,6 +732,8 @@ for i in range(numClusters):
     dev = deviation[i,:]
     true = profiles[i,:]
 
+    indexTesting = np.where((np.abs(true) == np.min(np.abs(true))))
+    zeroShoreline[i] = indexTesting[0]
     peaks = sig.find_peaks(x=(true), prominence=0.01)
 
     if len(peaks[0]) > 0:
@@ -729,6 +752,7 @@ for i in range(numClusters):
     ax.set_ylim([-8, 2.25])
     #ax.set_title('{}'.format(KMA.group_size.values[i]))
     ax.text(400,0, group_size[i], fontweight='bold')
+    #ax.text(400,0, phaseEOF1cen[i], fontweight='bold')
 
     if gc > 0:
         ax.set_yticks([])
@@ -745,11 +769,16 @@ for i in range(numClusters):
 
 
 
-
+shorelinePeakDiff = offshorePeaks-zeroShoreline
 
 # totalDepths = offshoreDepth+inshoreDepth
-sortedPeaks = np.sort(offshorePeaks)
-sortedPeakInd = np.argsort(offshorePeaks)
+sortedPeaks = np.sort(shorelinePeakDiff)
+sortedPeakInd = np.argsort(shorelinePeakDiff)
+
+# sortedPeaks = np.sort(phaseEOF1cen)
+# sortedPeakInd = np.argsort(phaseEOF1cen)
+#
+# sortedPhases = phaseEOF1cen[sortedPeakInd]
 
 # doubleIndex = np.where((inshorePeaks > 0))
 # singleIndex = np.where((inshorePeaks == 0))
@@ -759,7 +788,7 @@ sortedPeakInd = np.argsort(offshorePeaks)
 
 
 fig3 = plt.figure(figsize=(10,10))
-gs = gridspec.GridSpec(15, 1, wspace=0.0, hspace=0.0)
+gs = gridspec.GridSpec(numClusters, 1, wspace=0.0, hspace=0.0)
 gr, gc = 0, 0
 import matplotlib.cm as cm
 colors = cm.rainbow(np.linspace(0, 1, numClusters))
@@ -781,22 +810,23 @@ for i in range(numClusters):
     ax.set_xlim([80, 720])
     ax.set_ylim([-8, 2.25])
     #ax.set_title('{}'.format(KMA.group_size.values[i]))
-    ax.text(400,0, group_size[i], fontweight='bold')
+    ax.text(400,0, group_size[sortedPeakInd[i]], fontweight='bold')
+    #ax.text(400,0, sortedPhases[i], fontweight='bold')
 
     if gc > 0:
         ax.set_yticks([])
 
-    if gr < (15-1):
+    if gr < (numClusters-1):
         ax.set_xticks([])
     #  counter
     gr += 1
-    if gr >= 15:
+    if gr >= numClusters:
         gc += 1
         gr = 0
 
 
 fig3 = plt.figure(figsize=(10,10))
-gs = gridspec.GridSpec(1, 15, wspace=0.0, hspace=0.0)
+gs = gridspec.GridSpec(1, numClusters, wspace=0.0, hspace=0.0)
 gr, gc = 0, 0
 import matplotlib.cm as cm
 colors = cm.rainbow(np.linspace(0, 1, numClusters))
@@ -815,19 +845,20 @@ for i in range(numClusters):
 
     ax.plot(xinterp,true,color=colors[i])
     #ax.plot(xinterp[peaks[0]],true[peaks[0]],'ro')
-    ax.set_xlim([80, 720])
-    ax.set_ylim([-8, 2.25])
+    ax.set_xlim([80, 650])
+    ax.set_ylim([-7, 2.25])
     #ax.set_title('{}'.format(KMA.group_size.values[i]))
-    ax.text(400,0, group_size[i], fontweight='bold')
+    ax.text(400,0, group_size[sortedPeakInd[i]], fontweight='bold')
+    #ax.text(400,0, sortedPhases[i], fontweight='bold')
 
-    if gr < 15:
+    if gr < numClusters:
         ax.set_yticks([])
 
     if gc > 0:
         ax.set_xticks([])
     #  counter
     gc += 1
-    if gc >= 15:
+    if gc >= numClusters:
         gr += 1
         gc = 0
 
@@ -1175,7 +1206,7 @@ for i in files_path:
 ind = np.where((Hs17m > 0))
 hs17m = Hs17m[ind]
 tp17m = Tp17m[ind]
-dm17m = Dm17m[ind]
+dm17m = Dm17m[ind]+1000
 t17m = timeWave17m[ind]
 tWave17m = [DT.datetime.fromtimestamp(x) for x in t17m]
 
@@ -1211,6 +1242,21 @@ hsC = HsCombined[np.argsort(TimeCombined)]
 tpC = TpCombined[np.argsort(TimeCombined)]
 dmC = DmCombined[np.argsort(TimeCombined)]
 
+badDirs = np.where((dmC > 360))
+dmC[badDirs] = dmC[badDirs]*np.nan
+
+waveNorm = dmC - 72
+neg = np.where((waveNorm > 180))
+waveNorm[neg[0]] = waveNorm[neg[0]]-360
+offpos = np.where((waveNorm>90))
+offneg = np.where((waveNorm<-90))
+waveNorm[offpos[0]] = waveNorm[offpos[0]]*0
+waveNorm[offneg[0]] = waveNorm[offneg[0]]*0
+
+lwpC = 1025*np.square(hsC)*tpC*(9.81/(64*np.pi))*np.cos(waveNorm*(np.pi/180))*np.sin(waveNorm*(np.pi/180))
+weC = np.square(hsC)*tpC
+# tWave = [DT.datetime.fromtimestamp(x) for x in timeWave]
+
 plt.figure(figsize=(10,10))
 ax = plt.subplot2grid((3,3,),(0,0),rowspan=1,colspan=3)
 ax.plot(tC,hsC,'-',label='Combined')
@@ -1234,10 +1280,16 @@ plt.show()
 # prevdate = dict()
 wHs = []
 wTp = []
+wDm = []
+wLWP = []
+wWE = []
 wT = []
 for xx in range(numClusters):
     innerListHs = []
     innerListTp = []
+    innerListDm = []
+    innerListLWP = []
+    innerListWE = []
     innerListT = []
     for yy in range(numClusters):
         # if both are equal then the wave conditions didn't cause a transition and
@@ -1247,44 +1299,70 @@ for xx in range(numClusters):
         if len(wInd[0])>0:
             tempHs = []
             tempTp = []
+            tempDm = []
+            tempLWP = []
+            tempWE = []
             tempTi = []
             for tt in range(len(wInd[0])):
                 tempT = np.where((tC < date[xx][wInd[0][tt]]) & (tC > prevdate[xx][wInd[0][tt]]))
                 tempHs = np.append(tempHs,hsC[tempT])
                 tempTp = np.append(tempTp,tpC[tempT])
+                tempDm = np.append(tempDm,waveNorm[tempT])
+                tempLWP = np.append(tempLWP,lwpC[tempT])
+                tempWE = np.append(tempWE,weC[tempT])
                 tempTi = np.append(tempTi,tC[tempT])
 
         else:
             tempHs = []
             tempTp = []
+            tempDm = []
+            tempLWP =[]
+            tempWE= []
             tempTi = []
 
         innerListHs.append(tempHs)
         innerListTp.append(tempTp)
+        innerListDm.append(tempDm)
+        innerListLWP.append(tempLWP)
+        innerListWE.append(tempWE)
         innerListT.append(tempTi)
 
     wHs.append(innerListHs)
     wTp.append(innerListTp)
+    wDm.append(innerListDm)
+    wLWP.append(innerListLWP)
+    wWE.append(innerListWE)
     wT.append(innerListT)
 
 
-
+import matplotlib.cm as cm
+import matplotlib.colors as mcolors
 from scipy.stats.kde import gaussian_kde
-dist_space = np.linspace(0, 3, 50)
+dist_space = np.linspace(0, 5, 50)
 fig = plt.figure(figsize=(10,10))
-
+colorparam = np.zeros((numClusters*numClusters,))
+counter = 0
 for xx in range(numClusters):
     for yy in range(numClusters):
         ax = plt.subplot2grid((15,15), (yy,xx), rowspan=1, colspan=1)
+        #normalize = mcolors.Normalize(vmin=np.min(colorparams), vmax=np.max(colorparams))
+        normalize = mcolors.Normalize(vmin=.5, vmax=1.5)
+
         ax.set_xlim([0,3])
+        ax.set_ylim([0,2])
         data = wHs[xx][yy]
         if len(data)>0:
             kde = gaussian_kde(data)
-            ax.plot(dist_space, kde(dist_space),linewidth=1)
+            colorparam[counter] = np.nanmean(data)
+            colormap = cm.Reds
+            color = colormap(normalize(colorparam[counter]))
+            ax.plot(dist_space, kde(dist_space),linewidth=1,color=color)
             ax.spines['bottom'].set_color([0.5, 0.5, 0.5])
             ax.spines['top'].set_color([0.5, 0.5, 0.5])
             ax.spines['right'].set_color([0.5, 0.5, 0.5])
             ax.spines['left'].set_color([0.5, 0.5, 0.5])
+            #ax.text(1.8, 1, np.round(colorparam*100)/100, fontweight='bold')
+
         else:
             ax.spines['bottom'].set_color([0.3, 0.3, 0.3])
             ax.spines['top'].set_color([0.3, 0.3, 0.3])
@@ -1296,7 +1374,18 @@ for xx in range(numClusters):
             ax.xaxis.set_ticklabels([])
         ax.yaxis.set_ticklabels([])
         ax.yaxis.set_ticks([])
+        counter = counter+1
 plt.show()
+s_map = cm.ScalarMappable(norm=normalize, cmap=colormap)
+s_map.set_array(colorparam)
+fig.subplots_adjust(right=0.92)
+cbar_ax = fig.add_axes([0.94, 0.10, 0.02, 0.7])
+cbar = fig.colorbar(s_map, cax=cbar_ax)
+cbar.set_label('Mean Hs (m)')
+#cbar = ax.cax.colorbar(s_map, ticks=colorparam, format='%2.2g') # format='%2i' for integer
+
+
+
 
 
 from scipy.stats.kde import gaussian_kde
@@ -1307,6 +1396,8 @@ for xx in range(numClusters):
     for yy in range(numClusters):
         ax = plt.subplot2grid((15,15), (yy,xx), rowspan=1, colspan=1)
         ax.set_xlim([0,18])
+        ax.set_ylim([0,0.3])
+
         data = wTp[xx][yy]
         if len(data)>0:
             kde = gaussian_kde(data)
@@ -1327,6 +1418,157 @@ for xx in range(numClusters):
         ax.yaxis.set_ticklabels([])
         ax.yaxis.set_ticks([])
 plt.show()
+
+
+
+dist_space = np.linspace(-180, 180, 30)
+fig = plt.figure(figsize=(10,10))
+
+for xx in range(numClusters):
+    for yy in range(numClusters):
+        ax = plt.subplot2grid((15,15), (yy,xx), rowspan=1, colspan=1)
+        ax.set_xlim([-90,90])
+        normalize = mcolors.Normalize(vmin=-15, vmax=15)
+
+        data = wDm[xx][yy]
+        if len(data)>0:
+            baddata = np.isnan((data))
+            data = data[~baddata]
+            if len(data)>0:
+                kde = gaussian_kde(data)
+                colorparam = np.nanmean(data)
+                colormap = cm.bwr
+                color = colormap(normalize(colorparam))
+                ax.plot(dist_space, kde(dist_space),linewidth=1,color=color)
+                ax.spines['bottom'].set_color([0.5, 0.5, 0.5])
+                ax.spines['top'].set_color([0.5, 0.5, 0.5])
+                ax.spines['right'].set_color([0.5, 0.5, 0.5])
+                ax.spines['left'].set_color([0.5, 0.5, 0.5])
+            else:
+                ax.spines['bottom'].set_color([0.3, 0.3, 0.3])
+                ax.spines['top'].set_color([0.3, 0.3, 0.3])
+                ax.spines['right'].set_color([0.3, 0.3, 0.3])
+                ax.spines['left'].set_color([0.3, 0.3, 0.3])
+        else:
+            ax.spines['bottom'].set_color([0.3, 0.3, 0.3])
+            ax.spines['top'].set_color([0.3, 0.3, 0.3])
+            ax.spines['right'].set_color([0.3, 0.3, 0.3])
+            ax.spines['left'].set_color([0.3, 0.3, 0.3])
+            if yy < 14:
+                ax.xaxis.set_ticks([])
+        if yy < 14:
+            ax.xaxis.set_ticklabels([])
+        ax.yaxis.set_ticklabels([])
+        ax.yaxis.set_ticks([])
+plt.show()
+s_map = cm.ScalarMappable(norm=normalize, cmap=colormap)
+s_map.set_array(colorparam)
+fig.subplots_adjust(right=0.92)
+cbar_ax = fig.add_axes([0.94, 0.10, 0.02, 0.7])
+cbar = fig.colorbar(s_map, cax=cbar_ax)
+cbar.set_label('Dir (deg)')
+
+
+
+dist_space = np.linspace(-400, 400, 40)
+fig = plt.figure(figsize=(10,10))
+
+for xx in range(numClusters):
+    for yy in range(numClusters):
+        ax = plt.subplot2grid((15,15), (yy,xx), rowspan=1, colspan=1)
+        ax.set_xlim([-400,400])
+        ax.set_ylim([0, 0.008])
+        normalize = mcolors.Normalize(vmin=0, vmax=200)
+
+        data = wLWP[xx][yy]
+        if len(data)>0:
+            baddata = np.isnan((data))
+            data = data[~baddata]
+            if len(data)>0:
+                kde = gaussian_kde(data)
+                colorparam = np.abs(np.nanmean(data))
+                colormap = cm.Reds
+                color = colormap(normalize(colorparam))
+                ax.plot(dist_space, kde(dist_space),linewidth=1,color=color)
+                ax.spines['bottom'].set_color([0.5, 0.5, 0.5])
+                ax.spines['top'].set_color([0.5, 0.5, 0.5])
+                ax.spines['right'].set_color([0.5, 0.5, 0.5])
+                ax.spines['left'].set_color([0.5, 0.5, 0.5])
+            else:
+                ax.spines['bottom'].set_color([0.3, 0.3, 0.3])
+                ax.spines['top'].set_color([0.3, 0.3, 0.3])
+                ax.spines['right'].set_color([0.3, 0.3, 0.3])
+                ax.spines['left'].set_color([0.3, 0.3, 0.3])
+        else:
+            ax.spines['bottom'].set_color([0.3, 0.3, 0.3])
+            ax.spines['top'].set_color([0.3, 0.3, 0.3])
+            ax.spines['right'].set_color([0.3, 0.3, 0.3])
+            ax.spines['left'].set_color([0.3, 0.3, 0.3])
+            if yy < 14:
+                ax.xaxis.set_ticks([])
+        if yy < 14:
+            ax.xaxis.set_ticklabels([])
+        ax.yaxis.set_ticklabels([])
+        ax.yaxis.set_ticks([])
+plt.show()
+s_map = cm.ScalarMappable(norm=normalize, cmap=colormap)
+s_map.set_array(colorparam)
+fig.subplots_adjust(right=0.92)
+cbar_ax = fig.add_axes([0.94, 0.10, 0.02, 0.7])
+cbar = fig.colorbar(s_map, cax=cbar_ax)
+cbar.set_label('LWP (W$^2$)')
+
+
+
+
+dist_space = np.linspace(0, 100, 40)
+fig = plt.figure(figsize=(10,10))
+
+for xx in range(numClusters):
+    for yy in range(numClusters):
+        ax = plt.subplot2grid((15,15), (yy,xx), rowspan=1, colspan=1)
+        ax.set_xlim([-10, 100])
+        #ax.set_ylim([0, 0.008])
+        normalize = mcolors.Normalize(vmin=0, vmax=50)
+
+        data = wWE[xx][yy]
+        if len(data)>0:
+            baddata = np.isnan((data))
+            data = data[~baddata]
+            if len(data)>0:
+                kde = gaussian_kde(data)
+                colorparam = np.abs(np.nanmean(data))
+                colormap = cm.Reds
+                color = colormap(normalize(colorparam))
+                ax.plot(dist_space, kde(dist_space),linewidth=1,color=color)
+                ax.spines['bottom'].set_color([0.5, 0.5, 0.5])
+                ax.spines['top'].set_color([0.5, 0.5, 0.5])
+                ax.spines['right'].set_color([0.5, 0.5, 0.5])
+                ax.spines['left'].set_color([0.5, 0.5, 0.5])
+            else:
+                ax.spines['bottom'].set_color([0.3, 0.3, 0.3])
+                ax.spines['top'].set_color([0.3, 0.3, 0.3])
+                ax.spines['right'].set_color([0.3, 0.3, 0.3])
+                ax.spines['left'].set_color([0.3, 0.3, 0.3])
+        else:
+            ax.spines['bottom'].set_color([0.3, 0.3, 0.3])
+            ax.spines['top'].set_color([0.3, 0.3, 0.3])
+            ax.spines['right'].set_color([0.3, 0.3, 0.3])
+            ax.spines['left'].set_color([0.3, 0.3, 0.3])
+            if yy < 14:
+                ax.xaxis.set_ticks([])
+        if yy < 14:
+            ax.xaxis.set_ticklabels([])
+        ax.yaxis.set_ticklabels([])
+        ax.yaxis.set_ticks([])
+plt.show()
+s_map = cm.ScalarMappable(norm=normalize, cmap=colormap)
+s_map.set_array(colorparam)
+fig.subplots_adjust(right=0.92)
+cbar_ax = fig.add_axes([0.94, 0.10, 0.02, 0.7])
+cbar = fig.colorbar(s_map, cax=cbar_ax)
+cbar.set_label('WE (Hs$^2$Tp)')
+
 
 
 

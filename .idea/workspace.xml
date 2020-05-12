@@ -4,7 +4,6 @@
     <list default="true" id="144aeda8-086a-4b59-b43a-e83e36ee8dd3" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/complexClustering.py" beforeDir="false" afterPath="$PROJECT_DIR$/complexClustering.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/downloadThredds.py" beforeDir="false" afterPath="$PROJECT_DIR$/downloadThredds.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sandBarTool/morphLib.py" beforeDir="false" afterPath="$PROJECT_DIR$/sandBarTool/morphLib.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/testbedutils/geoprocess.py" beforeDir="false" afterPath="$PROJECT_DIR$/testbedutils/geoprocess.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/testbedutils/gridTools.py" beforeDir="false" afterPath="$PROJECT_DIR$/testbedutils/gridTools.py" afterDir="false" />
@@ -31,7 +30,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/downloadThredds.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PythonContentEntriesConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -39,7 +38,7 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.downloadThredds">
+  <component name="RunManager" selected="Python.complexClustering">
     <configuration name="WISscratch" type="PythonConfigurationType" factoryName="Python">
       <module name="duckGeomorph" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -104,6 +103,9 @@
       <module name="duckGeomorph" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="$USER_HOME$/anaconda3/envs/cmtb/bin/python" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
@@ -122,6 +124,9 @@
       <module name="duckGeomorph" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="$USER_HOME$/anaconda3/envs/cmtb/bin/python" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
@@ -182,6 +187,9 @@
       <module name="duckGeomorph" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="$USER_HOME$/anaconda3/bin/python3" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
@@ -263,6 +271,9 @@
       <module name="duckGeomorph" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="$USER_HOME$/anaconda3/envs/cmtb/bin/python" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../" />
       <option name="IS_MODULE_SDK" value="false" />

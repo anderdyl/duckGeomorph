@@ -12,8 +12,8 @@ server_url = 'https://chldata.erdc.dren.mil/thredds/'
 #server_url = 'http://thredds.northwestknowledge.net:8080/thredds/'
 # Everything after "catalog/"
 #request_url = 'catalog/frf/geomorphology/elevationTransects/survey/'
-#request_url = 'catalog/frf/geomorphology/DEMs/surveyDEM/'
-request_url = 'catalog/frf/oceanography/waves/8m-array/2019/'
+request_url = 'catalog/frf/geomorphology/DEMs/surveyDEM/'
+# request_url = 'catalog/frf/oceanography/waves/8m-array/2019/'
 
 #request_url = 'dodsC/' #agg_macav2metdata_rhsmin_CanESM2_r1i1p1_rcp45_2006_2099_CONUS_daily.nc'
 #request_url = 'catalog/wis/Atlantic/ST63218/2005/'

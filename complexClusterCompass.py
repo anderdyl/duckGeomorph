@@ -614,6 +614,256 @@ plt.plot(temp[:,6], temp[:,7])
 plt.plot(temp[:,8], temp[:,9])
 
 
+cat = np.ones((len(phitSubset[:,0],)))
+
+for tt in range(len(phitSubset[:, 0])):
+    tempPoint = phitSubset[tt,0]*180/np.pi
+    if tempPoint < -135:
+        cat[tt] = 0
+    elif tempPoint >= -135 and tempPoint < -90:
+        cat[tt] = 1
+    elif tempPoint >= -90 and tempPoint < -45:
+        cat[tt] = 2
+    elif tempPoint >= -45 and tempPoint < -0:
+        cat[tt] = 3
+    elif tempPoint >= -0 and tempPoint < 45:
+        cat[tt] = 4
+    elif tempPoint >= 45 and tempPoint < 90:
+        cat[tt] = 5
+    elif tempPoint >= 90 and tempPoint < 135:
+        cat[tt] = 6
+    elif tempPoint >= 135 and tempPoint < 180:
+        cat[tt] = 7
+
+import time as timeP
+import mpl_toolkits.mplot3d.axes3d as p3
+from sklearn.cluster import AgglomerativeClustering
+from sklearn.datasets import make_swiss_roll
+# Compute clustering
+print("Compute unstructured hierarchical clustering...")
+st = timeP.time()
+numClusters = 12
+Xall = CPCs[:,0:2]
+short = np.where(((np.sqrt(np.square(Xall[:,0]) + np.square(Xall[:,1]))) > 0.2))
+X = Xall[short[0],:]
+
+# Define the structure A of the data. Here a 10 nearest neighbors
+from sklearn.neighbors import kneighbors_graph
+connectivity = kneighbors_graph(X, n_neighbors=10, include_self=False)
+
+ward = AgglomerativeClustering(n_clusters=numClusters, connectivity=connectivity, linkage='ward').fit(X)
+elapsed_time = timeP.time() - st
+label = ward.labels_
+print("Elapsed time: %.2fs" % elapsed_time)
+print("Number of points: %i" % label.size)
+
+# #############################################################################
+# Plot result
+fig = plt.figure()
+#ax = p3.Axes3D(fig)
+#ax.view_init(7, -80)
+ax = plt.subplot2grid((2,2),(0,0),rowspan=2,colspan=2)
+for l in np.unique(label):
+    ax.scatter(X[label == l, 0], X[label == l, 1],color=plt.cm.jet(np.float(l) / np.max(label + 1)),s=20, edgecolor='k')
+plt.title('Without connectivity constraints (time %.2fs)' % elapsed_time)
+
+
+
+# groupsize
+_, group_size = np.unique(ward.labels_, return_counts=True)
+
+# groups
+d_groups = {}
+for k in range(numClusters):
+    d_groups['{0}'.format(k)] = np.where(ward.labels_ == k)
+
+centroids = np.zeros((numClusters, CPCs.shape[1]))
+for k in range(numClusters):
+    #print(PCsub[d_groups['{0}'.format(k)],0:1])
+    centroids[k,:] = np.mean(CPCs[d_groups['{0}'.format(k)],:], axis=1) #/var_explained
+
+bmus = ward.labels_
+
+
+
+
+# groupsize
+_, group_size = np.unique(cat, return_counts=True)
+
+# groups
+d_groups = {}
+for k in range(numClusters):
+    d_groups['{0}'.format(k)] = np.where(cat == k)
+
+centroids = np.zeros((numClusters, CPCs.shape[1]))
+for k in range(numClusters):
+    #print(PCsub[d_groups['{0}'.format(k)],0:1])
+    centroids[k,:] = np.mean(CPCs[d_groups['{0}'.format(k)],:], axis=1) #/var_explained
+
+bmus = cat
+
+from matplotlib import gridspec
+fig2 = plt.figure(figsize=(10,10))
+gs = gridspec.GridSpec(4, 5, wspace=0.0, hspace=0.0)
+gr, gc = 0, 0
+profiles = np.zeros((numClusters,len(xinterp)))
+magPhaseCentroid = np.zeros((np.shape(centroids)))
+
+for i in range(numClusters):
+    #getind = sorted[i]
+    # cpc1RT, cpc1Phi = R2P(complex(centroids[i, 0], centroids[i, 1]))
+    # cpc2RT, cpc2Phi = R2P(complex(centroids[i, 2], centroids[i, 3]))
+    # cpc3RT, cpc3Phi = R2P(complex(centroids[i, 4], centroids[i, 5]))
+    # cpc4RT, cpc4Phi = R2P(complex(centroids[i, 6], centroids[i, 7]))
+    # cpc5RT, cpc5Phi = R2P(complex(centroids[i, 8], centroids[i, 9]))
+    # cpc6RT, cpc6Phi = R2P(complex(centroids[i, 10], centroids[i, 11]))
+
+    cpcRt = np.zeros((modes,))
+    cpcPhi = np.zeros((modes,))
+
+    cpcRt[0], cpcPhi[0] = R2P(complex(centroids[i, 0], centroids[i, 1]))
+    cpcRt[1], cpcPhi[1] = R2P(complex(centroids[i, 2], centroids[i, 3]))
+    cpcRt[2], cpcPhi[2] = R2P(complex(centroids[i, 4], centroids[i, 5]))
+    cpcRt[3], cpcPhi[3] = R2P(complex(centroids[i, 6], centroids[i, 7]))
+    cpcRt[4], cpcPhi[4] = R2P(complex(centroids[i, 8], centroids[i, 9]))
+    cpcRt[5], cpcPhi[5] = R2P(complex(centroids[i, 10], centroids[i, 11]))
+
+    cpcRt[6], cpcPhi[6] = R2P(complex(centroids[i, 8], centroids[i, 9]))
+    cpcRt[7], cpcPhi[7] = R2P(complex(centroids[i, 10], centroids[i, 11]))
+
+    magPhaseCentroid[i,0:16] = [cpcRt[0], cpcPhi[0], cpcRt[1], cpcPhi[1], cpcRt[2], cpcPhi[2],
+                                cpcRt[3], cpcPhi[3], cpcRt[4], cpcPhi[4], cpcRt[5], cpcPhi[5],
+                                cpcRt[6], cpcPhi[6], cpcRt[7], cpcPhi[7]]
+
+
+    profile = 0 * np.ones(len(xinterp), )
+    for mode in range(6):
+        profile = profile + cpcRt[mode] * np.sin(cpcPhi[mode]) * S[:, mode] * np.sin(theta[:, mode]) + cpcRt[mode]* np.cos(cpcPhi[mode]) * S[:, mode] * np.cos(theta[:, mode])
+
+    profiles[i,:] = profile+np.mean(alllines,axis=0)
+    #profile = kma.centroids[i,:] * pred_std + pred_mean
+
+    ax = plt.subplot(gs[gr, gc])
+
+    ax.plot(xinterp,profile+np.mean(alllines,axis=0))
+    ax.set_xlim([80, 820])
+    ax.set_ylim([-8, 2.25])
+    #ax.set_title('{}'.format(KMA.group_size.values[i]))
+    ax.text(400,0, group_size[i], fontweight='bold')
+
+    if gc > 0:
+        ax.set_yticks([])
+
+    if gr < (5-1):
+        ax.set_xticks([])
+    #  counter
+    gc += 1
+    if gc >= 5:
+        gc = 0
+        gr += 1
+
+
+import scipy.signal as sig
+deviation = np.zeros((np.shape(profiles)))
+
+for i in range(numClusters):
+    deviation[i,:] = profiles[i,:] - np.mean(alllines,axis=0)
+
+# magEOF1cen = magPhaseCentroid[:,0]
+# phaseEOF1cen = magPhaseCentroid[:,1]*180/np.pi
+#
+# sortedPeaks = np.sort(phaseEOF1cen)
+# sortedPeakInd = np.argsort(phaseEOF1cen)
+# sortedPhases = phaseEOF1cen[sortedPeakInd]
+sortedPeakInd = [2,3,4,5,6,7,0,1]#np.arange(0,8)
+sortedPhases = np.arange(-180,175,45)+22
+
+fig3 = plt.figure(figsize=(10,10))
+gs = gridspec.GridSpec(1, numClusters, wspace=0.0, hspace=0.0)
+gr, gc = 0, 0
+import matplotlib.cm as cm
+# colors = cm.rainbow(np.linspace(0, 1, numClusters))
+colors = cm.hsv(np.linspace(0, 1, numClusters))
+
+for i in range(numClusters):
+    #getind = sorted[i]
+    dev = deviation[sortedPeakInd[i],:]
+    true = profiles[sortedPeakInd[i],:]
+
+    peaks = sig.find_peaks(x=(true), prominence=0.05)
+
+    #if len(peaks[0]) > 0:
+    #    offshorePeaks[i] = np.max(peaks[0])
+
+    ax = plt.subplot(gs[gr, gc])
+    #ax.plot(xinterp,np.mean(alllines,axis=0),'w-')
+
+    ax.plot(xinterp,true,color=colors[i])
+    #ax.plot(xinterp[peaks[0]],true[peaks[0]],'ro')
+    ax.set_xlim([80, 650])
+    ax.set_ylim([-7, 1])
+    #ax.set_title('{}'.format(KMA.group_size.values[i]))
+    #ax.text(400,0, group_size[sortedPeakInd[i]], fontweight='bold')
+    ax.text(400,0, sortedPhases[i], fontweight='bold')
+
+    if gr > 0:
+        ax.set_yticks([])
+
+    # if gc < numClusters:
+    #     ax.set_xticks([])
+    #  counter
+    gc += 1
+    if gc >= numClusters:
+        gr += 1
+        gc = 0
+
+
+fig3 = plt.figure(figsize=(10,10))
+ax = plt.subplot2grid((2,2),(0,0),rowspan=2,colspan=2)
+import matplotlib.cm as cm
+colors = cm.gist_rainbow(np.linspace(0, 1, numClusters))
+labels = ['0-45','45-90','90-135','135-180','180-225','225-270','270-315','315-360']
+for i in range(numClusters):
+    #getind = sorted[i]
+    dev = deviation[sortedPeakInd[i],:]
+    true = profiles[sortedPeakInd[i],:]
+
+    peaks = sig.find_peaks(x=(true), prominence=0.05)
+
+    #if len(peaks[0]) > 0:
+    #    offshorePeaks[i] = np.max(peaks[0])
+
+    # ax = plt.subplot(gs[gr, gc])
+    #ax.plot(xinterp,np.mean(alllines,axis=0),'w-')
+
+    ax.plot(xinterp,true,color=colors[i],label=labels[i])
+    #ax.plot(xinterp[peaks[0]],true[peaks[0]],'ro')
+    ax.set_xlim([80, 650])
+    ax.set_ylim([-7, 1])
+plt.legend()
+plt.title('Forced Clusters Dependent on Phase of CEOF1')
+plt.xlabel('xFRF (m)')
+plt.ylabel('elevation (m)')
+    #ax.set_title('{}'.format(KMA.group_size.values[i]))
+    #ax.text(400,0, group_size[sortedPeakInd[i]], fontweight='bold')
+    # ax.text(400,0, sortedPhases[i], fontweight='bold')
+
+    # if gr > 0:
+    #     ax.set_yticks([])
+
+    # if gc < numClusters:
+    #     ax.set_xticks([])
+    #  counter
+    # gc += 1
+    # if gc >= numClusters:
+    #     gr += 1
+    #     gc = 0
+
+
+
+
+asfg
+
 from sklearn.cluster import KMeans
 numClusters = 9
 

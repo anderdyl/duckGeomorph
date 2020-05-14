@@ -2,8 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="144aeda8-086a-4b59-b43a-e83e36ee8dd3" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/complexClusterCompass.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/complexDEMs.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hierarchialDemo.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/complexClustering.py" beforeDir="false" afterPath="$PROJECT_DIR$/complexClustering.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/downloadThredds.py" beforeDir="false" afterPath="$PROJECT_DIR$/downloadThredds.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sandBarTool/morphLib.py" beforeDir="false" afterPath="$PROJECT_DIR$/sandBarTool/morphLib.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/testbedutils/geoprocess.py" beforeDir="false" afterPath="$PROJECT_DIR$/testbedutils/geoprocess.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/testbedutils/gridTools.py" beforeDir="false" afterPath="$PROJECT_DIR$/testbedutils/gridTools.py" afterDir="false" />
@@ -30,7 +34,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/hierarchialDemo.py" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PythonContentEntriesConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -38,7 +42,7 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.complexClustering">
+  <component name="RunManager" selected="Python.complexClusterCompass">
     <configuration name="WISscratch" type="PythonConfigurationType" factoryName="Python">
       <module name="duckGeomorph" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -60,6 +64,24 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="complexClusterCompass" type="PythonConfigurationType" factoryName="Python">
+      <module name="duckGeomorph" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="$USER_HOME$/anaconda3/envs/cmtb/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/complexClusterCompass.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="complexClustering" type="PythonConfigurationType" factoryName="Python">
       <module name="duckGeomorph" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -70,6 +92,24 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/complexClustering.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="complexDEMs" type="PythonConfigurationType" factoryName="Python">
+      <module name="duckGeomorph" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="$USER_HOME$/anaconda3/envs/cmtb/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/complexDEMs.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -175,6 +215,24 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/fabricatedTest_inTime.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="hierarchialDemo" type="PythonConfigurationType" factoryName="Python">
+      <module name="duckGeomorph" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="$USER_HOME$/anaconda3/envs/cmtb/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/hierarchialDemo.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -335,6 +393,9 @@
       <item itemvalue="Python.complexImageStack" />
       <item itemvalue="Python.complex_scratch" />
       <item itemvalue="Python.complexClustering" />
+      <item itemvalue="Python.complexClusterCompass" />
+      <item itemvalue="Python.hierarchialDemo" />
+      <item itemvalue="Python.complexDEMs" />
       <item itemvalue="Python.downloadThredds" />
       <item itemvalue="Python.dunex_transects" />
       <item itemvalue="Python.fabricatedTest" />
@@ -373,18 +434,21 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="2078" y="123" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1588890432352">
-      <screen x="1920" y="0" width="1920" height="1200" />
+    <state x="180" y="117" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1589395654047">
+      <screen x="67" y="27" width="1373" height="873" />
     </state>
     <state x="2078" y="123" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.120.1920.1080/1920.0.1920.1200@1920.0.1920.1200" timestamp="1588890432352" />
     <state x="277" y="135" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.27.3360.1053@0.27.3360.1053" timestamp="1584809299393" />
-    <state x="2772" y="466" width="424" height="484" key="FileChooserDialogImpl" timestamp="1588890425654">
-      <screen x="1920" y="0" width="1920" height="1200" />
+    <state x="1598" y="111" key="#com.intellij.execution.impl.EditConfigurationsDialog/1440.0.1920.1080/0.27.1440.873@1440.0.1920.1080" timestamp="1589383373620" />
+    <state x="180" y="117" key="#com.intellij.execution.impl.EditConfigurationsDialog/1440.0.1920.1080/67.27.1373.873@67.27.1373.873" timestamp="1589395654047" />
+    <state x="676" y="366" width="374" height="392" key="FileChooserDialogImpl" timestamp="1589395648633">
+      <screen x="67" y="27" width="1373" height="873" />
     </state>
     <state x="2772" y="466" width="424" height="484" key="FileChooserDialogImpl/0.120.1920.1080/1920.0.1920.1200@1920.0.1920.1200" timestamp="1588890425654" />
     <state x="1650" y="567" key="FileChooserDialogImpl/0.27.3360.1053@0.27.3360.1053" timestamp="1584804472615" />
     <state x="1916" y="1107" width="374" height="993" key="FileChooserDialogImpl/1006.0.1853.2160@1006.0.1853.2160" timestamp="1582641203189" />
-    <state x="1920" y="556" key="FileChooserDialogImpl/67.147.3773.1053@67.147.3773.1053" timestamp="1580655801483" />
+    <state x="2292" y="419" width="424" height="484" key="FileChooserDialogImpl/1440.0.1920.1080/0.27.1440.873@1440.0.1920.1080" timestamp="1589383365780" />
+    <state x="676" y="366" width="374" height="392" key="FileChooserDialogImpl/1440.0.1920.1080/67.27.1373.873@67.27.1373.873" timestamp="1589395648633" />
     <state x="889" y="436" width="424" height="484" key="FileChooserDialogImpl/67.27.1853.1053@67.27.1853.1053" timestamp="1584832181394" />
     <state x="693" y="398" key="com.intellij.ide.util.TipDialog" timestamp="1586045847076">
       <screen x="67" y="27" width="3773" height="1053" />
@@ -393,5 +457,9 @@
     <state x="1632" y="1478" key="com.intellij.ide.util.TipDialog/1006.0.1853.2160@1006.0.1853.2160" timestamp="1582641043979" />
     <state x="693" y="398" key="com.intellij.ide.util.TipDialog/67.27.1853.1053@67.27.1853.1053" timestamp="1584832168275" />
     <state x="693" y="398" key="com.intellij.ide.util.TipDialog/67.27.3773.1053@67.27.3773.1053" timestamp="1586045847076" />
+    <state x="2096" y="257" width="672" height="678" key="search.everywhere.popup" timestamp="1589383534203">
+      <screen x="1440" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2096" y="257" width="672" height="678" key="search.everywhere.popup/1440.0.1920.1080/0.27.1440.873@1440.0.1920.1080" timestamp="1589383534203" />
   </component>
 </project>

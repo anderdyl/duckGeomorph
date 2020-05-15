@@ -859,6 +859,15 @@ plt.ylabel('elevation (m)')
     #     gr += 1
     #     gc = 0
 
+# Plot result
+fig = plt.figure()
+#ax = p3.Axes3D(fig)
+#ax.view_init(7, -80)
+ax = plt.subplot2grid((2,2),(0,0),rowspan=2,colspan=2)
+for l in np.unique(bmus):
+    ax.scatter(CPCs[bmus == l, 0], CPCs[bmus == l, 1],color=plt.cm.jet(np.float(l) / np.max(bmus + 1)),s=20, edgecolor='k')
+#plt.title('Without connectivity constraints (time %.2fs)' % elapsed_time)
+
 
 
 

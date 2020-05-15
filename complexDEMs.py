@@ -51,8 +51,139 @@ def getBathy(file):
     return output
 
 
-getFile = os.path.join(geomorphdir, files[-150])
-data = getBathy(getFile)
+
+subset = files[0:425]
+plt.style.use('dark_background')
+
+
+bathy = dict()
+#alllines = np.empty((len(xinterp),))
+count = 0
+count2 = 0
+worstcount = 0
+#fig = plt.figure(figsize=(10,10))
+allBathy = []
+time = []
+for i in range(len(subset)):
+    data = getBathy(os.path.join(geomorphdir, subset[i]))
+
+    temp = subset[i].split('_')
+
+    surveydate = DT.datetime.strptime(temp[1], '%Y%m%d')
+    xind = np.where((data['x'] > 100) & (data['x'] < 550))
+    yind = np.where((data['y'] > 600) & (data['y'] < 1000))
+    portion = data['z'][0,yind[0][0]:yind[0][-1]+1,xind[0][0]:xind[0][-1]+1]
+    nanValues = np.isnan(portion)
+
+    if not np.ma.array(portion).mask.any():
+        allBathy.append(np.ma.filled(portion))
+        time.append(surveydate)
+
+        # plt.figure(figsize=(10,10))
+        # plt.pcolor(data['x'][xind[0]],data['y'][yind[0]],portion,vmin=-7,vmax=2)
+        # plt.title('Survey Date = ' + temp[1][0:4] + '/' + temp[1][4:6] + '/'+ temp[1][6:8])
+        # if i < 10:
+        #     plt.savefig('/home/dylananderson/projects/duckGeomorph/bathyDEMextents/Survey_00{}'.format(i))
+        # elif i < 100:
+        #     plt.savefig('/home/dylananderson/projects/duckGeomorph/bathyDEMextents/Survey_0{}'.format(i))
+        # else:
+        #     plt.savefig('/home/dylananderson/projects/duckGeomorph/bathyDEMextents/Survey_{}'.format(i))
+        # plt.close()
+#
+#     plt.figure(figsize=(10,10))
+#     plt.pcolor(data['x'],data['y'],data['z'][0,:,:],vmin=-7,vmax=2)
+#     plt.title('Survey Date = ' + temp[1][0:4] + '/' + temp[1][4:6] + '/'+ temp[1][6:8])
+#     if i < 10:
+#         plt.savefig('/home/dylananderson/projects/duckGeomorph/bathyDEMextents/Survey_00{}'.format(i))
+#     elif i < 100:
+#         plt.savefig('/home/dylananderson/projects/duckGeomorph/bathyDEMextents/Survey_0{}'.format(i))
+#     else:
+#         plt.savefig('/home/dylananderson/projects/duckGeomorph/bathyDEMextents/Survey_{}'.format(i))
+#     plt.close()
+#
+#
+# geomorphdir = '/home/dylananderson/projects/duckGeomorph/bathyDEMextents/'
+#
+# files = os.listdir(geomorphdir)
+#
+# files.sort()
+#
+# files_path = [os.path.join(geomorphdir,x) for x in os.listdir(geomorphdir)]
+#
+# files_path.sort()
+# import cv2
+#
+# frame = cv2.imread(files_path[0])
+# height, width, layers = frame.shape
+# forcc = cv2.VideoWriter_fourcc(*'XVID')
+# video = cv2.VideoWriter('croppedNoNANsDEMsIntBathy.avi', forcc, 8, (width, height))
+# for image in files_path:
+#     video.write(cv2.imread(image))
+# cv2.destroyAllWindows()
+# video.release()
+
+
+
+portionx = data['x'][xind[0]]
+portiony = data['y'][yind[0]]
+
+allBathyMean = np.mean(allBathy, axis=0)
+plt.figure(figsize=(10,10))
+plt.pcolor(portionx,portiony,allBathyMean,vmin=-7,vmax=2)
 
 plt.figure()
-plt.pcolor(data['x'],data['y'],data['z'][0,:,:])
+plt.plot(portionx,allBathyMean[10,:])
+
+
+
+
+for i in range(len(allBathy)):
+    data = allBathy[i]-allBathyMean
+    t = time[i]
+
+    plt.figure(figsize=(10,10))
+    plt.pcolor(portionx,portiony,data,vmin=-2,vmax=2,cmap='RdBu_r')
+    plt.title('Survey Date = ' + temp[1][0:4] + '/' + temp[1][4:6] + '/'+ temp[1][6:8])
+    plt.title('{}'.format(t))
+    plt.colorbar()
+    if i < 10:
+        plt.savefig('/home/dylananderson/projects/duckGeomorph/bathyDiff/Survey_00{}'.format(i))
+    elif i < 100:
+        plt.savefig('/home/dylananderson/projects/duckGeomorph/bathyDiff/Survey_0{}'.format(i))
+    else:
+        plt.savefig('/home/dylananderson/projects/duckGeomorph/bathyDiff/Survey_{}'.format(i))
+    plt.close()
+
+#
+#     plt.figure(figsize=(10,10))
+#     plt.pcolor(data['x'],data['y'],data['z'][0,:,:],vmin=-7,vmax=2)
+#     plt.title('Survey Date = ' + temp[1][0:4] + '/' + temp[1][4:6] + '/'+ temp[1][6:8])
+#     if i < 10:
+#         plt.savefig('/home/dylananderson/projects/duckGeomorph/bathyDEMextents/Survey_00{}'.format(i))
+#     elif i < 100:
+#         plt.savefig('/home/dylananderson/projects/duckGeomorph/bathyDEMextents/Survey_0{}'.format(i))
+#     else:
+#         plt.savefig('/home/dylananderson/projects/duckGeomorph/bathyDEMextents/Survey_{}'.format(i))
+#     plt.close()
+#
+#
+geomorphdir = '/home/dylananderson/projects/duckGeomorph/bathyDiff/'
+
+files = os.listdir(geomorphdir)
+
+files.sort()
+
+files_path = [os.path.join(geomorphdir,x) for x in os.listdir(geomorphdir)]
+
+files_path.sort()
+import cv2
+
+frame = cv2.imread(files_path[0])
+height, width, layers = frame.shape
+forcc = cv2.VideoWriter_fourcc(*'XVID')
+video = cv2.VideoWriter('croppedBathyDiff.avi', forcc, 8, (width, height))
+for image in files_path:
+    video.write(cv2.imread(image))
+cv2.destroyAllWindows()
+video.release()
+

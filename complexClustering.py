@@ -88,9 +88,9 @@ import scipy.stats as spstats
 
 labels = []
 # xinterp = np.arange(108, 608, 2.5)
-xinterp = np.arange(115, 605, 2.5)
-
-#
+#xinterp = np.arange(108, 618, 2.5)
+xinterp = np.arange(108, 608, 5)
+deeperThan = 593
 # bathy = dict()
 # #alllines = np.empty((len(xinterp),))
 # count = 0
@@ -104,8 +104,8 @@ xinterp = np.arange(115, 605, 2.5)
 #     #data = getBathy(os.path.join(geomorphdir, subset[i]), lower=1070, upper=1100)
 #     #data = getBathy(os.path.join(geomorphdir, subset[i]), lower=750, upper=950)
 #     #data = getBathy(os.path.join(geomorphdir, subset[i]), lower=-10, upper=20)
-#     #data = getBathy(os.path.join(geomorphdir, subset[i]), lower=-2, upper=10)
-#     data = getBathy(os.path.join(geomorphdir, subset[i]), lower=-50, upper=50)
+#     data = getBathy(os.path.join(geomorphdir, subset[i]), lower=-10, upper=20)
+#     #data = getBathy(os.path.join(geomorphdir, subset[i]), lower=990, upper=1100)
 #
 #     #data = getBathy(os.path.join(geomorphdir, subset[i]), lower=-2, upper=10)
 #
@@ -123,23 +123,26 @@ xinterp = np.arange(115, 605, 2.5)
 #
 #     #realValues = ~np.isnan(xSub)
 #
-#     #binnedz, bin_edges, binnumber = spstats.binned_statistic(xSub,zSub, statistic='mean',bins=np.arange(106,566,4))
-#     #bin_width = (bin_edges[1] - bin_edges[0])
-#     #bin_centers = bin_edges[1:] - bin_width / 2
-#     #xMSub = bin_centers
-#     #zMSub = binnedz
-#     #xSubNew = xMSub[~np.isnan(zMSub)]
-#     #zSubNew = zMSub[~np.isnan(zMSub)]
+#     binnedz, bin_edges, binnumber = spstats.binned_statistic(xSub,zSub, statistic='mean',bins=np.arange(98,616,4))
+#     bin_width = (bin_edges[1] - bin_edges[0])
+#     bin_centers = bin_edges[1:] - bin_width / 2
+#     xMSub = bin_centers
+#     zMSub = binnedz
+#     xSubNewB = xMSub[~np.isnan(zMSub)]
+#     zSubNewB = zMSub[~np.isnan(zMSub)]
+#     realValues = ~np.isnan(xSubNewB)
+#     zSubNew = zSubNewB[~np.isnan(xSubNewB)]
+#     xSubNew = xSubNewB[~np.isnan(xSubNewB)]
 #
-#     realValues = ~np.isnan(xSub)
-#     xSubNew = xSub[~np.isnan(zSub)]
-#     zSubNew = zSub[~np.isnan(zSub)]
+#     # realValues = ~np.isnan(xSub)
+#     # xSubNew = xSub[~np.isnan(xSub)]
+#     # zSubNew = zSub[~np.isnan(xSub)]
 #
 #
 #
 #     if any(realValues):
 #
-#         if np.nanmax(xSubNew) > 610:
+#         if np.nanmax(xSubNew) > deeperThan:
 #
 #             if np.nanmin(xSubNew) < 125:
 #
@@ -165,7 +168,7 @@ xinterp = np.arange(115, 605, 2.5)
 #                         #plt.plot(xSub,zSub)
 #
 #
-#                         xindex = np.where((xSubNew>=600))
+#                         xindex = np.where((xSubNew>=deeperThan))
 #
 #                         if len(xindex[0]) > 3:
 #
@@ -231,6 +234,15 @@ xinterp = np.arange(115, 605, 2.5)
 #                             alllines = np.vstack((alllines, newdata['z']))
 #                             time = np.append(time,surveydate)
 #                             count = count+1
+#
+#                         # fig = plt.figure(figsize=(10,10))
+#                         # plt.plot(cross,elevs,'.')
+#                         # plt.plot(xinterp,newdata['z'],'.-')
+#                         # plt.xlim([0, 600])
+#                         # plt.ylim([-7,2])
+#                         # plt.title('Survey Date = ' + temp[1][0:4] + '/' + temp[1][4:6] + '/'+ temp[1][6:8])
+#                         # plt.savefig('/home/dylananderson/projects/duckGeomorph/interpolatedProfiles/Survey_{}'.format(i))
+#                         # plt.close()
 #                 else:
 #                     print('Data is less than 10 points long at line {}'.format(i))
 #             else:
@@ -249,7 +261,7 @@ xinterp = np.arange(115, 605, 2.5)
 #         else:
 #             print('No data deeper than 500 meters at line {}'.format(i))
 #             print('Most offshore point at {}'.format(np.nanmax(xSubNew)))
-#             newdata = interpBathy2(xSubNew, zSubNew, xinterp)
+#             #newdata = interpBathy2(xSubNew, zSubNew, xinterp)
 #
 #             # if count5 == 0:
 #             #     noneOffshore = newdata['z']
@@ -261,9 +273,9 @@ xinterp = np.arange(115, 605, 2.5)
 #             #     count4 = count5 + 1
 #     else:
 #         print('Survey with no data at this line {}'.format(i))
-#
-#         #plt.plot(xSubNew,zSubNew)
-#
+
+        #plt.plot(xSubNew,zSubNew)
+plt.style.use('dark_background')
 
 
 bathy = dict()
@@ -274,11 +286,21 @@ worstcount = 0
 #fig = plt.figure(figsize=(10,10))
 for i in range(len(subset)):
     #data = getBathy(os.path.join(geomorphdir, subset[i]), lower=1080, upper=1100)
-    data = getBathy(os.path.join(geomorphdir, subset[i]), lower=-2, upper=10)
+    data = getBathy(os.path.join(geomorphdir, subset[i]), lower=-10, upper=20)
 
     temp = subset[i].split('_')
 
     surveydate = DT.datetime.strptime(temp[1], '%Y%m%d')
+
+    # fig = plt.figure(figsize=(10,10))
+    # plt.plot(data['x'],data['y'],'o')
+    # plt.plot([500,500],[-100,1200],'w--')
+    # plt.xlim([0, 800])
+    # plt.ylim([-100,1200])
+    # plt.title('Survey Date = ' + temp[1][0:4] + '/' + temp[1][4:6] + '/'+ temp[1][6:8])
+    # plt.savefig('/home/dylananderson/projects/duckGeomorph/bathyExtents/Survey_{}'.format(i))
+    # plt.close()
+
     elevs = data['z']
     cross = data['x']
     xSub = np.ma.MaskedArray.filled(cross, np.nan)
@@ -443,6 +465,15 @@ ax[0,1].plot(xinterp, theta2[:,mode],'o')
 ax[1,0].plot(time,Rt[:,mode],'o')
 ax[1,1].plot(time,phit2[:,mode],'o')
 
+mode = 1
+
+fig, ax = plt.subplots(2,2)
+
+ax[0,0].plot(xinterp, S[:,mode],'o')
+ax[0,1].plot(xinterp, theta2[:,mode],'o')
+ax[1,0].plot(time,Rt[:,mode],'o')
+ax[1,1].plot(time,phit2[:,mode],'o')
+
 PC1 = Rt[:, mode]*np.sin(phit[:, mode]) + Rt[:, mode]*np.cos(phit[:, mode])
 PC1a = Rt[:, mode]*np.sin(phit[:, mode])
 PC1b = Rt[:, mode]*np.cos(phit[:, mode])
@@ -458,7 +489,7 @@ percentV = lamda / totalV
 
 ztemp = 0*np.ones(len(xinterp),)
 timestep = 200
-for mode in range(5):
+for mode in range(8):
     ztemp = ztemp + Rt[timestep,mode]*np.sin(phit[timestep,mode]) * S[:,mode]*np.sin(theta[:,mode]) + Rt[timestep,mode]*np.cos(phit[timestep,mode]) * S[:,mode]*np.cos(theta[:,mode])
 fig2 = plt.figure()
 #plt.plot(xinterp,np.mean(alllines,axis=0)+ztemp+ztemp1+ztemp2+ztemp3+ztemp4+ztemp5+ztemp6+ztemp7+ztemp8)
@@ -513,8 +544,8 @@ for timestep in range(len(timeind)):
     #         timestep, mode] * np.cos(phitSubset[timestep, mode]) * S[:, mode] * np.cos(theta[:, mode])
 
 
-t1 =475
-t2 = -1
+t1 =495
+t2 = -24
 
 plt.style.use('dark_background')
 
@@ -546,7 +577,46 @@ fig.colorbar(plt1, ax=ax[1], orientation='horizontal')
 ax[1].set_title('CEOF1 {:.2f}'.format(percentV[0]))
 ax[1].get_yaxis().set_ticks([])
 
-plt2 = ax[2].pcolor(xg,tg,eofPred2.T, vmin=-.65, vmax=.65)
+plt2 = ax[2].pcolor(xg,tg,eofPred2.T, vmin=-.85, vmax=.85)
+ax[2].set_ylim([time[t1], time[t2]])
+fig.colorbar(plt2, ax=ax[2], orientation='horizontal')
+ax[2].set_title('CEOF2 {:.2f}'.format(percentV[1]))
+ax[2].get_yaxis().set_ticks([])
+
+plt3 = ax[3].pcolor(xg,tg,eofPred3.T, vmin=-.65, vmax=.65)
+ax[3].set_ylim([time[t1], time[t2]])
+ax[3].set_title('CEOF3 {:.2f}'.format(percentV[2]))
+ax[3].get_yaxis().set_ticks([])
+
+fig.colorbar(plt3, ax=ax[3], orientation='horizontal')
+
+plt4 = ax[4].pcolor(xg,tg,eofPred4.T, vmin=-.65, vmax=.65)
+ax[4].set_ylim([time[t1], time[t2]])
+ax[4].set_title('CEOF4 {:.2f}'.format(percentV[3]))
+ax[4].get_yaxis().set_ticks([])
+fig.colorbar(plt4, ax=ax[4], orientation='horizontal')
+
+
+
+t1 = 200
+t2 = 400
+fig, ax = plt.subplots(1,5)
+#plt.set_cmap('RdBu')#bwr')
+plt.set_cmap('bwr')
+
+tg, xg = np.meshgrid(time, xinterp)
+plt0 = ax[0].pcolor(xg,tg,(alllines-np.mean(alllines, axis=0)).T, vmin=-1.8, vmax=1.8)
+fig.colorbar(plt0, ax=ax[0], orientation='horizontal')
+ax[0].set_ylim([time[t1], time[t2]])
+ax[0].set_title('Surveys (dev.)')
+
+plt1 = ax[1].pcolor(xg,tg,eofPred.T, vmin=-1.05, vmax=1.05)
+ax[1].set_ylim([time[t1], time[t2]])
+fig.colorbar(plt1, ax=ax[1], orientation='horizontal')
+ax[1].set_title('CEOF1 {:.2f}'.format(percentV[0]))
+ax[1].get_yaxis().set_ticks([])
+
+plt2 = ax[2].pcolor(xg,tg,eofPred2.T, vmin=-.85, vmax=.85)
 ax[2].set_ylim([time[t1], time[t2]])
 fig.colorbar(plt2, ax=ax[2], orientation='horizontal')
 ax[2].set_title('CEOF2 {:.2f}'.format(percentV[1]))
@@ -567,6 +637,8 @@ fig.colorbar(plt4, ax=ax[4], orientation='horizontal')
 
 #plt.tight_layout(pad=0.5)
 
+plt.show()
+asfg
 
 cpc1 = P2R(Rt[:, 0], phitSubset[:, 0])
 cpc2 = P2R(Rt[:, 1], phitSubset[:, 1])

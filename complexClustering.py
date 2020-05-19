@@ -418,11 +418,8 @@ ax[1].pcolor(xg,tg,alllines.T)
 demean = alllines - np.mean(alllines,axis=0)
 
 from scipy.signal import hilbert
-#from scipy.fftpack import hilbert
 data = (hilbert(demean.T))
 
-#datareal = np.imag(hilbert(alllines))
-#dataimag = np.real(hilbert(alllines))
 data = data.T
 c = np.matmul(np.conj(data).T,data)/np.shape(data)[0]
 
@@ -473,6 +470,9 @@ ax[0,0].plot(xinterp, S[:,mode],'o')
 ax[0,1].plot(xinterp, theta2[:,mode],'o')
 ax[1,0].plot(time,Rt[:,mode],'o')
 ax[1,1].plot(time,phit2[:,mode],'o')
+
+
+asdf
 
 PC1 = Rt[:, mode]*np.sin(phit[:, mode]) + Rt[:, mode]*np.cos(phit[:, mode])
 PC1a = Rt[:, mode]*np.sin(phit[:, mode])

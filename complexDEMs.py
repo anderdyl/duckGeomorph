@@ -76,7 +76,7 @@ for i in range(len(subset)):
 
     surveydate = DT.datetime.strptime(temp[1], '%Y%m%d')
     xind = np.where((data['x'] > 100) & (data['x'] < 550))
-    yind = np.where((data['y'] > 600) & (data['y'] < 1000))
+    yind = np.where((data['y'] > 0) & (data['y'] < 1000))
     portion = data['z'][0,yind[0][0]:yind[0][-1]+1,xind[0][0]:xind[0][-1]+1]
     nanValues = np.isnan(portion)
 
@@ -133,11 +133,11 @@ portionx = data['x'][xind[0]]
 portiony = data['y'][yind[0]]
 
 allBathyMean = np.mean(allBathy, axis=0)
-# plt.figure(figsize=(10,10))
-# plt.pcolor(portionx,portiony,allBathyMean,vmin=-7,vmax=2)
-#
-# plt.figure()
-# plt.plot(portionx,allBathyMean[10,:])
+plt.figure(figsize=(10,10))
+plt.pcolor(portionx,portiony,allBathyMean,vmin=-7,vmax=1)
+
+plt.figure()
+plt.plot(portionx,allBathyMean[15,:])
 
 
 
@@ -489,10 +489,10 @@ for i in range(numClusters):
     # ax.set_xlim([80, 820])
     # ax.set_ylim([-8, 2.25])
     #ax.set_title('{}'.format(KMA.group_size.values[i]))
-    ax.text(480,900, group_size[i], color='k',fontweight='bold')
+    ax.text(480,900, group_size[sortedPeakInd[i]], color='k',fontweight='bold')
     # ax.text(480,900, magEOF1cen[i], color='k',fontweight='bold')
     if i == 0:
-        plt.title('Clusters of DEMs (north side of pier)')
+        plt.title('Clusters of DEMs')
     if gc > 0:
         ax.set_yticks([])
 
@@ -501,6 +501,51 @@ for i in range(numClusters):
     #  counter
     gr += 1
     if gr >= numClusters:
+        gc += 1
+        gr = 0
+
+
+import matplotlib.cm as cm
+import matplotlib.colors as mcolors
+normalize = mcolors.Normalize(vmin=-1.25, vmax=1.25)
+s_map = cm.ScalarMappable(norm=normalize, cmap=colormap)
+# s_map.set_array(colorparam)
+fig2.subplots_adjust(right=0.86)
+cbar_ax = fig2.add_axes([0.9, 0.10, 0.02, 0.7])
+cbar = fig2.colorbar(s_map, cax=cbar_ax)
+cbar.set_label('Deviation from Mean (m)')
+
+
+
+
+from matplotlib import gridspec
+fig2 = plt.figure(figsize=(10,10))
+gs = gridspec.GridSpec(5, 2, wspace=0.0, hspace=0.0)
+gr, gc = 0, 0
+colormap = 'RdBu_r'
+for i in range(numClusters):
+
+    profile = dems[sortedPeakInd[i],:]
+    ax = plt.subplot(gs[gr, gc])
+
+    # ax.plot(xinterp,profile+np.mean(alllines,axis=0))
+    ax.pcolor(portionx,portiony, np.real(np.reshape(profile, (np.shape(allBathy)[1], np.shape(allBathy)[2]))),vmin=-1.25,vmax=1.25,cmap=colormap)
+
+    # ax.set_xlim([80, 820])
+    # ax.set_ylim([-8, 2.25])
+    #ax.set_title('{}'.format(KMA.group_size.values[i]))
+    ax.text(480,900, group_size[sortedPeakInd[i]], color='k',fontweight='bold')
+    # ax.text(480,900, magEOF1cen[i], color='k',fontweight='bold')
+    if i == 0:
+        plt.title('Clusters of DEMs')
+    if gc > 0:
+        ax.set_yticks([])
+
+    if gr < 4:
+        ax.set_xticks([])
+    #  counter
+    gr += 1
+    if gr >= 5:
         gc += 1
         gr = 0
 

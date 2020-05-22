@@ -453,14 +453,37 @@ Rt = np.power(pcs*np.conj(pcs),0.5) / np.sqrt(lamda)
 phit = np.arctan2(pcsimag,pcsreal)
 phit2 = phit*180/np.pi
 
+
+
+plt.style.use('default')
 mode = 0
+fig = plt.figure(figsize=(11,6))
+ax1 = plt.subplot2grid((2,2),(0,0),rowspan=1,colspan=1)
+ax1.plot(xinterp, S[:,mode],'o')
+ax1.set_ylabel('amplitude')
+ax1.set_xlabel('cross-shore (m)')
+ax2 = plt.subplot2grid((2,2),(1,0),rowspan=1,colspan=1)
+ax2.plot(xinterp, theta2[:,mode],'o')
+ax3 = plt.subplot2grid((2,2),(0,1),rowspan=1,colspan=1)
+ax3.plot(time,Rt[:,mode],'o')
+ax4 = plt.subplot2grid((2,2),(1,1),rowspan=1,colspan=1)
+ax4.plot(time,phit2[:,mode],'o')
+
+ax1.set_xlim([120,600])
+ax1.set_title('Cross-shore Surveys')
+ax1.set_ylabel('Years')
+ax1.set_xlabel('cross-shore distance (m)')
+fig.subplots_adjust(right=0.84)
+cbar_ax = fig.add_axes([0.87, 0.15, 0.02, 0.7])
+cbar = fig.colorbar(plt0, cax=cbar_ax)
+# cbar.set_label('WE (Hs$^2$Tp)')
+cbar.set_label('Deviation from mean profile (m)')
+
+
 
 fig, ax = plt.subplots(2,2)
 
-ax[0,0].plot(xinterp, S[:,mode],'o')
-ax[0,1].plot(xinterp, theta2[:,mode],'o')
-ax[1,0].plot(time,Rt[:,mode],'o')
-ax[1,1].plot(time,phit2[:,mode],'o')
+
 
 mode = 1
 
@@ -472,7 +495,6 @@ ax[1,0].plot(time,Rt[:,mode],'o')
 ax[1,1].plot(time,phit2[:,mode],'o')
 
 
-asdf
 
 PC1 = Rt[:, mode]*np.sin(phit[:, mode]) + Rt[:, mode]*np.cos(phit[:, mode])
 PC1a = Rt[:, mode]*np.sin(phit[:, mode])
@@ -542,6 +564,32 @@ for timestep in range(len(timeind)):
     # for mode in range(8):
     #     ztemp = ztemp + RtSubset[timestep, mode] * np.sin(phitSubset[timestep, mode]) * S[:, mode] * np.sin(theta[:, mode]) + RtSubset[
     #         timestep, mode] * np.cos(phitSubset[timestep, mode]) * S[:, mode] * np.cos(theta[:, mode])
+
+
+
+t1 = 0
+t2 = 300
+
+plt.style.use('default')
+
+fig = plt.figure(figsize=(7,11))
+ax1 = plt.subplot2grid((1,1),(0,0),rowspan=1,colspan=1)
+plt.set_cmap('RdBu_r')
+
+tg, xg = np.meshgrid(time, xinterp)
+plt0 = ax1.pcolor(xg,tg,(alllines-np.mean(alllines, axis=0)).T, vmin=-1, vmax=1)
+# cb = fig.colorbar(plt0, ax=ax1, fraction=0.045, pad=0.1)
+ax1.set_ylim([time[t1], time[t2]])
+ax1.set_xlim([120,600])
+ax1.set_title('Cross-shore Surveys')
+ax1.set_ylabel('Years')
+ax1.set_xlabel('cross-shore distance (m)')
+fig.subplots_adjust(right=0.84)
+cbar_ax = fig.add_axes([0.87, 0.15, 0.02, 0.7])
+cbar = fig.colorbar(plt0, cax=cbar_ax)
+# cbar.set_label('WE (Hs$^2$Tp)')
+cbar.set_label('Deviation from mean profile (m)')
+
 
 
 t1 =495

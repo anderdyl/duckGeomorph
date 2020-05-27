@@ -459,15 +459,30 @@ plt.style.use('default')
 mode = 0
 fig = plt.figure(figsize=(11,6))
 ax1 = plt.subplot2grid((2,2),(0,0),rowspan=1,colspan=1)
-ax1.plot(xinterp, S[:,mode],'o')
+ax1.plot(xinterp, S[:,mode],'.')
 ax1.set_ylabel('amplitude')
 ax1.set_xlabel('cross-shore (m)')
+text = ax1.text(-0.15,1.05, "A)", transform=ax1.transAxes)
+
 ax2 = plt.subplot2grid((2,2),(1,0),rowspan=1,colspan=1)
-ax2.plot(xinterp, theta2[:,mode],'o')
+ax2.plot(xinterp, theta2[:,mode],'.')
+ax2.set_ylabel('phase')
+ax2.set_xlabel('cross-shore (m)')
+text2 = ax2.text(-0.15,1.05, "B)", transform=ax2.transAxes)
+
 ax3 = plt.subplot2grid((2,2),(0,1),rowspan=1,colspan=1)
-ax3.plot(time,Rt[:,mode],'o')
+ax3.plot(time,Rt[:,mode],'.')
+ax3.set_ylabel('magnitude')
+ax3.set_xlabel('time')
+text3 = ax3.text(-0.15,1.05, "C)", transform=ax3.transAxes)
+
 ax4 = plt.subplot2grid((2,2),(1,1),rowspan=1,colspan=1)
-ax4.plot(time,phit2[:,mode],'o')
+ax4.plot(time,phit2[:,mode],'.')
+ax4.set_ylabel('phase')
+ax4.set_xlabel('time')
+text4 = ax4.text(-0.15,1.05, "D)", transform=ax4.transAxes)
+
+
 
 ax1.set_xlim([120,600])
 ax1.set_title('Cross-shore Surveys')
@@ -595,7 +610,7 @@ cbar.set_label('Deviation from mean profile (m)')
 t1 =495
 t2 = -24
 
-plt.style.use('dark_background')
+plt.style.use('default')
 
 fig = plt.figure()
 ax1 = plt.subplot2grid((1,1),(0,0),rowspan=1,colspan=1)
@@ -611,7 +626,7 @@ ax1.set_title('Cross-shore Surveys (deviation from mean profile)')
 
 fig, ax = plt.subplots(1,5)
 #plt.set_cmap('RdBu')#bwr')
-plt.set_cmap('bwr')
+plt.set_cmap('RdBu_r')
 
 tg, xg = np.meshgrid(time, xinterp)
 plt0 = ax[0].pcolor(xg,tg,(alllines-np.mean(alllines, axis=0)).T, vmin=-1.8, vmax=1.8)
@@ -650,7 +665,7 @@ t1 = 200
 t2 = 400
 fig, ax = plt.subplots(1,5)
 #plt.set_cmap('RdBu')#bwr')
-plt.set_cmap('bwr')
+plt.set_cmap('RdBu_r')
 
 tg, xg = np.meshgrid(time, xinterp)
 plt0 = ax[0].pcolor(xg,tg,(alllines-np.mean(alllines, axis=0)).T, vmin=-1.8, vmax=1.8)

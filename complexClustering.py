@@ -89,7 +89,7 @@ import scipy.stats as spstats
 labels = []
 # xinterp = np.arange(108, 608, 2.5)
 #xinterp = np.arange(108, 618, 2.5)
-xinterp = np.arange(108, 608, 5)
+xinterp = np.arange(103, 608, 4)
 deeperThan = 593
 # bathy = dict()
 # #alllines = np.empty((len(xinterp),))
@@ -385,19 +385,19 @@ for i in range(len(subset)):
     else:
         print('Survey with no data at this line {}'.format(i))
 
-
-fig, ax = plt.subplots(2,1)
-ax[0].set_prop_cycle(plt.cycler('color', plt.cm.jet(np.linspace(0, 1, len(alllines)))))
-for i in range(len(alllines)):
-    ax[0].plot(xinterp, alllines[i,:], label=time[i])
-
-#ax[0].legend(loc='upper right')
-ax[0].set_xlim([50, 850])
-ax[0].set_ylim([-8, 4])
-ax[0].set_title('Cross-shore profile variability')
+# Plotting all of the lines
+# fig, ax = plt.subplots(2,1)
+# ax[0].set_prop_cycle(plt.cycler('color', plt.cm.jet(np.linspace(0, 1, len(alllines)))))
+# for i in range(len(alllines)):
+#     ax[0].plot(xinterp, alllines[i,:], label=time[i])
+#
+# #ax[0].legend(loc='upper right')
+# ax[0].set_xlim([50, 850])
+# ax[0].set_ylim([-8, 4])
+# ax[0].set_title('Cross-shore profile variability')
 
 tg, xg = np.meshgrid(time, xinterp)
-ax[1].pcolor(xg,tg,alllines.T)
+# ax[1].pcolor(xg,tg,alllines.T)
 #
 #
 # #fig20 = plt.figure(figsize=(10,5))
@@ -483,31 +483,28 @@ ax4.set_xlabel('time')
 text4 = ax4.text(-0.15,1.05, "D)", transform=ax4.transAxes)
 
 
+#
+# ax1.set_xlim([120,600])
+# ax1.set_title('Cross-shore Surveys')
+# ax1.set_ylabel('Years')
+# ax1.set_xlabel('cross-shore distance (m)')
+# fig.subplots_adjust(right=0.84)
+# cbar_ax = fig.add_axes([0.87, 0.15, 0.02, 0.7])
+# cbar = fig.colorbar(plt0, cax=cbar_ax)
+# # cbar.set_label('WE (Hs$^2$Tp)')
+# cbar.set_label('Deviation from mean profile (m)')
 
-ax1.set_xlim([120,600])
-ax1.set_title('Cross-shore Surveys')
-ax1.set_ylabel('Years')
-ax1.set_xlabel('cross-shore distance (m)')
-fig.subplots_adjust(right=0.84)
-cbar_ax = fig.add_axes([0.87, 0.15, 0.02, 0.7])
-cbar = fig.colorbar(plt0, cax=cbar_ax)
-# cbar.set_label('WE (Hs$^2$Tp)')
-cbar.set_label('Deviation from mean profile (m)')
-
-
-
-fig, ax = plt.subplots(2,2)
 
 
 
 mode = 1
 
-fig, ax = plt.subplots(2,2)
-
-ax[0,0].plot(xinterp, S[:,mode],'o')
-ax[0,1].plot(xinterp, theta2[:,mode],'o')
-ax[1,0].plot(time,Rt[:,mode],'o')
-ax[1,1].plot(time,phit2[:,mode],'o')
+# fig, ax = plt.subplots(2,2)
+#
+# ax[0,0].plot(xinterp, S[:,mode],'o')
+# ax[0,1].plot(xinterp, theta2[:,mode],'o')
+# ax[1,0].plot(time,Rt[:,mode],'o')
+# ax[1,1].plot(time,phit2[:,mode],'o')
 
 
 
@@ -528,12 +525,14 @@ ztemp = 0*np.ones(len(xinterp),)
 timestep = 200
 for mode in range(8):
     ztemp = ztemp + Rt[timestep,mode]*np.sin(phit[timestep,mode]) * S[:,mode]*np.sin(theta[:,mode]) + Rt[timestep,mode]*np.cos(phit[timestep,mode]) * S[:,mode]*np.cos(theta[:,mode])
-fig2 = plt.figure()
-#plt.plot(xinterp,np.mean(alllines,axis=0)+ztemp+ztemp1+ztemp2+ztemp3+ztemp4+ztemp5+ztemp6+ztemp7+ztemp8)
-plt.plot(xinterp,np.mean(alllines,axis=0)+ztemp)
-#plt.plot(xinterp,np.mean(alllines,axis=0)+ztemp2)
-plt.plot(xinterp,np.mean(alllines,axis=0))
-plt.plot(xinterp,alllines[timestep,:])
+
+# Plotting a comparison
+# fig2 = plt.figure()
+# #plt.plot(xinterp,np.mean(alllines,axis=0)+ztemp+ztemp1+ztemp2+ztemp3+ztemp4+ztemp5+ztemp6+ztemp7+ztemp8)
+# plt.plot(xinterp,np.mean(alllines,axis=0)+ztemp)
+# #plt.plot(xinterp,np.mean(alllines,axis=0)+ztemp2)
+# plt.plot(xinterp,np.mean(alllines,axis=0))
+# plt.plot(xinterp,alllines[timestep,:])
 
 #plt.plot(xinterp,ztemp)
 #plt.plot(xinterp,ztemp1)
@@ -619,7 +618,7 @@ plt.set_cmap('bwr')
 
 tg, xg = np.meshgrid(time, xinterp)
 plt0 = ax1.pcolor(xg,tg,(alllines-np.mean(alllines, axis=0)).T, vmin=-1.6, vmax=1.6)
-fig.colorbar(plt0, ax=ax[0], orientation='horizontal')
+fig.colorbar(plt0, ax=ax1, orientation='horizontal')
 ax1.set_ylim([time[t1], time[t2]])
 ax1.set_title('Cross-shore Surveys (deviation from mean profile)')
 
@@ -701,7 +700,7 @@ fig.colorbar(plt4, ax=ax[4], orientation='horizontal')
 #plt.tight_layout(pad=0.5)
 
 plt.show()
-asfg
+
 
 cpc1 = P2R(Rt[:, 0], phitSubset[:, 0])
 cpc2 = P2R(Rt[:, 1], phitSubset[:, 1])
@@ -723,34 +722,34 @@ var_explained = np.array((percentV[0], percentV[0], percentV[1], percentV[1], pe
                           percentV[3], percentV[3], percentV[4], percentV[4], percentV[5], percentV[5],
                           percentV[6], percentV[6], percentV[7], percentV[7]))
 
-
-fig = plt.figure()
-plt.plot(np.real(cpc1),np.imag(cpc1))
-plt.plot(np.real(cpc2),np.imag(cpc2))
-plt.plot(np.real(cpc3),np.imag(cpc3))
-plt.plot(np.real(cpc4),np.imag(cpc4))
-plt.plot(np.real(cpc5),np.imag(cpc5))
-plt.plot(np.real(cpc6),np.imag(cpc6))
-plt.plot(np.real(cpc7),np.imag(cpc7))
-
-fig = plt.figure()
-plt.plot(np.real(cpc1)*var_explained[0],np.imag(cpc1)*var_explained[0])
-plt.plot(np.real(cpc2)*var_explained[2],np.imag(cpc2)*var_explained[2])
-plt.plot(np.real(cpc3)*var_explained[4],np.imag(cpc3)*var_explained[4])
-plt.plot(np.real(cpc4)*var_explained[6],np.imag(cpc4)*var_explained[6])
-plt.plot(np.real(cpc5)*var_explained[8],np.imag(cpc5)*var_explained[8])
+#
+# fig = plt.figure()
+# plt.plot(np.real(cpc1),np.imag(cpc1))
+# plt.plot(np.real(cpc2),np.imag(cpc2))
+# plt.plot(np.real(cpc3),np.imag(cpc3))
+# plt.plot(np.real(cpc4),np.imag(cpc4))
+# plt.plot(np.real(cpc5),np.imag(cpc5))
+# plt.plot(np.real(cpc6),np.imag(cpc6))
+# plt.plot(np.real(cpc7),np.imag(cpc7))
+#
+# fig = plt.figure()
+# plt.plot(np.real(cpc1)*var_explained[0],np.imag(cpc1)*var_explained[0])
+# plt.plot(np.real(cpc2)*var_explained[2],np.imag(cpc2)*var_explained[2])
+# plt.plot(np.real(cpc3)*var_explained[4],np.imag(cpc3)*var_explained[4])
+# plt.plot(np.real(cpc4)*var_explained[6],np.imag(cpc4)*var_explained[6])
+# plt.plot(np.real(cpc5)*var_explained[8],np.imag(cpc5)*var_explained[8])
 
 temp = CPCs*var_explained
-fig = plt.figure()
-plt.plot(temp[:,0], temp[:,1])
-plt.plot(temp[:,2], temp[:,3])
-plt.plot(temp[:,4], temp[:,5])
-plt.plot(temp[:,6], temp[:,7])
-plt.plot(temp[:,8], temp[:,9])
+# fig = plt.figure()
+# plt.plot(temp[:,0], temp[:,1])
+# plt.plot(temp[:,2], temp[:,3])
+# plt.plot(temp[:,4], temp[:,5])
+# plt.plot(temp[:,6], temp[:,7])
+# plt.plot(temp[:,8], temp[:,9])
 
 
 from sklearn.cluster import KMeans
-numClusters = 9
+numClusters = 6
 
 PCsub = CPCs*var_explained
 
@@ -1197,14 +1196,16 @@ plt.show()
 def transition_matrix(transitions):
     n = 1+ max(transitions) #number of states
     M = [[0]*n for _ in range(n)]
+    M2 = [[0]*n for _ in range(n)]
     for (i,j) in zip(transitions,transitions[1:]):
         M[i][j] += 1
+        M2[i][j] += 1
     #now convert to probabilities:
     for row in M:
         s = sum(row)
         if s > 0:
             row[:] = [f/s for f in row]
-    return M
+    return M, M2
 
 # def transitionDictionary(bmus,dates):
 
@@ -1230,13 +1231,16 @@ for xx in range(numClusters):
 
 
 
-m = transition_matrix(sorted_bmus)
+m,m2 = transition_matrix(sorted_bmus)
 for row in m: print(' '.join('{0:.2f}'.format(x) for x in row))
 
 flat_list = [item for sublist in m for item in sublist]
 flatarray = np.asarray(flat_list)
+flatarray.resize(numClusters, numClusters)
 
-flatarray.resize(15,15)
+flat_list2 = [item for sublist in m2 for item in sublist]
+flatarray2 = np.asarray(flat_list2)
+flatarray2.resize(numClusters, numClusters)
 
 fig = plt.figure(figsize=(10,10))
 ax = plt.subplot2grid((2,2),(0,0),colspan=2,rowspan=2)
@@ -1739,10 +1743,678 @@ ax.plot([0, 600],[21,21],'--')
 # ylim = ax.get_ylim()
 # ax.set_ylim(None, ylim[1]+0.1*np.diff(ylim))
 
+#plt.show()
+
+plt.close()
+plt.close()
+plt.close()
+plt.close()
+plt.close()
+plt.close()
+plt.close()
+plt.close()
+plt.close()
+plt.close()
+plt.close()
+plt.close()
+plt.close()
+plt.close()
+
+###
+
+# lets find all of the first bins...
+initialStates = np.where((sorted_bmus==0))
+tempState = initialStates
+jumps = tempState[0][1:]-tempState[0][0:-1]
+bigJumps = np.where((jumps > 1))
+allJumps = np.append(0,bigJumps[0]+1)
+
+firstSequence = sorted_bmus[initialStates[0][allJumps[0]]:initialStates[0][allJumps[1]]]
+
+matrix = flatarray2
+
+
+### Chord option #2
+
+# import holoviews as hv
+# from holoviews import opts, dim
+# import pandas as pd
+# from bokeh.plotting import show
+#
+# source_list = sorted_bmus[0:-1]
+# target_list = sorted_bmus[1:]
+#
+#
+# # create a df from the data
+# df_links = pd.DataFrame([source_list, target_list], ["source", "target"]).T
+#
+# # calculate the number of interactions between entities using pandas groupby
+# # for now let's assume 1 - 1 flows
+# df_links = df_links.groupby(["source", "target"]).apply(len)
+#
+# # convert the groupby into a dataframe
+# df_links = df_links.to_frame().reset_index()
+#
+# # rename the 0 column with value
+# df_links.rename(columns = {0:"value"}, inplace = True)
+#
+# # this is our data
+# df_links.head()
+# hv.extension('boken')
+# mychordplt = hv.Chord(df_links)
+# show(hv.render(mychordplt))
+#
+
+## Chord option #1
+
+# chord diagram
+import matplotlib.pyplot as plt
+from matplotlib.path import Path
+import matplotlib.patches as patches
+
+import numpy as np
+
+LW = 0.3
+
+def polar2xy(r, theta):
+    return np.array([r*np.cos(theta), r*np.sin(theta)])
+
+def hex2rgb(c):
+    return tuple(int(c[i:i+2], 16)/256.0 for i in (1, 3 ,5))
+
+def IdeogramArc(start=0, end=60, radius=1.0, width=0.2, ax=None, color=(1,0,0)):
+    # start, end should be in [0, 360)
+    if start > end:
+        start, end = end, start
+    start *= np.pi/180.
+    end *= np.pi/180.
+    # optimal distance to the control points
+    # https://stackoverflow.com/questions/1734745/how-to-create-circle-with-b%C3%A9zier-curves
+    opt = 4./3. * np.tan((end-start)/ 4.) * radius
+    inner = radius*(1-width)
+    verts = [
+        polar2xy(radius, start),
+        polar2xy(radius, start) + polar2xy(opt, start+0.5*np.pi),
+        polar2xy(radius, end) + polar2xy(opt, end-0.5*np.pi),
+        polar2xy(radius, end),
+        polar2xy(inner, end),
+        polar2xy(inner, end) + polar2xy(opt*(1-width), end-0.5*np.pi),
+        polar2xy(inner, start) + polar2xy(opt*(1-width), start+0.5*np.pi),
+        polar2xy(inner, start),
+        polar2xy(radius, start),
+        ]
+
+    codes = [Path.MOVETO,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.LINETO,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CLOSEPOLY,
+             ]
+
+    if ax == None:
+        return verts, codes
+    else:
+        path = Path(verts, codes)
+        print(color)
+        patch = patches.PathPatch(path, facecolor=color, edgecolor=color, lw=LW, alpha=0.5)
+        #patch = patches.PathPatch(path, facecolor=color+(0.5,), edgecolor=color+(0.4,), lw=LW)
+
+        ax.add_patch(patch)
+
+
+def ChordArc(start1=0, end1=60, start2=180, end2=240, radius=1.0, chordwidth=0.7, ax=None, color=(1,0,0)):
+    # start, end should be in [0, 360)
+    if start1 > end1:
+        start1, end1 = end1, start1
+    if start2 > end2:
+        start2, end2 = end2, start2
+    start1 *= np.pi/180.
+    end1 *= np.pi/180.
+    start2 *= np.pi/180.
+    end2 *= np.pi/180.
+    opt1 = 4./3. * np.tan((end1-start1)/ 4.) * radius
+    opt2 = 4./3. * np.tan((end2-start2)/ 4.) * radius
+    rchord = radius * (1-chordwidth)
+    verts = [
+        polar2xy(radius, start1),
+        polar2xy(radius, start1) + polar2xy(opt1, start1+0.5*np.pi),
+        polar2xy(radius, end1) + polar2xy(opt1, end1-0.5*np.pi),
+        polar2xy(radius, end1),
+        polar2xy(rchord, end1),
+        polar2xy(rchord, start2),
+        polar2xy(radius, start2),
+        polar2xy(radius, start2) + polar2xy(opt2, start2+0.5*np.pi),
+        polar2xy(radius, end2) + polar2xy(opt2, end2-0.5*np.pi),
+        polar2xy(radius, end2),
+        polar2xy(rchord, end2),
+        polar2xy(rchord, start1),
+        polar2xy(radius, start1),
+        ]
+
+    codes = [Path.MOVETO,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             ]
+
+    if ax == None:
+        return verts, codes
+    else:
+        path = Path(verts, codes)
+        #patch = patches.PathPatch(path, facecolor=color+(0.5,), edgecolor=color+(0.4,), lw=LW)
+        patch = patches.PathPatch(path, facecolor=color, edgecolor=color, lw=LW, alpha=0.5)
+
+        ax.add_patch(patch)
+
+def selfChordArc(start=0, end=60, radius=1.0, chordwidth=0.7, ax=None, color=(1,0,0)):
+    # start, end should be in [0, 360)
+    if start > end:
+        start, end = end, start
+    start *= np.pi/180.
+    end *= np.pi/180.
+    opt = 4./3. * np.tan((end-start)/ 4.) * radius
+    rchord = radius * (1-chordwidth)
+    verts = [
+        polar2xy(radius, start),
+        polar2xy(radius, start) + polar2xy(opt, start+0.5*np.pi),
+        polar2xy(radius, end) + polar2xy(opt, end-0.5*np.pi),
+        polar2xy(radius, end),
+        polar2xy(rchord, end),
+        polar2xy(rchord, start),
+        polar2xy(radius, start),
+        ]
+
+    codes = [Path.MOVETO,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             ]
+
+    if ax == None:
+        return verts, codes
+    else:
+        path = Path(verts, codes)
+        #patch = patches.PathPatch(path, facecolor=color+(0.5,), edgecolor=color+(0.4,), lw=LW)
+        patch = patches.PathPatch(path, facecolor=color, edgecolor=color, lw=LW, alpha=0.5)
+
+        ax.add_patch(patch)
+
+def chordDiagram(X, ax, colors=None, width=0.1, pad=2, chordwidth=0.7):
+    """Plot a chord diagram
+    Parameters
+    ----------
+    X :
+        flux data, X[i, j] is the flux from i to j
+    ax :
+        matplotlib `axes` to show the plot
+    colors : optional
+        user defined colors in rgb format. Use function hex2rgb() to convert hex color to rgb color. Default: d3.js category10
+    width : optional
+        width/thickness of the ideogram arc
+    pad : optional
+        gap pad between two neighboring ideogram arcs, unit: degree, default: 2 degree
+    chordwidth : optional
+        position of the control points for the chords, controlling the shape of the chords
+    """
+    # X[i, j]:  i -> j
+    x = X.sum(axis = 1) # sum over rows
+    ax.set_xlim(-1.1, 1.1)
+    ax.set_ylim(-1.1, 1.1)
+
+    if colors is None:
+    # use d3.js category10 https://github.com/d3/d3-3.x-api-reference/blob/master/Ordinal-Scales.md#category10
+        colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
+                  '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
+        if len(x) > 10:
+            print('x is too large! Use x smaller than 10')
+        colors = [hex2rgb(colors[i]) for i in range(len(x))]
+
+    # find position for each start and end
+    y = x/np.sum(x).astype(float) * (360 - pad*len(x))
+
+    pos = {}
+    arc = []
+    nodePos = []
+    start = 0
+    for i in range(len(x)):
+        end = start + y[i]
+        arc.append((start, end))
+        angle = 0.5*(start+end)
+        #print(start, end, angle)
+        if -30 <= angle <= 210:
+            angle -= 90
+        else:
+            angle -= 270
+        nodePos.append(tuple(polar2xy(1.1, 0.5*(start+end)*np.pi/180.)) + (angle,))
+        z = (X[i, :]/x[i].astype(float)) * (end - start)
+        ids = np.argsort(z)
+        z0 = start
+        for j in ids:
+            pos[(i, j)] = (z0, z0+z[j])
+            z0 += z[j]
+        start = end + pad
+
+    for i in range(len(x)):
+        start, end = arc[i]
+        print(colors[i])
+        IdeogramArc(start=start, end=end, radius=1.0, ax=ax, color=colors[i], width=width)
+        start, end = pos[(i,i)]
+        selfChordArc(start, end, radius=1.-width, color=colors[i], chordwidth=chordwidth*0.7, ax=ax)
+        for j in range(i):
+            color = colors[i]
+            if X[i, j] > X[j, i]:
+                color = colors[j]
+            start1, end1 = pos[(i,j)]
+            start2, end2 = pos[(j,i)]
+            ChordArc(start1, end1, start2, end2,
+                     radius=1.-width, color=colors[i], chordwidth=chordwidth, ax=ax)
+
+    #print(nodePos)
+    return nodePos
+
+##################################
+#if __name__ == "__main__":
+fig = plt.figure(figsize=(6,6))
+    # flux = np.array([[11975,  5871, 8916, 2868],
+    #   [ 1951, 10048, 2060, 6171],
+    #   [ 8010, 16145, 8090, 8045],
+    #   [ 1013,   990,  940, 6907]
+    # ])
+flux = matrix
+ax = plt.axes([0,0,1,1])
+
+    #nodePos = chordDiagram(flux, ax, colors=[hex2rgb(x) for x in ['#666666', '#66ff66', '#ff6666', '#6666ff']])
+#nodePos = chordDiagram(flux, ax)
+tempColorsInd = np.where((colors==1))
+tempColorsInd2 = np.where((colors==0))
+
+tempColors = colors
+tempColors[tempColorsInd] = 0.9999
+tempColors[tempColorsInd2] = 0.0001
+tempColors = tempColors
+nodePos = chordDiagram(flux,ax,colors=tempColors[:,0:3])
+ax.axis('off')
+prop = dict(fontsize=16*0.8, ha='center', va='center')
+
 plt.show()
 
 
 
+
+
+
+
+
+# nodes = ['1', '2', '3', '4', '5', '6', '7', '8']
+# for i in range(8):
+#     ax.text(nodePos[i][0], nodePos[i][1], nodes[i], rotation=nodePos[i][2], **prop)
+
+    # plt.savefig("example.png", dpi=600,
+    #         transparent=True,
+    #         bbox_inches='tight', pad_inches=0.02)
+
+
+
+#
+# def check_data(data_matrix):
+#     L, M=data_matrix.shape
+#     if L!=M:
+#         raise ValueError('Data array must have (n,n) shape')
+#     return L
+#
+# L=check_data(matrix)
+#
+# PI=np.pi
+#
+# def moduloAB(x, a, b): #maps a real number onto the unit circle identified with
+#                        #the interval [a,b), b-a=2*PI
+#         if a>=b:
+#             raise ValueError('Incorrect interval ends')
+#         y=(x-a)%(b-a)
+#         return y+b if y<0 else y+a
+#
+# def test_2PI(x):
+#     return 0<= x <2*PI
+#
+# row_sum=[np.sum(matrix[k,:]) for k in range(L)]
+#
+# #set the gap between two consecutive ideograms
+# gap=2*PI*0.005
+# ideogram_length=2*PI*np.asarray(row_sum)/sum(row_sum)-gap*np.ones(L)
+# def get_ideogram_ends(ideogram_len, gap):
+#     ideo_ends=[]
+#     left=0
+#     for k in range(len(ideogram_len)):
+#         right=left+ideogram_len[k]
+#         ideo_ends.append([left, right])
+#         left=right+gap
+#     return ideo_ends
+#
+# ideo_ends=get_ideogram_ends(ideogram_length, gap)
+# ideo_ends
+#
+# def make_ideogram_arc(R, phi, a=50):
+#     # R is the circle radius
+#     # phi is the list of ends angle coordinates of an arc
+#     # a is a parameter that controls the number of points to be evaluated on an arc
+#     if not test_2PI(phi[0]) or not test_2PI(phi[1]):
+#         phi=[moduloAB(t, 0, 2*PI) for t in phi]
+#     length=(phi[1]-phi[0])% 2*PI
+#     nr=5 if length<=PI/4 else int(a*length/PI)
+#
+#     if phi[0] < phi[1]:
+#         theta=np.linspace(phi[0], phi[1], nr)
+#     else:
+#         phi=[moduloAB(t, -PI, PI) for t in phi]
+#         theta=np.linspace(phi[0], phi[1], nr)
+#     return R*np.exp(1j*theta)
+#
+# z=make_ideogram_arc(1.3, [11*PI/6, PI/17])
+#
+# labels=['1', '2', '3', '4', '5']#, '6','7','8','9','10','11','12','13','14','15']
+# ideo_colors=['rgba(244, 109, 67, 0.75)',
+#              'rgba(253, 174, 97, 0.75)',
+#              'rgba(254, 224, 139, 0.75)',
+#              'rgba(217, 239, 139, 0.75)',
+#              'rgba(166, 217, 106, 0.75)']#,
+#              # 'rgba(253, 174, 97, 0.75)',
+#              # 'rgba(254, 224, 139, 0.75)',
+#              # 'rgba(217, 239, 139, 0.75)',
+#              # 'rgba(166, 217, 106, 0.75)',
+#              # 'rgba(217, 239, 139, 0.75)',
+#              # 'rgba(166, 217, 106, 0.75)',
+#              # 'rgba(253, 174, 97, 0.75)',
+#              # 'rgba(254, 224, 139, 0.75)',
+#              # 'rgba(217, 239, 139, 0.75)',
+#              # 'rgba(166, 217, 106, 0.75)']#brewer colors with alpha set on 0.75
+#
+# def map_data(data_matrix, row_value, ideogram_length):
+#     mapped=np.zeros(data_matrix.shape)
+#     for j  in range(L):
+#         mapped[:, j]=ideogram_length*data_matrix[:,j]/row_value
+#     return mapped
+#
+# mapped_data=map_data(matrix, row_sum, ideogram_length)
+# mapped_data
+#
+# idx_sort=np.argsort(mapped_data, axis=1)
+# idx_sort
+#
+# def make_ribbon_ends(mapped_data, ideo_ends,  idx_sort):
+#     L=mapped_data.shape[0]
+#     ribbon_boundary=np.zeros((L,L+1))
+#     for k in range(L):
+#         start=ideo_ends[k][0]
+#         ribbon_boundary[k][0]=start
+#         for j in range(1,L+1):
+#             J=idx_sort[k][j-1]
+#             ribbon_boundary[k][j]=start+mapped_data[k][J]
+#             start=ribbon_boundary[k][j]
+#     return [[(ribbon_boundary[k][j],ribbon_boundary[k][j+1] ) for j in range(L)] for k in range(L)]
+#
+# ribbon_ends=make_ribbon_ends(mapped_data, ideo_ends,  idx_sort)
+#
+# def control_pts(angle, radius):
+#     #angle is a  3-list containing angular coordinates of the control points b0, b1, b2
+#     #radius is the distance from b1 to the  origin O(0,0)
+#
+#     # if len(angle)!=3:
+#     #     raise InvalidInputError('angle must have len =3')
+#     b_cplx=np.array([np.exp(1j*angle[k]) for k in range(3)])
+#     b_cplx[1]=radius*b_cplx[1]
+#     return zip(b_cplx.real, b_cplx.imag)
+#
+# def ctrl_rib_chords(l, r, radius):
+#     # this function returns a 2-list containing control poligons of the two quadratic Bezier
+#     #curves that are opposite sides in a ribbon
+#     #l (r) the list of angular variables of the ribbon arc ends defining
+#     #the ribbon starting (ending) arc
+#     # radius is a common parameter for both control polygons
+#     if len(l)!=2 or len(r)!=2:
+#         raise ValueError('the arc ends must be elements in a list of len 2')
+#     return [control_pts([l[j], (l[j]+r[j])/2, r[j]], radius) for j in range(2)]
+#
+# ribbon_color=[L*[ideo_colors[k]] for k in range(L)]
+# ribbon_color[0][4]=ideo_colors[4]
+# ribbon_color[1][2]=ideo_colors[2]
+# ribbon_color[2][3]=ideo_colors[3]
+# ribbon_color[2][4]=ideo_colors[4]
+#
+#
+# def make_q_bezier(b):  # defines the Plotly SVG path for a quadratic Bezier curve defined by the list if its control points
+#     # if len(b) != 3:
+#     #      raise valueError('control poligon must have 3 points')
+#     A, B, C = b
+#     return 'M ' + str(A[0]) + ',' + str(A[1]) + ' ' + 'Q ' + \
+#        str(B[0]) + ', ' + str(B[1]) + ' ' + \
+#        str(C[0]) + ', ' + str(C[1])
+#
+# b = [(1, 4), (-0.5, 2.35), (3.745, 1.47)]
+#
+# make_q_bezier(b)
+# #print 'ribbon ends starting from the ideogram[2]\n', ribbon_ends[2]
+# def make_ribbon_arc(theta0, theta1):
+#
+#     if test_2PI(theta0) and test_2PI(theta1):
+#         if theta0 < theta1:
+#             theta0= moduloAB(theta0, -PI, PI)
+#             theta1= moduloAB(theta1, -PI, PI)
+#             if theta0*theta1>0:
+#                 raise ValueError('incorrect angle coordinates for ribbon')
+#
+#         nr=int(40*(theta0-theta1)/PI)
+#         if nr<=2: nr=3
+#         theta=np.linspace(theta0, theta1, nr)
+#         pts=np.exp(1j*theta)# points on arc in polar complex form
+#
+#         string_arc=''
+#         for k in range(len(theta)):
+#             string_arc+='L '+str(pts.real[k])+', '+str(pts.imag[k])+' '
+#         return   string_arc
+#     else:
+#         raise ValueError('the angle coordinates for an arc side of a ribbon must be in [0, 2*pi]')
+#
+# make_ribbon_arc(np.pi/3, np.pi/6)
+#
+#
+# #import plotly.plotly as py
+# #import plotly.figure_factory as ff
+# import plotly.graph_objs as go
+#
+# #import chart_studio.plotly as py
+# #import plot, iplot
+# #import chart_studio.grid_objs as go
+# #Replace plotly.presentation_objs with chart_studio.presentation_objs
+# #    Replace plotly.widgets with chart_studio.widgets
+#
+#
+#
+#
+# def make_layout(title, plot_size):
+#     axis=dict(showline=False, # hide axis line, grid, ticklabels and  title
+#           zeroline=False,
+#           showgrid=False,
+#           showticklabels=False,
+#           title=''
+#           )
+#
+#     return go.Layout(title=title,
+#                   xaxis=dict(axis),
+#                   yaxis=dict(axis),
+#                   showlegend=False,
+#                   width=plot_size,
+#                   height=plot_size,
+#                   margin=dict(t=25, b=25, l=25, r=25),
+#                   hovermode='closest',
+#                   shapes= []# to this list one appends below the dicts defining the ribbon,
+#                            #respectively the ideogram shapes
+#                  )
+#
+# def make_ideo_shape(path, line_color, fill_color):
+#     #line_color is the color of the shape boundary
+#     #fill_collor is the color assigned to an ideogram
+#     return  dict(
+#                   line=dict(
+#                   color=line_color,
+#                   width=0.45
+#                  ),
+#
+#             path=  path,
+#             type='path',
+#             fillcolor=fill_color,
+#             layer='below'
+#         )
+#
+# def make_ribbon(l, r, line_color, fill_color, radius=0.2):
+#     #l=[l[0], l[1]], r=[r[0], r[1]]  represent the opposite arcs in the ribbon
+#     #line_color is the color of the shape boundary
+#     #fill_color is the fill color for the ribbon shape
+#     poligon=ctrl_rib_chords(l,r, radius)
+#     b,c =poligon
+#
+#     return  dict(
+#                 line=dict(
+#                 color=line_color, width=0.5
+#             ),
+#             path=  make_q_bezier(b)+make_ribbon_arc(r[0], r[1])+
+#                    make_q_bezier(c[::-1])+make_ribbon_arc(l[1], l[0]),
+#             type='path',
+#             fillcolor=fill_color,
+#             layer='below'
+#         )
+#
+# def make_self_rel(l, line_color, fill_color, radius):
+#     #radius is the radius of Bezier control point b_1
+#     b=control_pts([l[0], (l[0]+l[1])/2, l[1]], radius)
+#     return  dict(
+#                 line=dict(
+#                 color=line_color, width=0.5
+#             ),
+#             path=  make_q_bezier(b)+make_ribbon_arc(l[1], l[0]),
+#             type='path',
+#             fillcolor=fill_color,
+#             layer='below'
+#         )
+#
+# def invPerm(perm):
+#     # function that returns the inverse of a permutation, perm
+#     inv = [0] * len(perm)
+#     for i, s in enumerate(perm):
+#         inv[s] = i
+#     return inv
+#
+# layout=make_layout('Chord diagram', 400)
+#
+# radii_sribb=[0.4, 0.30, 0.35, 0.39, 0.12]#,0.4, 0.30, 0.35, 0.39, 0.12,0.4, 0.30, 0.35, 0.39, 0.12]
+#
+# ribbon_info=[]
+# for k in range(L):
+#
+#     sigma=idx_sort[k]
+#     sigma_inv=invPerm(sigma)
+#     for j in range(k, L):
+#         if matrix[k][j]==0 and matrix[j][k]==0: continue
+#         eta=idx_sort[j]
+#         eta_inv=invPerm(eta)
+#         l=ribbon_ends[k][sigma_inv[j]]
+#
+#         if j==k:
+#             layout['shapes'].append(make_self_rel(l, 'rgb(175,175,175)',ideo_colors[k], radius=radii_sribb[k]))
+#             z=0.9*np.exp(1j*(l[0]+l[1])/2)
+#             #the text below will be displayed when hovering the mouse over the ribbon
+#             text=labels[k]+' commented on '+ '{:d}'.format(matrix[k][k])+' of '+ 'herself Fb posts',
+#             ribbon_info.append(go.Scatter(x=[z.real],
+#                                        y=[z.imag],
+#                                        mode='markers',
+#                                        marker=dict(size=0.5, color=ideo_colors[k]),
+#                                        text=text,
+#                                        hoverinfo='text'
+#                                        )
+#                               )
+#         else:
+#             r=ribbon_ends[j][eta_inv[k]]
+#             zi=0.9*np.exp(1j*(l[0]+l[1])/2)
+#             zf=0.9*np.exp(1j*(r[0]+r[1])/2)
+#             #texti and textf are the strings that will be displayed when hovering the mouse
+#             #over the two ribbon ends
+#             texti=labels[k]+' commented on '+ '{:d}'.format(matrix[k][j])+' of '+\
+#                   labels[j]+ ' Fb posts',
+#
+#             textf=labels[j]+' commented on '+ '{:d}'.format(matrix[j][k])+' of '+\
+#             labels[k]+ ' Fb posts',
+#             ribbon_info.append(go.Scatter(x=[zi.real],
+#                                        y=[zi.imag],
+#                                        mode='markers',
+#                                        marker=dict(size=0.5, color=ribbon_color[k][j]),
+#                                        text=texti,
+#                                        hoverinfo='text'
+#                                        )
+#                               ),
+#             ribbon_info.append(go.Scatter(x=[zf.real],
+#                                        y=[zf.imag],
+#                                        mode='markers',
+#                                        marker=dict(size=0.5, color=ribbon_color[k][j]),
+#                                        text=textf,
+#                                        hoverinfo='text'
+#                                        )
+#                               )
+#             r=(r[1], r[0])#IMPORTANT!!!  Reverse these arc ends because otherwise you get
+#                           # a twisted ribbon
+#             #append the ribbon shape
+#             layout['shapes'].append(make_ribbon(l, r, 'rgb(175,175,175)' , ribbon_color[k][j]))
+#
+#
+# ideograms=[]
+# for k in range(len(ideo_ends)):
+#     z= make_ideogram_arc(1.1, ideo_ends[k])
+#     zi=make_ideogram_arc(1.0, ideo_ends[k])
+#     m=len(z)
+#     n=len(zi)
+#     ideograms.append(go.Scatter(x=z.real,
+#                              y=z.imag,
+#                              mode='lines',
+#                              line=dict(color=ideo_colors[k], shape='spline', width=0.25),
+#                              text=labels[k]+'<br>'+'{:d}'.format(row_sum[k]),
+#                              hoverinfo='text'
+#                              )
+#                      )
+#
+#
+#     path='M '
+#     for s in range(m):
+#         path+=str(z.real[s])+', '+str(z.imag[s])+' L '
+#
+#     Zi=np.array(zi.tolist()[::-1])
+#
+#     for s in range(m):
+#         path+=str(Zi.real[s])+', '+str(Zi.imag[s])+' L '
+#     path+=str(z.real[0])+' ,'+str(z.imag[0])
+#
+#     layout['shapes'].append(make_ideo_shape(path,'rgb(150,150,150)' , ideo_colors[k]))
+#
+# data = go.Data(ideograms+ribbon_info)
+# fig = go.Figure(data=data, layout=layout)
+#
+# import plotly.offline as off
+# off.init_notebook_mode()
+#
+# off.iplot(fig, filename='chord-diagram-Fb')
 
 # from sklearn.cluster import KMeans
 # num_clusters = 20

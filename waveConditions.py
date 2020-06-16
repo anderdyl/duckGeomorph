@@ -749,7 +749,7 @@ temp = CPCs*var_explained
 
 
 from sklearn.cluster import KMeans
-numClusters = 12
+numClusters = 15
 
 PCsub = CPCs*var_explained
 
@@ -1437,22 +1437,44 @@ def getWIS(file):
 
     waveHs = waves.variables['waveHs'][:]
     waveTp = waves.variables['waveTp'][:]
+    waveMeanDirection = waves.variables['waveMeanDirection'][:]
+
     waveTm = waves.variables['waveTm'][:]
     waveTm1 = waves.variables['waveTm1'][:]
     waveTm2 = waves.variables['waveTm2'][:]
-    waveMeanDirection = waves.variables['waveMeanDirection'][:]
-    waveMeanDirectionSwell = waves.variables['waveMeanDirectionSwell'][:]
+
+    waveHsWindsea = waves.variables['waveHsWindsea'][:]
+    waveTmWindsea = waves.variables['waveTmWindsea'][:]
+    waveMeanDirectionWindsea = waves.variables['waveMeanDirectionWindsea'][:]
+    waveSpreadWindsea = waves.variables['waveSpreadWindsea'][:]
+
     timeW = waves.variables['time'][:]
+
+    waveTpSwell = waves.variables['waveTpSwell'][:]
+    waveHsSwell = waves.variables['waveHsSwell'][:]
+    waveMeanDirectionSwell = waves.variables['waveMeanDirectionSwell'][:]
+    waveSpreadSwell = waves.variables['waveSpreadSwell'][:]
 
 
     output = dict()
     output['waveHs'] = waveHs
     output['waveTp'] = waveTp
+    output['waveMeanDirection'] = waveMeanDirection
+
     output['waveTm'] = waveTm
     output['waveTm1'] = waveTm1
     output['waveTm2'] = waveTm2
-    output['waveMeanDirection'] = waveMeanDirection
+
+    output['waveTpSwell'] = waveTpSwell
+    output['waveHsSwell'] = waveHsSwell
     output['waveMeanDirectionSwell'] = waveMeanDirectionSwell
+    output['waveSpreadSwell'] = waveSpreadSwell
+
+    output['waveHsWindsea'] = waveHsWindsea
+    output['waveTpWindsea'] = waveTmWindsea
+    output['waveMeanDirectionWindsea'] = waveMeanDirectionWindsea
+    output['waveSpreadWindsea'] = waveSpreadWindsea
+
     output['t'] = timeW
 
     return output
@@ -1481,23 +1503,47 @@ def datenum_to_datetime(datenum):
 Hs = []
 Tp = []
 Dm = []
+hsSwell = []
+tpSwell = []
+dmSwell = []
+hsWindsea = []
+tpWindsea = []
+dmWindsea = []
+
 timeWave = []
 for i in files_path:
     waves = getWIS(i)
     Hs = np.append(Hs,waves['waveHs'])
     Tp = np.append(Tp,waves['waveTp'])
     Dm = np.append(Dm,waves['waveMeanDirection'])
+    hsSwell = np.append(hsSwell,waves['waveHsSwell'])
+    tpSwell = np.append(tpSwell,waves['waveTpSwell'])
+    dmSwell = np.append(dmSwell,waves['waveMeanDirectionSwell'])
+    hsWindsea = np.append(hsWindsea,waves['waveHsWindsea'])
+    tpWindsea = np.append(tpWindsea,waves['waveTpWindsea'])
+    dmWindsea = np.append(dmWindsea,waves['waveMeanDirectionWindsea'])
     #timeTemp = [datenum_to_datetime(x) for x in waves['t'].flatten()]
     timeWave = np.append(timeWave,waves['t'].flatten())
 
 
-hsC = Hs
-tpC = Tp
-dmC = Dm
-badDirs = np.where((dmC > 360))
-dmC[badDirs] = dmC[badDirs]*np.nan
+hsCombined = Hs
+tpCombined = Tp
+dmCombined = Dm
+hsSwellCombined = hsSwell
+tpSwellCombined = tpSwell
+dmSwellCombined = hsSwell
+hsWindseaCombined = hsWindsea
+tpWindseaCombined = tpWindsea
+dmWindseaCombined = hsWindsea
 
-waveNorm = dmC - 72
+badDirs = np.where((dmCombined > 360))
+dmCombined[badDirs] = dmCombined[badDirs]*np.nan
+badDirsSwell = np.where((dmSwellCombined > 360))
+dmSwellCombined[badDirsSwell] = dmSwellCombined[badDirsSwell]*np.nan
+badDirsWindsea = np.where((dmWindseaCombined > 360))
+dmWindseaCombined[badDirsWindsea] = dmWindseaCombined[badDirsWindsea]*np.nan
+
+waveNorm = dmCombined - 72
 neg = np.where((waveNorm > 180))
 waveNorm[neg[0]] = waveNorm[neg[0]]-360
 offpos = np.where((waveNorm>90))
@@ -1505,9 +1551,30 @@ offneg = np.where((waveNorm<-90))
 waveNorm[offpos[0]] = waveNorm[offpos[0]]*0
 waveNorm[offneg[0]] = waveNorm[offneg[0]]*0
 
-lwpC = 1025*np.square(hsC)*tpC*(9.81/(64*np.pi))*np.cos(waveNorm*(np.pi/180))*np.sin(waveNorm*(np.pi/180))
-weC = np.square(hsC)*tpC
+waveNormSwell = dmSwellCombined - 72
+negSwell = np.where((waveNormSwell > 180))
+waveNormSwell[negSwell[0]] = waveNormSwell[negSwell[0]]-360
+offposSwell = np.where((waveNormSwell>90))
+offnegSwell = np.where((waveNormSwell<-90))
+waveNormSwell[offposSwell[0]] = waveNormSwell[offposSwell[0]]*0
+waveNormSwell[offnegSwell[0]] = waveNormSwell[offnegSwell[0]]*0
 
+waveNormWindsea = dmWindseaCombined - 72
+negWindsea = np.where((waveNormWindsea > 180))
+waveNormWindsea[negWindsea[0]] = waveNormWindsea[negWindsea[0]]-360
+offposWindsea = np.where((waveNormWindsea>90))
+offnegWindsea = np.where((waveNormWindsea<-90))
+waveNormWindsea[offposWindsea[0]] = waveNormWindsea[offposWindsea[0]]*0
+waveNormWindsea[offnegWindsea[0]] = waveNormWindsea[offnegWindsea[0]]*0
+
+lwpC = 1025*np.square(hsCombined)*tpCombined*(9.81/(64*np.pi))*np.cos(waveNorm*(np.pi/180))*np.sin(waveNorm*(np.pi/180))
+weC = np.square(hsCombined)*tpCombined
+
+lwpSwell = 1025*np.square(hsSwellCombined)*tpSwellCombined*(9.81/(64*np.pi))*np.cos(waveNormSwell*(np.pi/180))*np.sin(waveNormSwell*(np.pi/180))
+weSwell = np.square(hsSwellCombined)*tpSwellCombined
+
+lwpWindsea = 1025*np.square(hsWindseaCombined)*tpWindseaCombined*(9.81/(64*np.pi))*np.cos(waveNormWindsea*(np.pi/180))*np.sin(waveNormWindsea*(np.pi/180))
+weWindsea = np.square(hsWindseaCombined)*tpWindseaCombined
 tWave = [DT.datetime.fromtimestamp(x) for x in timeWave]
 
 tC = np.array(tWave)
@@ -1515,22 +1582,20 @@ tC = np.array(tWave)
 
 
 
-
-
-
-
-# bins = dict()
-# date = dict()
-# nextbin = dict()
-# nextdate = dict()
-# prevbin = dict()
-# prevdate = dict()
 wHs = []
 wTp = []
 wDm = []
 wLWP = []
 wWE = []
 wT = []
+swellHs = []
+swellTp = []
+swellDm = []
+swellLWP = []
+windseaHs = []
+windseaTp = []
+windseaDm = []
+windseaLWP = []
 for xx in range(numClusters):
     innerListHs = []
     innerListTp = []
@@ -1538,6 +1603,14 @@ for xx in range(numClusters):
     innerListLWP = []
     innerListWE = []
     innerListT = []
+    innerListSwellHs = []
+    innerListSwellTp = []
+    innerListSwellDm = []
+    innerListSwellLWP = []
+    innerListWindseaHs = []
+    innerListWindseaTp = []
+    innerListWindseaDm = []
+    innerListWindseaLWP = []
     for yy in range(numClusters):
         # if both are equal then the wave conditions didn't cause a transition and
         # everything between the last two dates should be added to a distribution
@@ -1551,36 +1624,213 @@ for xx in range(numClusters):
             tempLWP = []
             tempWE = []
             tempTi = []
+            tempSwellHs = []
+            tempSwellTp = []
+            tempSwellDm = []
+            tempSwellLWP = []
+            tempWindseaHs = []
+            tempWindseaTp = []
+            tempWindseaDm = []
+            tempWindseaLWP = []
             for tt in range(len(wInd[0])):
                 tempT = np.where((tC < date[xx][wInd[0][tt]]) & (tC > prevdate[xx][wInd[0][tt]]))
-                tempHs = np.append(tempHs,hsC[tempT])
-                tempTp = np.append(tempTp,tpC[tempT])
+                tempHs = np.append(tempHs,hsCombined[tempT])
+                tempTp = np.append(tempTp,tpCombined[tempT])
                 tempDm = np.append(tempDm,waveNorm[tempT])
                 tempLWP = np.append(tempLWP,lwpC[tempT])
                 tempWE = np.append(tempWE,weC[tempT])
                 tempTi = np.append(tempTi,tC[tempT])
-
+                tempSwellHs = np.append(tempSwellHs,hsSwellCombined[tempT])
+                tempSwellTp = np.append(tempSwellTp,tpSwellCombined[tempT])
+                tempSwellDm = np.append(tempSwellDm,waveNormSwell[tempT])
+                tempSwellLWP = np.append(tempSwellLWP,lwpSwell[tempT])
+                tempWindseaHs = np.append(tempWindseaHs,hsWindseaCombined[tempT])
+                tempWindseaTp = np.append(tempWindseaTp,tpWindseaCombined[tempT])
+                tempWindseaDm = np.append(tempWindseaDm,waveNormWindsea[tempT])
+                tempWindseaLWP = np.append(tempWindseaLWP,lwpWindsea[tempT])
         else:
             tempHs = []
             tempTp = []
             tempDm = []
             tempLWP =[]
-            tempWE= []
+            tempWE = []
             tempTi = []
-
+            tempSwellHs = []
+            tempSwellTp = []
+            tempSwellDm = []
+            tempSwellLWP = []
+            tempWindseaHs = []
+            tempWindseaTp = []
+            tempWindseaDm = []
+            tempWindseaLWP = []
         innerListHs.append(tempHs)
         innerListTp.append(tempTp)
         innerListDm.append(tempDm)
         innerListLWP.append(tempLWP)
         innerListWE.append(tempWE)
         innerListT.append(tempTi)
-
+        innerListSwellHs.append(tempSwellHs)
+        innerListSwellTp.append(tempSwellTp)
+        innerListSwellDm.append(tempSwellDm)
+        innerListSwellLWP.append(tempSwellLWP)
+        innerListWindseaHs.append(tempWindseaHs)
+        innerListWindseaTp.append(tempWindseaTp)
+        innerListWindseaDm.append(tempWindseaDm)
+        innerListWindseaLWP.append(tempWindseaLWP)
     wHs.append(innerListHs)
     wTp.append(innerListTp)
     wDm.append(innerListDm)
     wLWP.append(innerListLWP)
     wWE.append(innerListWE)
     wT.append(innerListT)
+    swellHs.append(innerListSwellHs)
+    swellTp.append(innerListSwellTp)
+    swellDm.append(innerListSwellDm)
+    swellLWP.append(innerListSwellLWP)
+    windseaHs.append(innerListWindseaHs)
+    windseaTp.append(innerListWindseaTp)
+    windseaDm.append(innerListWindseaDm)
+    windseaLWP.append(innerListWindseaLWP)
+
+
+# can we separate into no transition, up transition, down transition
+
+stayHs = []
+stayTp = []
+stayDm = []
+stayLWP = []
+downHs = []
+downTp = []
+downDm = []
+downLWP = []
+upHs = []
+upTp = []
+upDm = []
+upLWP = []
+
+stayHsSwell = []
+stayTpSwell = []
+stayDmSwell = []
+stayLWPSwell = []
+downHsSwell = []
+downTpSwell = []
+downDmSwell = []
+downLWPSwell = []
+upHsSwell = []
+upTpSwell = []
+upDmSwell = []
+upLWPSwell = []
+
+stayHsWindsea = []
+stayTpWindsea = []
+stayDmWindsea = []
+stayLWPWindsea = []
+downHsWindsea = []
+downTpWindsea = []
+downDmWindsea = []
+downLWPWindsea = []
+upHsWindsea = []
+upTpWindsea = []
+upDmWindsea = []
+upLWPWindsea = []
+
+for xx in range(numClusters):
+    for yy in range(numClusters):
+        if xx == yy:
+            if len(wHs[xx][yy]) > 0:
+                stayHs.append(wHs[xx][yy])
+                stayTp.append(wTp[xx][yy])
+                stayDm.append(wDm[xx][yy])
+                stayLWP.append(wLWP[xx][yy])
+                stayHsSwell.append(swellHs[xx][yy])
+                stayTpSwell.append(swellTp[xx][yy])
+                stayDmSwell.append(swellDm[xx][yy])
+                stayLWPSwell.append(swellLWP[xx][yy])
+
+                stayHsWindsea.append(windseaHs[xx][yy])
+                stayTpWindsea.append(windseaTp[xx][yy])
+                stayDmWindsea.append(windseaDm[xx][yy])
+                stayLWPWindsea.append(windseaLWP[xx][yy])
+        if xx < yy:
+            if len(wHs[xx][yy]) > 0:
+                downHs.append(wHs[xx][yy])
+                downTp.append(wTp[xx][yy])
+                downDm.append(wDm[xx][yy])
+                downLWP.append(wLWP[xx][yy])
+                downHsSwell.append(swellHs[xx][yy])
+                downTpSwell.append(swellTp[xx][yy])
+                downDmSwell.append(swellDm[xx][yy])
+                downLWPSwell.append(swellLWP[xx][yy])
+
+                downHsWindsea.append(windseaHs[xx][yy])
+                downTpWindsea.append(windseaTp[xx][yy])
+                downDmWindsea.append(windseaDm[xx][yy])
+                downLWPWindsea.append(windseaLWP[xx][yy])
+        if yy < xx:
+            if len(wHs[xx][yy]) > 0:
+                upHs.append(wHs[xx][yy])
+                upTp.append(wTp[xx][yy])
+                upDm.append(wDm[xx][yy])
+                upLWP.append(wLWP[xx][yy])
+                upHsSwell.append(swellHs[xx][yy])
+                upTpSwell.append(swellTp[xx][yy])
+                upDmSwell.append(swellDm[xx][yy])
+                upLWPSwell.append(swellLWP[xx][yy])
+
+                upHsWindsea.append(windseaHs[xx][yy])
+                upTpWindsea.append(windseaTp[xx][yy])
+                upDmWindsea.append(windseaDm[xx][yy])
+                upLWPWindsea.append(windseaLWP[xx][yy])
+
+stayHsArray = np.concatenate(stayHs).ravel()
+upHsArray = np.concatenate(upHs).ravel()
+downHsArray = np.concatenate(downHs).ravel()
+stayTpArray = np.concatenate(stayTp).ravel()
+upTpArray = np.concatenate(upTp).ravel()
+downTpArray = np.concatenate(downTp).ravel()
+stayDmArray = np.concatenate(stayDm).ravel()
+upDmArray = np.concatenate(upDm).ravel()
+downDmArray = np.concatenate(downDm).ravel()
+stayLWPArray = np.concatenate(stayLWP).ravel()
+upLWPArray = np.concatenate(upLWP).ravel()
+downLWPArray = np.concatenate(downLWP).ravel()
+
+stayHsSwellArray = np.concatenate(stayHsSwell).ravel()
+upHsSwellArray = np.concatenate(upHsSwell).ravel()
+downHsSwellArray = np.concatenate(downHsSwell).ravel()
+stayTpSwellArray = np.concatenate(stayTpSwell).ravel()
+upTpSwellArray = np.concatenate(upTpSwell).ravel()
+downTpSwellArray = np.concatenate(downTpSwell).ravel()
+stayDmSwellArray = np.concatenate(stayDmSwell).ravel()
+upDmSwellArray = np.concatenate(upDmSwell).ravel()
+downDmSwellArray = np.concatenate(downDmSwell).ravel()
+stayLWPSwellArray = np.concatenate(stayLWPSwell).ravel()
+upLWPSwellArray = np.concatenate(upLWPSwell).ravel()
+downLWPSwellArray = np.concatenate(downLWPSwell).ravel()
+
+stayHsWindseaArray = np.concatenate(stayHsWindsea).ravel()
+upHsWindseaArray = np.concatenate(upHsWindsea).ravel()
+downHsWindseaArray = np.concatenate(downHsWindsea).ravel()
+stayTpWindseaArray = np.concatenate(stayTpWindsea).ravel()
+upTpWindseaArray = np.concatenate(upTpWindsea).ravel()
+downTpWindseaArray = np.concatenate(downTpWindsea).ravel()
+stayDmWindseaArray = np.concatenate(stayDmWindsea).ravel()
+upDmWindseaArray = np.concatenate(upDmWindsea).ravel()
+downDmWindseaArray = np.concatenate(downDmWindsea).ravel()
+stayLWPWindseaArray = np.concatenate(stayLWPWindsea).ravel()
+upLWPWindseaArray = np.concatenate(upLWPWindsea).ravel()
+downLWPWindseaArray = np.concatenate(downLWPWindsea).ravel()
+
+# Where are the extremes?
+
+stayOver2m = np.where((stayHsArray>2.0))
+percentStayOver2m = len(stayOver2m[0])/len(stayHsArray)
+downOver2m = np.where((downHsArray>2.0))
+percentDownOver2m = len(downOver2m[0])/len(downHsArray)
+upOver2m = np.where((upHsArray>2.0))
+percentUpOver2m = len(upOver2m[0])/len(upHsArray)
+
+
 
 
 
@@ -1643,14 +1893,22 @@ dwtBMUS = dwtBmus[removeTooSoon]
 numDWTs = 30
 dwtHs = []
 dwtMaxHs = []
+dwtHsSwell = []
+dwtHsWindsea = []
 dwtTp = []
 dwtDm = []
+dwtDmSwell = []
+dwtDmWindsea = []
 dwtLWP = []
 dwtWE = []
 dwtT = []
 for xx in range(numDWTs):
     tempHs = []
     tempMaxHs = []
+    tempHsSwell = []
+    tempHsWindsea = []
+    tempDmSwell = []
+    tempDmWindsea = []
     tempTp = []
     tempDm = []
     tempLWP = []
@@ -1661,10 +1919,14 @@ for xx in range(numDWTs):
     for tt in range(len(wInd[0])):
         tempT = np.where((tC < dwtTimes[wInd[0][tt]+1]) & (tC > dwtTimes[wInd[0][tt]]))
         if len(tempT[0]) > 0:
-            tempMaxHs = np.append(tempMaxHs, np.nanmax(hsC[tempT]))
+            tempMaxHs = np.append(tempMaxHs, np.nanmax(hsCombined[tempT]))
 
-        tempHs = np.append(tempHs, hsC[tempT])
-        tempTp = np.append(tempTp, tpC[tempT])
+        tempHs = np.append(tempHs, hsCombined[tempT])
+        tempHsSwell = np.append(tempHsSwell, hsSwellCombined[tempT])
+        tempHsWindsea = np.append(tempHsWindsea, hsWindseaCombined[tempT])
+        tempDmSwell = np.append(tempDmSwell, dmSwellCombined[tempT])
+        tempDmWindsea = np.append(tempDmWindsea, dmWindseaCombined[tempT])
+        tempTp = np.append(tempTp, tpCombined[tempT])
         tempDm = np.append(tempDm, waveNorm[tempT])
         tempLWP = np.append(tempLWP, lwpC[tempT])
         tempWE = np.append(tempWE, weC[tempT])
@@ -1672,6 +1934,10 @@ for xx in range(numDWTs):
 
     dwtHs.append(tempHs)
     dwtMaxHs.append(tempMaxHs)
+    dwtHsWindsea.append(tempHsWindsea)
+    dwtHsSwell.append(tempHsSwell)
+    dwtDmWindsea.append(tempDmWindsea)
+    dwtDmSwell.append(tempDmSwell)
     dwtTp.append(tempTp)
     dwtDm.append(tempDm)
     dwtLWP.append(tempLWP)
@@ -1684,7 +1950,7 @@ for xx in range(numDWTs):
 order = DWT['DWT']['order']
 meanDWTHs = np.zeros((np.shape(order)))
 for xx in range(numDWTs):
-    data = dwtMaxHs[xx]
+    data = dwtHs[xx]
     meanDWTHs[xx] = np.nanmean(data)
 
 newOrder = np.argsort(meanDWTHs)
@@ -1707,16 +1973,20 @@ plt.style.use('dark_background')
 from scipy.stats.kde import gaussian_kde
 dist_space = np.linspace(0, 4, 80)
 fig = plt.figure(figsize=(10,10))
+gs2 = gridspec.GridSpec(6, 5)
+
 colorparam = np.zeros((numDWTs,))
 counter = 0
 plotIndx = 0
 plotIndy = 0
 for xx in range(numDWTs):
-
+    #dwtInd = xx
     dwtInd = order[xx]-1
     #dwtInd = newOrder[xx]
 
-    ax = plt.subplot2grid((6, 5), (plotIndx, plotIndy), rowspan=1, colspan=1)
+    #ax = plt.subplot2grid((6, 5), (plotIndx, plotIndy), rowspan=1, colspan=1)
+    ax = plt.subplot(gs2[xx])
+
     # normalize = mcolors.Normalize(vmin=np.min(colorparams), vmax=np.max(colorparams))
     normalize = mcolors.Normalize(vmin=.5, vmax=1.8)
 
@@ -1765,6 +2035,242 @@ cbar.set_label('Mean Hs (m)')
 
 
 
+
+import matplotlib.cm as cm
+import matplotlib.colors as mcolors
+plt.style.use('dark_background')
+
+from scipy.stats.kde import gaussian_kde
+dist_space = np.linspace(-0.5, 4, 80)
+fig = plt.figure(figsize=(12,10))
+gs2 = gridspec.GridSpec(6, 5)
+
+colorparam = np.zeros((numDWTs,))
+colorparam2 = np.zeros((numDWTs,))
+counter = 0
+plotIndx = 0
+plotIndy = 0
+for xx in range(numDWTs):
+    #dwtInd = xx
+    dwtInd = order[xx]-1
+    #dwtInd = newOrder[xx]
+
+    #ax = plt.subplot2grid((6, 5), (plotIndx, plotIndy), rowspan=1, colspan=1)
+    ax = plt.subplot(gs2[xx])
+
+    # normalize = mcolors.Normalize(vmin=np.min(colorparams), vmax=np.max(colorparams))
+    normalize = mcolors.Normalize(vmin=0, vmax=1.5)
+    normalize2 = mcolors.Normalize(vmin=0, vmax =1)
+
+    ax.set_xlim([0, 3])
+    ax.set_ylim([0, 2])
+    data = dwtHsSwell[dwtInd]
+    data2 = dwtHsWindsea[dwtInd]
+    if len(data) > 0:
+        kde = gaussian_kde(data)
+        colorparam[counter] = np.nanmean(data)
+        colormap = cm.Reds
+        color = colormap(normalize(colorparam[counter]))
+        ax.plot(dist_space, kde(dist_space), linewidth=1, color=color)
+
+        kde2 = gaussian_kde(data2)
+        colorparam2[counter] = np.nanmean(data2)
+        colormap2 = cm.Blues
+        color2 = colormap2(normalize2(colorparam2[counter]))
+        ax.plot(dist_space, kde2(dist_space), linewidth=1, color=color2)
+
+        ax.spines['bottom'].set_color([0.5, 0.5, 0.5])
+        ax.spines['top'].set_color([0.5, 0.5, 0.5])
+        ax.spines['right'].set_color([0.5, 0.5, 0.5])
+        ax.spines['left'].set_color([0.5, 0.5, 0.5])
+        # ax.text(1.8, 1, np.round(colorparam*100)/100, fontweight='bold')
+
+    else:
+        ax.spines['bottom'].set_color([0.3, 0.3, 0.3])
+        ax.spines['top'].set_color([0.3, 0.3, 0.3])
+        ax.spines['right'].set_color([0.3, 0.3, 0.3])
+        ax.spines['left'].set_color([0.3, 0.3, 0.3])
+
+    if plotIndx < 5:
+        ax.xaxis.set_ticks([])
+        ax.xaxis.set_ticklabels([])
+    if plotIndy > 0:
+        ax.yaxis.set_ticklabels([])
+        ax.yaxis.set_ticks([])
+    counter = counter + 1
+    if plotIndy < 4:
+        plotIndy = plotIndy + 1
+    else:
+        plotIndy = 0
+        plotIndx = plotIndx + 1
+    print(plotIndy, plotIndx)
+
+plt.show()
+fig.subplots_adjust(right=0.80)
+s_map = cm.ScalarMappable(norm=normalize, cmap=colormap)
+s_map.set_array(colorparam)
+cbar_ax = fig.add_axes([0.82, 0.15, 0.02, 0.7])
+cbar = fig.colorbar(s_map, cax=cbar_ax)
+cbar.set_label('Mean Swell (m)')
+s_map2 = cm.ScalarMappable(norm=normalize2, cmap=colormap2)
+s_map2.set_array(colorparam2)
+cbar_ax2 = fig.add_axes([0.91, 0.15, 0.02, 0.7])
+cbar2 = fig.colorbar(s_map2, cax=cbar_ax2)
+cbar2.set_label('Mean Windsea (m)')
+
+
+
+import matplotlib.cm as cm
+import matplotlib.colors as mcolors
+plt.style.use('dark_background')
+
+from scipy.stats.kde import gaussian_kde
+dist_space = np.linspace(-10, 10, 80)
+fig = plt.figure(figsize=(12,10))
+gs2 = gridspec.GridSpec(6, 5)
+
+colorparam = np.zeros((numDWTs,))
+colorparam2 = np.zeros((numDWTs,))
+counter = 0
+plotIndx = 0
+plotIndy = 0
+for xx in range(numDWTs):
+    #dwtInd = xx
+    dwtInd = order[xx]-1
+    #dwtInd = newOrder[xx]
+
+    #ax = plt.subplot2grid((6, 5), (plotIndx, plotIndy), rowspan=1, colspan=1)
+    ax = plt.subplot(gs2[xx])
+
+    # normalize = mcolors.Normalize(vmin=np.min(colorparams), vmax=np.max(colorparams))
+    normalize = mcolors.Normalize(vmin=-20, vmax=20)
+    normalize2 = mcolors.Normalize(vmin=-20, vmax = 20)
+
+    #ax.set_xlim([0, 3])
+    #ax.set_ylim([0, 2])
+    data = dwtDmSwell[dwtInd]
+    data2 = dwtDmWindsea[dwtInd]
+    if len(data) > 0:
+        kde = gaussian_kde(data)
+        colorparam[counter] = np.nanmean(data)
+        colormap = cm.Reds
+        color = colormap(normalize(colorparam[counter]))
+        ax.plot(dist_space, kde(dist_space), linewidth=1, color=color)
+
+        kde2 = gaussian_kde(data2)
+        colorparam2[counter] = np.nanmean(data2)
+        colormap2 = cm.Blues
+        color2 = colormap2(normalize2(colorparam2[counter]))
+        ax.plot(dist_space, kde2(dist_space), linewidth=1, color=color2)
+
+        ax.spines['bottom'].set_color([0.5, 0.5, 0.5])
+        ax.spines['top'].set_color([0.5, 0.5, 0.5])
+        ax.spines['right'].set_color([0.5, 0.5, 0.5])
+        ax.spines['left'].set_color([0.5, 0.5, 0.5])
+        # ax.text(1.8, 1, np.round(colorparam*100)/100, fontweight='bold')
+
+    else:
+        ax.spines['bottom'].set_color([0.3, 0.3, 0.3])
+        ax.spines['top'].set_color([0.3, 0.3, 0.3])
+        ax.spines['right'].set_color([0.3, 0.3, 0.3])
+        ax.spines['left'].set_color([0.3, 0.3, 0.3])
+
+    if plotIndx < 5:
+        ax.xaxis.set_ticks([])
+        ax.xaxis.set_ticklabels([])
+    if plotIndy > 0:
+        ax.yaxis.set_ticklabels([])
+        ax.yaxis.set_ticks([])
+    counter = counter + 1
+    if plotIndy < 4:
+        plotIndy = plotIndy + 1
+    else:
+        plotIndy = 0
+        plotIndx = plotIndx + 1
+    print(plotIndy, plotIndx)
+
+plt.show()
+fig.subplots_adjust(right=0.80)
+s_map = cm.ScalarMappable(norm=normalize, cmap=colormap)
+s_map.set_array(colorparam)
+cbar_ax = fig.add_axes([0.82, 0.15, 0.02, 0.7])
+cbar = fig.colorbar(s_map, cax=cbar_ax)
+cbar.set_label('Mean Swell Dir (deg)')
+s_map2 = cm.ScalarMappable(norm=normalize2, cmap=colormap2)
+s_map2.set_array(colorparam2)
+cbar_ax2 = fig.add_axes([0.91, 0.15, 0.02, 0.7])
+cbar2 = fig.colorbar(s_map2, cax=cbar_ax2)
+cbar2.set_label('Mean Windsea Dir (deg)')
+
+
+import matplotlib.cm as cm
+import matplotlib.colors as mcolors
+plt.style.use('dark_background')
+
+from scipy.stats.kde import gaussian_kde
+dist_space = np.linspace(0, 800, 50)
+fig = plt.figure(figsize=(10,10))
+colorparam = np.zeros((numDWTs,))
+counter = 0
+plotIndx = 0
+plotIndy = 0
+for xx in range(numDWTs):
+
+    #dwtInd = order[xx]-1
+    dwtInd = newOrder[xx]
+
+    ax = plt.subplot2grid((6, 5), (plotIndx, plotIndy), rowspan=1, colspan=1)
+    # normalize = mcolors.Normalize(vmin=np.min(colorparams), vmax=np.max(colorparams))
+    normalize = mcolors.Normalize(vmin=0, vmax=400)
+
+    #ax.set_xlim([0, 3])
+    ax.set_ylim([0, 0.01])
+    data = np.abs(dwtLWP[dwtInd])
+    if len(data) > 0:
+        kde = gaussian_kde(data)
+        colorparam[counter] = np.nanmean(data)
+        colormap = cm.Reds
+        color = colormap(normalize(colorparam[counter]))
+        ax.plot(dist_space, kde(dist_space), linewidth=1, color=color)
+        ax.spines['bottom'].set_color([0.5, 0.5, 0.5])
+        ax.spines['top'].set_color([0.5, 0.5, 0.5])
+        ax.spines['right'].set_color([0.5, 0.5, 0.5])
+        ax.spines['left'].set_color([0.5, 0.5, 0.5])
+        # ax.text(1.8, 1, np.round(colorparam*100)/100, fontweight='bold')
+
+    else:
+        ax.spines['bottom'].set_color([0.3, 0.3, 0.3])
+        ax.spines['top'].set_color([0.3, 0.3, 0.3])
+        ax.spines['right'].set_color([0.3, 0.3, 0.3])
+        ax.spines['left'].set_color([0.3, 0.3, 0.3])
+
+    if plotIndx < 5:
+        ax.xaxis.set_ticks([])
+        ax.xaxis.set_ticklabels([])
+    if plotIndy > 0:
+        ax.yaxis.set_ticklabels([])
+        ax.yaxis.set_ticks([])
+    counter = counter + 1
+    if plotIndy < 4:
+        plotIndy = plotIndy + 1
+    else:
+        plotIndy = 0
+        plotIndx = plotIndx + 1
+    print(plotIndy, plotIndx)
+
+plt.show()
+s_map = cm.ScalarMappable(norm=normalize, cmap=colormap)
+s_map.set_array(colorparam)
+fig.subplots_adjust(right=0.86)
+cbar_ax = fig.add_axes([0.89, 0.15, 0.02, 0.7])
+cbar = fig.colorbar(s_map, cax=cbar_ax)
+cbar.set_label('LWP (W/m2)')
+
+
+
+
+
+
 repmatDesviacion = np.tile(DWT['PCA']['Desviacion'], (25,1))
 repmatMedia = np.tile(DWT['PCA']['Media'], (25,1))
 Km_ = np.multiply(DWT['KMA']['centroids'],repmatDesviacion) + repmatMedia
@@ -1807,11 +2313,12 @@ for qq in range(numDWTs):
 
     #ax = plt.subplot2grid((7, 7), (plotIndx, plotIndy), rowspan=1, colspan=1)
     ax = plt.subplot(gs1[qq])
-    #num = order[qq]
-    num = newOrder[qq]
+    #num = qq
+    num = order[qq]
+    #num = newOrder[qq]+1
     wt = np.ones((np.shape(XR))) * np.nan
 
-    if qq < 25:
+    if num < 25:
         num_index = np.where((dwtBMUS == num))
         temp = Km_slp[(num-1),:]/100 - np.nanmean(SLP_C,axis=0)/100
     else:

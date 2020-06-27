@@ -1182,7 +1182,7 @@ colors2 = cm.gray(np.linspace(0, 1, numClusters))
 # ax16.set_title('Onshore Bar')
 
 sorted_bmus = np.tile(0,(len(kma.labels_),), )
-sorted_time = np.tile(0,(len(kma.labels_),), )
+#sorted_time = np.tile(0,(len(kma.labels_),), )
 
 for i in range(numClusters):
     posc = np.where(kma.labels_ == sortedPeakInd[i])
@@ -1206,6 +1206,22 @@ def transition_matrix(transitions):
         if s > 0:
             row[:] = [f/s for f in row]
     return M, M2
+
+
+def conditional_transition_matrix(transitions,num_of_states):
+    n = num_of_states #1+ max(transitions) #number of states
+    M = [[0]*n for _ in range(n)]
+    M2 = [[0]*n for _ in range(n)]
+    for (i,j) in zip(transitions,transitions[1:]):
+        M[i][j] += 1
+        M2[i][j] += 1
+    #now convert to probabilities:
+    for row in M:
+        s = sum(row)
+        if s > 0:
+            row[:] = [f/s for f in row]
+    return M, M2
+
 
 # def transitionDictionary(bmus,dates):
 
@@ -1241,6 +1257,89 @@ flatarray.resize(numClusters, numClusters)
 flat_list2 = [item for sublist in m2 for item in sublist]
 flatarray2 = np.asarray(flat_list2)
 flatarray2.resize(numClusters, numClusters)
+
+
+
+
+plt.figure(figsize=(10,10))
+plt.plot(time,sorted_bmus)
+import datetime
+years = np.arange(1979,2020)
+summers = []
+summerTransitions = []
+for year in years:
+    summerInd = np.where((time>datetime.datetime(year=year,month=6,day=1)) & (time < datetime.datetime(year=year,month=9,day=1)))
+    summers.append(summerInd)
+    if len(summerInd[0]>1):
+        tran1, tran2 = conditional_transition_matrix(sorted_bmus[summerInd],numClusters)
+        flat_listCond = [item for sublist in tran2 for item in sublist]
+        flatarrayCond = np.asarray(flat_listCond)
+        flatarrayCond.resize(numClusters, numClusters)
+
+        summerTransitions.append(flatarrayCond)
+
+summerAllTransitions = np.sum(summerTransitions,axis=0)
+
+falls = []
+fallTransitions = []
+
+for year in years:
+    fallInd = np.where((time>datetime.datetime(year=year,month=9,day=1)) & (time < datetime.datetime(year=year,month=12,day=1)))
+    falls.append(fallInd)
+    if len(fallInd[0]>1):
+        tran1, tran2 = conditional_transition_matrix(sorted_bmus[fallInd],numClusters)
+        flat_listCond = [item for sublist in tran2 for item in sublist]
+        flatarrayCond = np.asarray(flat_listCond)
+        flatarrayCond.resize(numClusters, numClusters)
+
+        fallTransitions.append(flatarrayCond)
+fallAllTransitions = np.sum(fallTransitions,axis=0)
+
+winters = []
+winterTransitions = []
+for year in years:
+    winterInd = np.where((time>datetime.datetime(year=year,month=12,day=1)) & (time < datetime.datetime(year=year+1,month=3,day=1)))
+    winters.append(winterInd)
+    if len(winterInd[0]>1):
+        tran1, tran2 = conditional_transition_matrix(sorted_bmus[winterInd],numClusters)
+        flat_listCond = [item for sublist in tran2 for item in sublist]
+        flatarrayCond = np.asarray(flat_listCond)
+        flatarrayCond.resize(numClusters, numClusters)
+
+        winterTransitions.append(flatarrayCond)
+winterAllTransitions = np.sum(winterTransitions,axis=0)
+
+
+springs = []
+springTransitions = []
+for year in years:
+    springInd = np.where((time>datetime.datetime(year=year,month=3,day=1)) & (time < datetime.datetime(year=year,month=6,day=1)))
+    springs.append(springInd)
+    if len(springInd[0]>1):
+        tran1, tran2 = conditional_transition_matrix(sorted_bmus[springInd],numClusters)
+        flat_listCond = [item for sublist in tran2 for item in sublist]
+        flatarrayCond = np.asarray(flat_listCond)
+        flatarrayCond.resize(numClusters, numClusters)
+
+        springTransitions.append(flatarrayCond)
+springAllTransitions = np.sum(springTransitions,axis=0)
+
+def convertToProbabilities(totalTransitions):
+    mm, nn = np.shape(totalTransitions)
+    output = np.zeros((mm,nn))
+    for qq in range(mm):
+        s = sum(totalTransitions[qq])
+        if s > 0:
+            output[qq,0:len(totalTransitions[qq])] = [f / s for f in totalTransitions[qq]]
+    return output
+
+
+summerProbs = convertToProbabilities(summerAllTransitions)
+springProbs = convertToProbabilities(springAllTransitions)
+winterProbs = convertToProbabilities(winterAllTransitions)
+fallProbs = convertToProbabilities(fallAllTransitions)
+
+    #ax3.patches.patch()
 
 # fig = plt.figure(figsize=(10,10))
 # ax = plt.subplot2grid((2,2),(0,0),colspan=2,rowspan=2)
@@ -1284,7 +1383,23 @@ flatarray2.resize(numClusters, numClusters)
 #
 # # python_datetime = datetime.fromordinal(int(matlab_datenum)) + timedelta(days=matlab_datenum%1) - timedelta(days = 366)
 #
+# import matplotlib
+# import matplotlib.pyplot as plt
 #
+# fig = plt.figure()
+# ax = fig.add_subplot(111)
+# rect1 = matplotlib.patches.Rectangle((-200,-100), 400, 200, color='yellow')
+# rect2 = matplotlib.patches.Rectangle((0,150), 300, 20, color='red')
+# rect3 = matplotlib.patches.Rectangle((-300,-50), 40, 200, color='#0099FF')
+# circle1 = matplotlib.patches.Circle((-200,-250), radius=90, color='#EB70AA')
+# ax.add_patch(rect1)
+# ax.add_patch(rect2)
+# ax.add_patch(rect3)
+# ax.add_patch(circle1)
+# plt.xlim([-400, 400])
+# plt.ylim([-400, 400])
+# plt.show()
+
 #
 # def getArray(file):
 #     waves = Dataset(file)
@@ -1531,13 +1646,14 @@ tpCombined = Tp
 dmCombined = Dm
 hsSwellCombined = hsSwell
 tpSwellCombined = tpSwell
-dmSwellCombined = hsSwell
+dmSwellCombined = dmSwell
 hsWindseaCombined = hsWindsea
 tpWindseaCombined = tpWindsea
-dmWindseaCombined = hsWindsea
+dmWindseaCombined = dmWindsea
 
 badDirs = np.where((dmCombined > 360))
 dmCombined[badDirs] = dmCombined[badDirs]*np.nan
+
 badDirsSwell = np.where((dmSwellCombined > 360))
 dmSwellCombined[badDirsSwell] = dmSwellCombined[badDirsSwell]*np.nan
 badDirsWindsea = np.where((dmWindseaCombined > 360))
@@ -1579,8 +1695,9 @@ tWave = [DT.datetime.fromtimestamp(x) for x in timeWave]
 
 tC = np.array(tWave)
 
-
-
+from itertools import groupby
+from operator import itemgetter
+import more_itertools as mit
 
 wHs = []
 wTp = []
@@ -1634,6 +1751,15 @@ for xx in range(numClusters):
             tempWindseaLWP = []
             for tt in range(len(wInd[0])):
                 tempT = np.where((tC < date[xx][wInd[0][tt]]) & (tC > prevdate[xx][wInd[0][tt]]))
+
+
+
+                # lets look for storms in the 26 m record
+                stormHsInd = np.where((hsCombined[tempT]>2))
+                stormHsList = [list(group) for group in mit.consecutive_groups(stormHsInd[0])]
+
+
+
                 tempHs = np.append(tempHs,hsCombined[tempT])
                 tempTp = np.append(tempTp,tpCombined[tempT])
                 tempDm = np.append(tempDm,waveNorm[tempT])
@@ -1896,6 +2022,8 @@ dwtMaxHs = []
 dwtHsSwell = []
 dwtHsWindsea = []
 dwtTp = []
+dwtTpSwell = []
+dwtTpWindsea = []
 dwtDm = []
 dwtDmSwell = []
 dwtDmWindsea = []
@@ -1907,6 +2035,8 @@ for xx in range(numDWTs):
     tempMaxHs = []
     tempHsSwell = []
     tempHsWindsea = []
+    tempTpSwell = []
+    tempTpWindsea = []
     tempDmSwell = []
     tempDmWindsea = []
     tempTp = []
@@ -1924,8 +2054,10 @@ for xx in range(numDWTs):
         tempHs = np.append(tempHs, hsCombined[tempT])
         tempHsSwell = np.append(tempHsSwell, hsSwellCombined[tempT])
         tempHsWindsea = np.append(tempHsWindsea, hsWindseaCombined[tempT])
-        tempDmSwell = np.append(tempDmSwell, dmSwellCombined[tempT])
-        tempDmWindsea = np.append(tempDmWindsea, dmWindseaCombined[tempT])
+        tempTpSwell = np.append(tempTpSwell, tpSwellCombined[tempT])
+        tempTpWindsea = np.append(tempTpWindsea, tpWindseaCombined[tempT])
+        tempDmSwell = np.append(tempDmSwell, waveNormSwell[tempT])
+        tempDmWindsea = np.append(tempDmWindsea, waveNormWindsea[tempT])
         tempTp = np.append(tempTp, tpCombined[tempT])
         tempDm = np.append(tempDm, waveNorm[tempT])
         tempLWP = np.append(tempLWP, lwpC[tempT])
@@ -1936,6 +2068,8 @@ for xx in range(numDWTs):
     dwtMaxHs.append(tempMaxHs)
     dwtHsWindsea.append(tempHsWindsea)
     dwtHsSwell.append(tempHsSwell)
+    dwtTpWindsea.append(tempTpWindsea)
+    dwtTpSwell.append(tempTpSwell)
     dwtDmWindsea.append(tempDmWindsea)
     dwtDmSwell.append(tempDmSwell)
     dwtTp.append(tempTp)
@@ -1968,7 +2102,7 @@ dwtcolors = np.vstack((etcolors,tccolors[1:,:]))
 
 import matplotlib.cm as cm
 import matplotlib.colors as mcolors
-plt.style.use('dark_background')
+#plt.style.use('dark_background')
 
 from scipy.stats.kde import gaussian_kde
 dist_space = np.linspace(0, 4, 80)
@@ -2038,7 +2172,7 @@ cbar.set_label('Mean Hs (m)')
 
 import matplotlib.cm as cm
 import matplotlib.colors as mcolors
-plt.style.use('dark_background')
+#plt.style.use('dark_background')
 
 from scipy.stats.kde import gaussian_kde
 dist_space = np.linspace(-0.5, 4, 80)
@@ -2047,6 +2181,7 @@ gs2 = gridspec.GridSpec(6, 5)
 
 colorparam = np.zeros((numDWTs,))
 colorparam2 = np.zeros((numDWTs,))
+colorparam3 = np.zeros((numDWTs,))
 counter = 0
 plotIndx = 0
 plotIndy = 0
@@ -2061,11 +2196,13 @@ for xx in range(numDWTs):
     # normalize = mcolors.Normalize(vmin=np.min(colorparams), vmax=np.max(colorparams))
     normalize = mcolors.Normalize(vmin=0, vmax=1.5)
     normalize2 = mcolors.Normalize(vmin=0, vmax =1)
+    normalize3 = mcolors.Normalize(vmin=0.5, vmax =1.8)
 
     ax.set_xlim([0, 3])
     ax.set_ylim([0, 2])
     data = dwtHsSwell[dwtInd]
     data2 = dwtHsWindsea[dwtInd]
+    data3 = dwtHs[dwtInd]
     if len(data) > 0:
         kde = gaussian_kde(data)
         colorparam[counter] = np.nanmean(data)
@@ -2078,6 +2215,12 @@ for xx in range(numDWTs):
         colormap2 = cm.Blues
         color2 = colormap2(normalize2(colorparam2[counter]))
         ax.plot(dist_space, kde2(dist_space), linewidth=1, color=color2)
+
+        # kde3 = gaussian_kde(data3)
+        # colorparam3[counter] = np.nanmean(data3)
+        # colormap3 = cm.Greens
+        # color3 = colormap3(normalize3(colorparam3[counter]))
+        # ax.plot(dist_space, kde3(dist_space), linewidth=1, color=color3)
 
         ax.spines['bottom'].set_color([0.5, 0.5, 0.5])
         ax.spines['top'].set_color([0.5, 0.5, 0.5])
@@ -2094,9 +2237,9 @@ for xx in range(numDWTs):
     if plotIndx < 5:
         ax.xaxis.set_ticks([])
         ax.xaxis.set_ticklabels([])
-    if plotIndy > 0:
-        ax.yaxis.set_ticklabels([])
-        ax.yaxis.set_ticks([])
+    #if plotIndy > 0:
+    ax.yaxis.set_ticklabels([])
+    ax.yaxis.set_ticks([])
     counter = counter + 1
     if plotIndy < 4:
         plotIndy = plotIndy + 1
@@ -2106,31 +2249,132 @@ for xx in range(numDWTs):
     print(plotIndy, plotIndx)
 
 plt.show()
-fig.subplots_adjust(right=0.80)
+fig.subplots_adjust(right=0.82)
+# s_map3 = cm.ScalarMappable(norm=normalize3, cmap=colormap3)
+# s_map3.set_array(colorparam3)
+# cbar_ax3 = fig.add_axes([0.75, 0.15, 0.02, 0.7])
+# cbar3 = fig.colorbar(s_map3, cax=cbar_ax3)
+# cbar3.set_label('Mean Hs (m)')
 s_map = cm.ScalarMappable(norm=normalize, cmap=colormap)
 s_map.set_array(colorparam)
-cbar_ax = fig.add_axes([0.82, 0.15, 0.02, 0.7])
+cbar_ax = fig.add_axes([0.84, 0.15, 0.02, 0.7])
 cbar = fig.colorbar(s_map, cax=cbar_ax)
 cbar.set_label('Mean Swell (m)')
+
 s_map2 = cm.ScalarMappable(norm=normalize2, cmap=colormap2)
 s_map2.set_array(colorparam2)
-cbar_ax2 = fig.add_axes([0.91, 0.15, 0.02, 0.7])
+cbar_ax2 = fig.add_axes([0.93, 0.15, 0.02, 0.7])
 cbar2 = fig.colorbar(s_map2, cax=cbar_ax2)
 cbar2.set_label('Mean Windsea (m)')
 
 
 
-import matplotlib.cm as cm
-import matplotlib.colors as mcolors
-plt.style.use('dark_background')
-
 from scipy.stats.kde import gaussian_kde
-dist_space = np.linspace(-10, 10, 80)
+dist_space = np.linspace(0, 15, 30)
 fig = plt.figure(figsize=(12,10))
 gs2 = gridspec.GridSpec(6, 5)
 
 colorparam = np.zeros((numDWTs,))
 colorparam2 = np.zeros((numDWTs,))
+colorparam3 = np.zeros((numDWTs,))
+counter = 0
+plotIndx = 0
+plotIndy = 0
+for xx in range(numDWTs):
+    #dwtInd = xx
+    dwtInd = order[xx]-1
+    #dwtInd = newOrder[xx]
+
+    #ax = plt.subplot2grid((6, 5), (plotIndx, plotIndy), rowspan=1, colspan=1)
+    ax = plt.subplot(gs2[xx])
+
+    # normalize = mcolors.Normalize(vmin=np.min(colorparams), vmax=np.max(colorparams))
+    normalize = mcolors.Normalize(vmin=0, vmax=10)
+    normalize2 = mcolors.Normalize(vmin=0, vmax =10)
+    normalize3 = mcolors.Normalize(vmin=0, vmax =10)
+
+    #ax.set_xlim([0, 3])
+    ax.set_ylim([0, 0.7])
+    data = dwtTpSwell[dwtInd]
+    data2 = dwtTpWindsea[dwtInd]
+    data3 = dwtTp[dwtInd]
+    if len(data) > 0:
+        kde = gaussian_kde(data)
+        colorparam[counter] = np.nanmean(data)
+        colormap = cm.Reds
+        color = colormap(normalize(colorparam[counter]))
+        ax.plot(dist_space, kde(dist_space), linewidth=1, color=color)
+
+        kde2 = gaussian_kde(data2)
+        colorparam2[counter] = np.nanmean(data2)
+        colormap2 = cm.Blues
+        color2 = colormap2(normalize2(colorparam2[counter]))
+        ax.plot(dist_space, kde2(dist_space), linewidth=1, color=color2)
+
+        kde3 = gaussian_kde(data3)
+        colorparam3[counter] = np.nanmean(data3)
+        colormap3 = cm.Greens
+        color3 = colormap3(normalize3(colorparam3[counter]))
+        ax.plot(dist_space, kde3(dist_space), linewidth=1, color=color3)
+
+        ax.spines['bottom'].set_color([0.5, 0.5, 0.5])
+        ax.spines['top'].set_color([0.5, 0.5, 0.5])
+        ax.spines['right'].set_color([0.5, 0.5, 0.5])
+        ax.spines['left'].set_color([0.5, 0.5, 0.5])
+        # ax.text(1.8, 1, np.round(colorparam*100)/100, fontweight='bold')
+
+    else:
+        ax.spines['bottom'].set_color([0.3, 0.3, 0.3])
+        ax.spines['top'].set_color([0.3, 0.3, 0.3])
+        ax.spines['right'].set_color([0.3, 0.3, 0.3])
+        ax.spines['left'].set_color([0.3, 0.3, 0.3])
+
+    if plotIndx < 5:
+        ax.xaxis.set_ticks([])
+        ax.xaxis.set_ticklabels([])
+    #if plotIndy > 0:
+    ax.yaxis.set_ticklabels([])
+    ax.yaxis.set_ticks([])
+    counter = counter + 1
+    if plotIndy < 4:
+        plotIndy = plotIndy + 1
+    else:
+        plotIndy = 0
+        plotIndx = plotIndx + 1
+    print(plotIndy, plotIndx)
+
+plt.show()
+fig.subplots_adjust(right=0.74)
+s_map3 = cm.ScalarMappable(norm=normalize3, cmap=colormap3)
+s_map3.set_array(colorparam3)
+cbar_ax3 = fig.add_axes([0.75, 0.15, 0.02, 0.7])
+cbar3 = fig.colorbar(s_map3, cax=cbar_ax3)
+cbar3.set_label('Mean Tp (s)')
+s_map = cm.ScalarMappable(norm=normalize, cmap=colormap)
+s_map.set_array(colorparam)
+cbar_ax = fig.add_axes([0.84, 0.15, 0.02, 0.7])
+cbar = fig.colorbar(s_map, cax=cbar_ax)
+cbar.set_label('Mean Swell Tp (s)')
+s_map2 = cm.ScalarMappable(norm=normalize2, cmap=colormap2)
+s_map2.set_array(colorparam2)
+cbar_ax2 = fig.add_axes([0.93, 0.15, 0.02, 0.7])
+cbar2 = fig.colorbar(s_map2, cax=cbar_ax2)
+cbar2.set_label('Mean Windsea Tp (s)')
+
+
+
+import matplotlib.cm as cm
+import matplotlib.colors as mcolors
+#plt.style.use('dark_background')
+
+from scipy.stats.kde import gaussian_kde
+dist_space = np.linspace(-65, 65, 50)
+fig = plt.figure(figsize=(12,10))
+gs2 = gridspec.GridSpec(6, 5)
+
+colorparam = np.zeros((numDWTs,))
+colorparam2 = np.zeros((numDWTs,))
+colorparam3 = np.zeros((numDWTs,))
 counter = 0
 plotIndx = 0
 plotIndy = 0
@@ -2144,24 +2388,32 @@ for xx in range(numDWTs):
 
     # normalize = mcolors.Normalize(vmin=np.min(colorparams), vmax=np.max(colorparams))
     normalize = mcolors.Normalize(vmin=-20, vmax=20)
-    normalize2 = mcolors.Normalize(vmin=-20, vmax = 20)
+    normalize2 = mcolors.Normalize(vmin=-20, vmax =20)
+    normalize3 = mcolors.Normalize(vmin=-20, vmax =20)
 
     #ax.set_xlim([0, 3])
-    #ax.set_ylim([0, 2])
+    ax.set_ylim([0, .06])
     data = dwtDmSwell[dwtInd]
     data2 = dwtDmWindsea[dwtInd]
+    data3 = dwtDm[dwtInd]
     if len(data) > 0:
         kde = gaussian_kde(data)
         colorparam[counter] = np.nanmean(data)
-        colormap = cm.Reds
+        colormap = cm.RdBu
         color = colormap(normalize(colorparam[counter]))
         ax.plot(dist_space, kde(dist_space), linewidth=1, color=color)
 
         kde2 = gaussian_kde(data2)
         colorparam2[counter] = np.nanmean(data2)
-        colormap2 = cm.Blues
+        colormap2 = cm.PRGn
         color2 = colormap2(normalize2(colorparam2[counter]))
         ax.plot(dist_space, kde2(dist_space), linewidth=1, color=color2)
+
+        kde3 = gaussian_kde(data3)
+        colorparam3[counter] = np.nanmean(data3)
+        colormap3 = cm.BrBG
+        color3 = colormap3(normalize3(colorparam3[counter]))
+        ax.plot(dist_space, kde3(dist_space), linewidth=1, color=color3)
 
         ax.spines['bottom'].set_color([0.5, 0.5, 0.5])
         ax.spines['top'].set_color([0.5, 0.5, 0.5])
@@ -2178,9 +2430,9 @@ for xx in range(numDWTs):
     if plotIndx < 5:
         ax.xaxis.set_ticks([])
         ax.xaxis.set_ticklabels([])
-    if plotIndy > 0:
-        ax.yaxis.set_ticklabels([])
-        ax.yaxis.set_ticks([])
+    #if plotIndy > 0:
+    ax.yaxis.set_ticklabels([])
+    ax.yaxis.set_ticks([])
     counter = counter + 1
     if plotIndy < 4:
         plotIndy = plotIndy + 1
@@ -2190,15 +2442,20 @@ for xx in range(numDWTs):
     print(plotIndy, plotIndx)
 
 plt.show()
-fig.subplots_adjust(right=0.80)
+fig.subplots_adjust(right=0.74)
+s_map3 = cm.ScalarMappable(norm=normalize3, cmap=colormap3)
+s_map3.set_array(colorparam3)
+cbar_ax3 = fig.add_axes([0.75, 0.15, 0.02, 0.7])
+cbar3 = fig.colorbar(s_map3, cax=cbar_ax3)
+cbar3.set_label('Mean Dir (deg)')
 s_map = cm.ScalarMappable(norm=normalize, cmap=colormap)
 s_map.set_array(colorparam)
-cbar_ax = fig.add_axes([0.82, 0.15, 0.02, 0.7])
+cbar_ax = fig.add_axes([0.84, 0.15, 0.02, 0.7])
 cbar = fig.colorbar(s_map, cax=cbar_ax)
 cbar.set_label('Mean Swell Dir (deg)')
 s_map2 = cm.ScalarMappable(norm=normalize2, cmap=colormap2)
 s_map2.set_array(colorparam2)
-cbar_ax2 = fig.add_axes([0.91, 0.15, 0.02, 0.7])
+cbar_ax2 = fig.add_axes([0.93, 0.15, 0.02, 0.7])
 cbar2 = fig.colorbar(s_map2, cax=cbar_ax2)
 cbar2.set_label('Mean Windsea Dir (deg)')
 
@@ -2545,8 +2802,196 @@ plt.show()
 # cbar = fig.colorbar(s_map, cax=cbar_ax)
 # cbar.set_label('Mean Hs (m)')
 
+t1 =0
+t2 = -1
+
+plt.style.use('default')
+
+fig = plt.figure(figsize=(10,10))
+ax1 = plt.subplot2grid((4,4),(0,0),rowspan=4,colspan=1)
+#plt.set_cmap('RdBu')#bwr')
+plt.set_cmap('bwr')
+
+tg, xg = np.meshgrid(time, xinterp)
+plt0 = ax1.pcolor(xg,tg,(alllines-np.mean(alllines, axis=0)).T, vmin=-1.6, vmax=1.6)
+#fig.colorbar(plt0, ax=ax1, orientation='horizontal')
+ax1.set_ylim([time[t1], time[t2]])
+ax1.set_title('Surveys (deviation from mean)')
+
+ax2 = plt.subplot2grid((4,4),(0,1),rowspan=4,colspan=1)
+plt1 = ax2.pcolor(xg,tg,eofPred.T, vmin=-1.05, vmax=1.05)
+#ax2.set_ylim([time[t1], time[t2]])
+#fig.colorbar(plt1, ax=ax[1], orientation='horizontal')
+ax2.set_title('CEOF1 {:.2f}'.format(percentV[0]))
+ax2.plot(innerBar,time,'bo')
+ax2.plot(outerBar,time,'ro')
+#ax[1].get_yaxis().set_ticks([])
+#
+
+#fig = plt.figure(figsize=(10,10))
+ax3 = plt.subplot2grid((4,4),(0,2),rowspan=4,colspan=1)
+
+import matplotlib.patches as patches
+from matplotlib.collections import PatchCollection
+import matplotlib.dates as mdates
+from matplotlib.colors import ListedColormap
+patch = []
+for ff in range(len(time)):
+    if ff < 599:
+        colind = sorted_bmus[ff]
+        start = mdates.date2num(time[ff])
+        end = mdates.date2num(time[ff+1])
+        width = end - start
+        left = (colind+1)*40-40
+        right = 40
+        rect = patches.Rectangle((left,start),right,width,facecolor=colors[colind,:])
+
+        ax3.add_patch(rect)
+locator = mdates.AutoDateLocator(minticks=3)
+formatter = mdates.AutoDateFormatter(locator)
+ax3.yaxis.set_major_locator(locator)
+ax3.yaxis.set_major_formatter(formatter)
+ax3.set_ylim([mdates.date2num(time[t1]), mdates.date2num(time[t2])])
+ax3.set_xlim([0, 600])
+
+ax4 = plt.subplot2grid((4,4),(0,3),rowspan=4,colspan=1)
+subInd = np.where((dwtBMUS > 25))
+subTime = dwtTimes[subInd]
+subTime2 = subTime + timedelta(days=10)
+subDwts = dwtBMUS[subInd]
+for ff in range(len(subTime)-1):
+    colind = subDwts[ff]
+    start = mdates.date2num(subTime[ff])
+    end = mdates.date2num(subTime2[ff])
+    width = end - start
+    left = (colind-24)*100-100
+    right = 100
+    rect = patches.Rectangle((left,start),right,width,facecolor=dwtcolors[colind-1,:])
+
+    ax4.add_patch(rect)
+
+ax4.set_ylim([mdates.date2num(time[t1]), mdates.date2num(time[t2])])
+ax4.set_xlim([0, 600])
+
+# assign date locator / formatter to the x-axis to get proper labels
+locator = mdates.AutoDateLocator(minticks=3)
+formatter = mdates.AutoDateFormatter(locator)
+ax4.yaxis.set_major_locator(locator)
+ax4.yaxis.set_major_formatter(formatter)
+
+plt.show()
+
+
 
 asdf
+
+
+import itertools
+import matplotlib.patches as patches
+import matplotlib.pyplot as plt
+import numpy as np
+import sys
+
+#%matplotlib inline
+fig, ax = plt.subplots()
+npoints = numClusters
+# Calculate the xy coords for each point on the circle
+s = 2 * np.pi / npoints
+verts = np.zeros((npoints, 2))
+for i in np.arange(npoints):
+    angle = s * i
+    x = npoints * np.cos(angle)
+    y = npoints * np.sin(angle)
+    verts[i] = [x, y]
+
+
+
+
+npoints = 10
+# Calculate the xy coords for each point on the circle
+s = 2 * np.pi / npoints
+verts = np.zeros((npoints, 2))
+for i in np.arange(npoints):
+    angle = s * i
+    x = npoints * np.cos(angle)
+    y = npoints * np.sin(angle)
+    verts[i] = [x, y]
+
+xV, yV = verts.T
+
+fig, ax = plt.subplots()
+for qq in range(len(xV)):
+    ax.scatter(xV[qq], yV[qq], marker='o', s=50, c=colors[qq,:])
+
+#numbers = sorted_bmus[0:106]
+#numbers = sorted_bmus[107:164]
+#numbers = sorted_bmus[165:211]
+#numbers = sorted_bmus[212:256]
+numbers = sorted_bmus[257:370]
+#numbers = sorted_bmus[160:206]
+#numbers = sorted_bmus[101:159]
+
+bezier_path = np.arange(0, 1.01, 0.01)
+
+for qq in range(len(numbers)-1):
+    a = numbers[qq]
+    b = numbers[qq+1]
+
+    if a == b:
+        continue
+    else:
+
+        x1y1 = x1, y1 = verts[a]
+        x2y2 = x2, y2 = verts[b]
+        if a < b:
+            xbyb = xb, yb = [0, 0]
+            # Compute and store the quadratic Bezier curve points
+            x = (1 - bezier_path)** 2 * x1 + 2 * (1 - bezier_path) * bezier_path * xb + bezier_path** 2 * x2
+            y = (1 - bezier_path)** 2 * y1 + 2 * (1 - bezier_path) * bezier_path * yb + bezier_path** 2 * y2
+
+            ax.plot(x, y, 'r-')
+        else:
+            xbyb = xb, yb = [(x1+x2)/4, (y1+y2)/4]
+            # Compute and store the quadratic Bezier curve points
+            x = (1 - bezier_path)** 2 * x1 + 2 * (1 - bezier_path) * bezier_path * xb + bezier_path** 2 * x2
+            y = (1 - bezier_path)** 2 * y1 + 2 * (1 - bezier_path) * bezier_path * yb + bezier_path** 2 * y2
+
+            ax.plot(x, y, 'b-')
+
+ax.set_xlim(-npoints - 5, npoints + 6)
+ax.set_ylim(-npoints - 5, npoints + 6)
+ax.set(aspect=1)
+
+
+
+#
+# # Plot the Bezier curves
+# numbers = [i for i in range(npoints)]
+# bezier_path = np.arange(0, 1.01, 0.01)
+#
+# for a, b in itertools.product(numbers, repeat=2):
+#     if a == b:
+#         continue
+#
+#     x1y1 = x1, y1 = verts[a]
+#     x2y2 = x2, y2 = verts[b]
+#
+#     xbyb = xb, yb = [0, 0]
+#
+#     # Compute and store the Bezier curve points
+#     x = (1 - bezier_path)** 2 * x1 + 2 * (1 - bezier_path) * bezier_path * xb + bezier_path** 2 * x2
+#     y = (1 - bezier_path)** 2 * y1 + 2 * (1 - bezier_path) * bezier_path * yb + bezier_path** 2 * y2
+#
+#     ax.plot(x, y, 'k-')
+#
+# x, y = verts.T
+# ax.scatter(x, y, marker='o', s=50, c='r')
+#
+# ax.set_xlim(-npoints - 5, npoints + 6)
+# ax.set_ylim(-npoints - 5, npoints + 6)
+# ax.set(aspect=1)
+
+
 
 
 
@@ -2687,7 +3132,7 @@ cbar.set_label('Dir (deg)')
 
 
 
-dist_space = np.linspace(-400, 400, 40)
+dist_space = np.linspace(-800, 800, 80)
 fig = plt.figure(figsize=(10,10))
 
 for xx in range(numClusters):
@@ -2903,263 +3348,261 @@ matrix = flatarray2
 # show(hv.render(mychordplt))
 #
 
-# ## Chord option #1
-#
-# # chord diagram
-# import matplotlib.pyplot as plt
-# from matplotlib.path import Path
-# import matplotlib.patches as patches
-#
-# import numpy as np
-#
-# LW = 0.3
-#
-# def polar2xy(r, theta):
-#     return np.array([r*np.cos(theta), r*np.sin(theta)])
-#
-# def hex2rgb(c):
-#     return tuple(int(c[i:i+2], 16)/256.0 for i in (1, 3 ,5))
-#
-# def IdeogramArc(start=0, end=60, radius=1.0, width=0.2, ax=None, color=(1,0,0)):
-#     # start, end should be in [0, 360)
-#     if start > end:
-#         start, end = end, start
-#     start *= np.pi/180.
-#     end *= np.pi/180.
-#     # optimal distance to the control points
-#     # https://stackoverflow.com/questions/1734745/how-to-create-circle-with-b%C3%A9zier-curves
-#     opt = 4./3. * np.tan((end-start)/ 4.) * radius
-#     inner = radius*(1-width)
-#     verts = [
-#         polar2xy(radius, start),
-#         polar2xy(radius, start) + polar2xy(opt, start+0.5*np.pi),
-#         polar2xy(radius, end) + polar2xy(opt, end-0.5*np.pi),
-#         polar2xy(radius, end),
-#         polar2xy(inner, end),
-#         polar2xy(inner, end) + polar2xy(opt*(1-width), end-0.5*np.pi),
-#         polar2xy(inner, start) + polar2xy(opt*(1-width), start+0.5*np.pi),
-#         polar2xy(inner, start),
-#         polar2xy(radius, start),
-#         ]
-#
-#     codes = [Path.MOVETO,
-#              Path.CURVE4,
-#              Path.CURVE4,
-#              Path.CURVE4,
-#              Path.LINETO,
-#              Path.CURVE4,
-#              Path.CURVE4,
-#              Path.CURVE4,
-#              Path.CLOSEPOLY,
-#              ]
-#
-#     if ax == None:
-#         return verts, codes
-#     else:
-#         path = Path(verts, codes)
-#         print(color)
-#         patch = patches.PathPatch(path, facecolor=color, edgecolor=color, lw=LW, alpha=0.5)
-#         #patch = patches.PathPatch(path, facecolor=color+(0.5,), edgecolor=color+(0.4,), lw=LW)
-#
-#         ax.add_patch(patch)
-#
-#
-# def ChordArc(start1=0, end1=60, start2=180, end2=240, radius=1.0, chordwidth=0.7, ax=None, color=(1,0,0)):
-#     # start, end should be in [0, 360)
-#     if start1 > end1:
-#         start1, end1 = end1, start1
-#     if start2 > end2:
-#         start2, end2 = end2, start2
-#     start1 *= np.pi/180.
-#     end1 *= np.pi/180.
-#     start2 *= np.pi/180.
-#     end2 *= np.pi/180.
-#     opt1 = 4./3. * np.tan((end1-start1)/ 4.) * radius
-#     opt2 = 4./3. * np.tan((end2-start2)/ 4.) * radius
-#     rchord = radius * (1-chordwidth)
-#     verts = [
-#         polar2xy(radius, start1),
-#         polar2xy(radius, start1) + polar2xy(opt1, start1+0.5*np.pi),
-#         polar2xy(radius, end1) + polar2xy(opt1, end1-0.5*np.pi),
-#         polar2xy(radius, end1),
-#         polar2xy(rchord, end1),
-#         polar2xy(rchord, start2),
-#         polar2xy(radius, start2),
-#         polar2xy(radius, start2) + polar2xy(opt2, start2+0.5*np.pi),
-#         polar2xy(radius, end2) + polar2xy(opt2, end2-0.5*np.pi),
-#         polar2xy(radius, end2),
-#         polar2xy(rchord, end2),
-#         polar2xy(rchord, start1),
-#         polar2xy(radius, start1),
-#         ]
-#
-#     codes = [Path.MOVETO,
-#              Path.CURVE4,
-#              Path.CURVE4,
-#              Path.CURVE4,
-#              Path.CURVE4,
-#              Path.CURVE4,
-#              Path.CURVE4,
-#              Path.CURVE4,
-#              Path.CURVE4,
-#              Path.CURVE4,
-#              Path.CURVE4,
-#              Path.CURVE4,
-#              Path.CURVE4,
-#              ]
-#
-#     if ax == None:
-#         return verts, codes
-#     else:
-#         path = Path(verts, codes)
-#         #patch = patches.PathPatch(path, facecolor=color+(0.5,), edgecolor=color+(0.4,), lw=LW)
-#         patch = patches.PathPatch(path, facecolor=color, edgecolor=color, lw=LW, alpha=0.5)
-#
-#         ax.add_patch(patch)
-#
-# def selfChordArc(start=0, end=60, radius=1.0, chordwidth=0.7, ax=None, color=(1,0,0)):
-#     # start, end should be in [0, 360)
-#     if start > end:
-#         start, end = end, start
-#     start *= np.pi/180.
-#     end *= np.pi/180.
-#     opt = 4./3. * np.tan((end-start)/ 4.) * radius
-#     rchord = radius * (1-chordwidth)
-#     verts = [
-#         polar2xy(radius, start),
-#         polar2xy(radius, start) + polar2xy(opt, start+0.5*np.pi),
-#         polar2xy(radius, end) + polar2xy(opt, end-0.5*np.pi),
-#         polar2xy(radius, end),
-#         polar2xy(rchord, end),
-#         polar2xy(rchord, start),
-#         polar2xy(radius, start),
-#         ]
-#
-#     codes = [Path.MOVETO,
-#              Path.CURVE4,
-#              Path.CURVE4,
-#              Path.CURVE4,
-#              Path.CURVE4,
-#              Path.CURVE4,
-#              Path.CURVE4,
-#              ]
-#
-#     if ax == None:
-#         return verts, codes
-#     else:
-#         path = Path(verts, codes)
-#         #patch = patches.PathPatch(path, facecolor=color+(0.5,), edgecolor=color+(0.4,), lw=LW)
-#         patch = patches.PathPatch(path, facecolor=color, edgecolor=color, lw=LW, alpha=0.5)
-#
-#         ax.add_patch(patch)
-#
-# def chordDiagram(X, ax, colors=None, width=0.1, pad=2, chordwidth=0.7):
-#     """Plot a chord diagram
-#     Parameters
-#     ----------
-#     X :
-#         flux data, X[i, j] is the flux from i to j
-#     ax :
-#         matplotlib `axes` to show the plot
-#     colors : optional
-#         user defined colors in rgb format. Use function hex2rgb() to convert hex color to rgb color. Default: d3.js category10
-#     width : optional
-#         width/thickness of the ideogram arc
-#     pad : optional
-#         gap pad between two neighboring ideogram arcs, unit: degree, default: 2 degree
-#     chordwidth : optional
-#         position of the control points for the chords, controlling the shape of the chords
-#     """
-#     # X[i, j]:  i -> j
-#     x = X.sum(axis = 1) # sum over rows
-#     ax.set_xlim(-1.1, 1.1)
-#     ax.set_ylim(-1.1, 1.1)
-#
-#     if colors is None:
-#     # use d3.js category10 https://github.com/d3/d3-3.x-api-reference/blob/master/Ordinal-Scales.md#category10
-#         colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
-#                   '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
-#         if len(x) > 10:
-#             print('x is too large! Use x smaller than 10')
-#         colors = [hex2rgb(colors[i]) for i in range(len(x))]
-#
-#     # find position for each start and end
-#     y = x/np.sum(x).astype(float) * (360 - pad*len(x))
-#
-#     pos = {}
-#     arc = []
-#     nodePos = []
-#     start = 0
-#     for i in range(len(x)):
-#         end = start + y[i]
-#         arc.append((start, end))
-#         angle = 0.5*(start+end)
-#         #print(start, end, angle)
-#         if -30 <= angle <= 210:
-#             angle -= 90
-#         else:
-#             angle -= 270
-#         nodePos.append(tuple(polar2xy(1.1, 0.5*(start+end)*np.pi/180.)) + (angle,))
-#         z = (X[i, :]/x[i].astype(float)) * (end - start)
-#         ids = np.argsort(z)
-#         z0 = start
-#         for j in ids:
-#             pos[(i, j)] = (z0, z0+z[j])
-#             z0 += z[j]
-#         start = end + pad
-#
-#     for i in range(len(x)):
-#         start, end = arc[i]
-#         print(colors[i])
-#         IdeogramArc(start=start, end=end, radius=1.0, ax=ax, color=colors[i], width=width)
-#         start, end = pos[(i,i)]
-#         selfChordArc(start, end, radius=1.-width, color=colors[i], chordwidth=chordwidth*0.7, ax=ax)
-#         for j in range(i):
-#             color = colors[i]
-#             if X[i, j] > X[j, i]:
-#                 color = colors[j]
-#             start1, end1 = pos[(i,j)]
-#             start2, end2 = pos[(j,i)]
-#             ChordArc(start1, end1, start2, end2,
-#                      radius=1.-width, color=colors[i], chordwidth=chordwidth, ax=ax)
-#
-#     #print(nodePos)
-#     return nodePos
-#
-# ##################################
-# #if __name__ == "__main__":
-# fig = plt.figure(figsize=(6,6))
-#     # flux = np.array([[11975,  5871, 8916, 2868],
-#     #   [ 1951, 10048, 2060, 6171],
-#     #   [ 8010, 16145, 8090, 8045],
-#     #   [ 1013,   990,  940, 6907]
-#     # ])
-# flux = matrix
-# ax = plt.axes([0,0,1,1])
-#
-#     #nodePos = chordDiagram(flux, ax, colors=[hex2rgb(x) for x in ['#666666', '#66ff66', '#ff6666', '#6666ff']])
-# #nodePos = chordDiagram(flux, ax)
-# tempColorsInd = np.where((colors==1))
-# tempColorsInd2 = np.where((colors==0))
-#
-# tempColors = colors
-# tempColors[tempColorsInd] = 0.9999
-# tempColors[tempColorsInd2] = 0.0001
-# tempColors = tempColors
-# nodePos = chordDiagram(flux,ax,colors=tempColors[:,0:3])
-# ax.axis('off')
-# prop = dict(fontsize=16*0.8, ha='center', va='center')
-#
-# plt.show()
-#
+## Chord option #1
+
+# chord diagram
+import matplotlib.pyplot as plt
+from matplotlib.path import Path
+import matplotlib.patches as patches
+
+import numpy as np
+
+LW = 0.3
+
+def polar2xy(r, theta):
+    return np.array([r*np.cos(theta), r*np.sin(theta)])
+
+def hex2rgb(c):
+    return tuple(int(c[i:i+2], 16)/256.0 for i in (1, 3 ,5))
+
+def IdeogramArc(start=0, end=60, radius=1.0, width=0.2, ax=None, color=(1,0,0)):
+    # start, end should be in [0, 360)
+    if start > end:
+        start, end = end, start
+    start *= np.pi/180.
+    end *= np.pi/180.
+    # optimal distance to the control points
+    # https://stackoverflow.com/questions/1734745/how-to-create-circle-with-b%C3%A9zier-curves
+    opt = 4./3. * np.tan((end-start)/ 4.) * radius
+    inner = radius*(1-width)
+    verts = [
+        polar2xy(radius, start),
+        polar2xy(radius, start) + polar2xy(opt, start+0.5*np.pi),
+        polar2xy(radius, end) + polar2xy(opt, end-0.5*np.pi),
+        polar2xy(radius, end),
+        polar2xy(inner, end),
+        polar2xy(inner, end) + polar2xy(opt*(1-width), end-0.5*np.pi),
+        polar2xy(inner, start) + polar2xy(opt*(1-width), start+0.5*np.pi),
+        polar2xy(inner, start),
+        polar2xy(radius, start),
+        ]
+
+    codes = [Path.MOVETO,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.LINETO,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CLOSEPOLY,
+             ]
+
+    if ax == None:
+        return verts, codes
+    else:
+        path = Path(verts, codes)
+        print(color)
+        patch = patches.PathPatch(path, facecolor=color, edgecolor=color, lw=LW, alpha=0.5)
+        #patch = patches.PathPatch(path, facecolor=color+(0.5,), edgecolor=color+(0.4,), lw=LW)
+
+        ax.add_patch(patch)
+
+
+def ChordArc(start1=0, end1=60, start2=180, end2=240, radius=1.0, chordwidth=0.7, ax=None, color=(1,0,0)):
+    # start, end should be in [0, 360)
+    if start1 > end1:
+        start1, end1 = end1, start1
+    if start2 > end2:
+        start2, end2 = end2, start2
+    start1 *= np.pi/180.
+    end1 *= np.pi/180.
+    start2 *= np.pi/180.
+    end2 *= np.pi/180.
+    opt1 = 4./3. * np.tan((end1-start1)/ 4.) * radius
+    opt2 = 4./3. * np.tan((end2-start2)/ 4.) * radius
+    rchord = radius * (1-chordwidth)
+    verts = [
+        polar2xy(radius, start1),
+        polar2xy(radius, start1) + polar2xy(opt1, start1+0.5*np.pi),
+        polar2xy(radius, end1) + polar2xy(opt1, end1-0.5*np.pi),
+        polar2xy(radius, end1),
+        polar2xy(rchord, end1),
+        polar2xy(rchord, start2),
+        polar2xy(radius, start2),
+        polar2xy(radius, start2) + polar2xy(opt2, start2+0.5*np.pi),
+        polar2xy(radius, end2) + polar2xy(opt2, end2-0.5*np.pi),
+        polar2xy(radius, end2),
+        polar2xy(rchord, end2),
+        polar2xy(rchord, start1),
+        polar2xy(radius, start1),
+        ]
+
+    codes = [Path.MOVETO,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             ]
+
+    if ax == None:
+        return verts, codes
+    else:
+        path = Path(verts, codes)
+        #patch = patches.PathPatch(path, facecolor=color+(0.5,), edgecolor=color+(0.4,), lw=LW)
+        patch = patches.PathPatch(path, facecolor=color, edgecolor=color, lw=LW, alpha=0.5)
+
+        ax.add_patch(patch)
+
+def selfChordArc(start=0, end=60, radius=1.0, chordwidth=0.7, ax=None, color=(1,0,0)):
+    # start, end should be in [0, 360)
+    if start > end:
+        start, end = end, start
+    start *= np.pi/180.
+    end *= np.pi/180.
+    opt = 4./3. * np.tan((end-start)/ 4.) * radius
+    rchord = radius * (1-chordwidth)
+    verts = [
+        polar2xy(radius, start),
+        polar2xy(radius, start) + polar2xy(opt, start+0.5*np.pi),
+        polar2xy(radius, end) + polar2xy(opt, end-0.5*np.pi),
+        polar2xy(radius, end),
+        polar2xy(rchord, end),
+        polar2xy(rchord, start),
+        polar2xy(radius, start),
+        ]
+
+    codes = [Path.MOVETO,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             Path.CURVE4,
+             ]
+
+    if ax == None:
+        return verts, codes
+    else:
+        path = Path(verts, codes)
+        #patch = patches.PathPatch(path, facecolor=color+(0.5,), edgecolor=color+(0.4,), lw=LW)
+        patch = patches.PathPatch(path, facecolor=color, edgecolor=color, lw=LW, alpha=0.5)
+
+        ax.add_patch(patch)
+
+def chordDiagram(X, ax, colors=None, width=0.1, pad=2, chordwidth=0.7):
+    """Plot a chord diagram
+    Parameters
+    ----------
+    X :
+        flux data, X[i, j] is the flux from i to j
+    ax :
+        matplotlib `axes` to show the plot
+    colors : optional
+        user defined colors in rgb format. Use function hex2rgb() to convert hex color to rgb color. Default: d3.js category10
+    width : optional
+        width/thickness of the ideogram arc
+    pad : optional
+        gap pad between two neighboring ideogram arcs, unit: degree, default: 2 degree
+    chordwidth : optional
+        position of the control points for the chords, controlling the shape of the chords
+    """
+    # X[i, j]:  i -> j
+    x = X.sum(axis = 1) # sum over rows
+    ax.set_xlim(-1.1, 1.1)
+    ax.set_ylim(-1.1, 1.1)
+
+    if colors is None:
+    # use d3.js category10 https://github.com/d3/d3-3.x-api-reference/blob/master/Ordinal-Scales.md#category10
+        colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
+                  '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
+        if len(x) > 10:
+            print('x is too large! Use x smaller than 10')
+        colors = [hex2rgb(colors[i]) for i in range(len(x))]
+
+    # find position for each start and end
+    y = x/np.sum(x).astype(float) * (360 - pad*len(x))
+
+    pos = {}
+    arc = []
+    nodePos = []
+    start = 0
+    for i in range(len(x)):
+        end = start + y[i]
+        arc.append((start, end))
+        angle = 0.5*(start+end)
+        #print(start, end, angle)
+        if -30 <= angle <= 210:
+            angle -= 90
+        else:
+            angle -= 270
+        nodePos.append(tuple(polar2xy(1.1, 0.5*(start+end)*np.pi/180.)) + (angle,))
+        z = (X[i, :]/x[i].astype(float)) * (end - start)
+        ids = np.argsort(z)
+        z0 = start
+        for j in ids:
+            pos[(i, j)] = (z0, z0+z[j])
+            z0 += z[j]
+        start = end + pad
+
+    for i in range(len(x)):
+        start, end = arc[i]
+        print(colors[i])
+        IdeogramArc(start=start, end=end, radius=1.0, ax=ax, color=colors[i], width=width)
+        start, end = pos[(i,i)]
+        selfChordArc(start, end, radius=1.-width, color=colors[i], chordwidth=chordwidth*0.7, ax=ax)
+        for j in range(i):
+            color = colors[i]
+            if X[i, j] > X[j, i]:
+                color = colors[j]
+            start1, end1 = pos[(i,j)]
+            start2, end2 = pos[(j,i)]
+            ChordArc(start1, end1, start2, end2,
+                     radius=1.-width, color=colors[i], chordwidth=chordwidth, ax=ax)
+
+    #print(nodePos)
+    return nodePos
+
+
+
+##################################
+#if __name__ == "__main__":
+fig = plt.figure(figsize=(6,6))
+#flux = matrix
+flux = fallAllTransitions
+ax = plt.axes([0,0,1,1])
+
+    #nodePos = chordDiagram(flux, ax, colors=[hex2rgb(x) for x in ['#666666', '#66ff66', '#ff6666', '#6666ff']])
+#nodePos = chordDiagram(flux, ax)
+tempColorsInd = np.where((colors==1))
+tempColorsInd2 = np.where((colors==0))
+
+tempColors = colors
+tempColors[tempColorsInd] = 0.9999
+tempColors[tempColorsInd2] = 0.0001
+tempColors = tempColors
+nodePos = chordDiagram(flux,ax,colors=tempColors[:,0:3])
+ax.axis('off')
+prop = dict(fontsize=16*0.8, ha='center', va='center')
+#plt.title('Winter')
+plt.show()
+
 
 # nodes = ['1', '2', '3', '4', '5', '6', '7', '8']
 # for i in range(8):
 #     ax.text(nodePos[i][0], nodePos[i][1], nodes[i], rotation=nodePos[i][2], **prop)
-
-    # plt.savefig("example.png", dpi=600,
-    #         transparent=True,
-    #         bbox_inches='tight', pad_inches=0.02)
+#
+#     plt.savefig("example.png", dpi=600,
+#             transparent=True,
+#             bbox_inches='tight', pad_inches=0.02)
 
 
 

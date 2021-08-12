@@ -2,16 +2,64 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="144aeda8-086a-4b59-b43a-e83e36ee8dd3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/version1ComplexEOFsProcessing.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/version1ExtractSandbarProfiles.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/version1TransitionsMatrices.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/version1WaveConditionsSeparated.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/rGraphicsSettings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/rSettings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/atlanticInterannualClimate.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/eofAnalysisOfJune2019.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fittingTides.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hypotheticalNourishmentProfiles.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mda.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nagsHeadDWT.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plottingHypotheticalScenarios.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plottingSurrogatePredictions.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/processingFinalXBeachLibrary.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/processingLibraryOfXbeach.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scarp_data_final2/newscarp_data_500_600.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scarp_data_final2/newscarp_data_600_700.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scarp_data_final2/newscarp_data_700_800.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scarp_data_final2/newscarp_data_800_900.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scarp_data_final2/newscarp_data_900_1000.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scarp_data_final2/scarp_data_0_49_DAversion.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scarp_data_final2/scarp_data_100_149_DAversion.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scarp_data_final2/scarp_data_150_199_DAversion.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scarp_data_final2/scarp_data_200_249_DAversion.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scarp_data_final2/scarp_data_250_299_DAversion.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scarp_data_final2/scarp_data_300_349_DAversion.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scarp_data_final2/scarp_data_350_399_DAversion.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scarp_data_final2/scarp_data_400_449_DAversion.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scarp_data_final2/scarp_data_450_499_DAversion.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scarp_data_final2/scarp_data_50_99_DAversion.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scratchGPR.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testPickleMerge.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testTrajectoryClustering.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/version1AssessCeofModes.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/version1PythonClustering.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/version1RandomForestClassifier.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/version1StudyMapOfFRF.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/version1TransitionProbabilities.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/version2WaveConditionsSeparated.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vertsion1ExtractOriginalSanbarProfiles.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vertsion2ExtractSandbarProfiles.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/duckGeomorph.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/duckGeomorph.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fig2.png" beforeDir="false" afterPath="$PROJECT_DIR$/fig2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ceofsNorthernTransect.mat" beforeDir="false" afterPath="$PROJECT_DIR$/ceofsNorthernTransect.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ceofsNorthernTransect.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/ceofsNorthernTransect.pickle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ceofsSouthernTransect.mat" beforeDir="false" afterPath="$PROJECT_DIR$/ceofsSouthernTransect.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ceofsSouthernTransect.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/ceofsSouthernTransect.pickle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/downloadThredds.py" beforeDir="false" afterPath="$PROJECT_DIR$/downloadThredds.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/latestFRFevolution.py" beforeDir="false" afterPath="$PROJECT_DIR$/latestFRFevolution.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlabsSouthernTransectClusters.mat" beforeDir="false" afterPath="$PROJECT_DIR$/matlabsSouthernTransectClusters.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sandBarTool" beforeDir="false" afterPath="$PROJECT_DIR$/sandBarTool" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sandBarTool/morphLib.py" beforeDir="false" afterPath="$PROJECT_DIR$/sandBarTool/morphLib.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sandbarsSouthernTransect.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/sandbarsSouthernTransect.pickle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testbedutils" beforeDir="false" afterPath="$PROJECT_DIR$/testbedutils" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/testbedutils/geoprocess.py" beforeDir="false" afterPath="$PROJECT_DIR$/testbedutils/geoprocess.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/testbedutils/gridTools.py" beforeDir="false" afterPath="$PROJECT_DIR$/testbedutils/gridTools.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/waveConditions.py" beforeDir="false" afterPath="$PROJECT_DIR$/waveConditions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/version1ClusterKmeans.m" beforeDir="false" afterPath="$PROJECT_DIR$/version1ClusterKmeans.m" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/version1ComplexEOFsProcessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/version1ComplexEOFsProcessing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/version1ExtractSandbarProfiles.py" beforeDir="false" afterPath="$PROJECT_DIR$/version1ExtractSandbarProfiles.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/version1WaveConditionsSeparated.py" beforeDir="false" afterPath="$PROJECT_DIR$/version1WaveConditionsSeparated.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,6 +76,14 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
   <component name="ProjectId" id="1RNfWbtlcnFShvMAbgKxrm6vc27" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -35,15 +91,20 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/version1WaveConditionsSeparated.py" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PythonContentEntriesConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/scarp_data_final2" />
       <recent name="$PROJECT_DIR$" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/testPickles" />
+    </key>
   </component>
-  <component name="RunManager" selected="Python.waveClustering">
+  <component name="RunManager" selected="Python.processingPowerFits">
     <configuration name="WISscratch" type="PythonConfigurationType" factoryName="Python">
       <module name="duckGeomorph" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -57,6 +118,69 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/waveWISscratch.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="applyEOFsToObservations" type="PythonConfigurationType" factoryName="Python">
+      <module name="duckGeomorph" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$USER_HOME$/anaconda3/bin/python3" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/eofAnalysisOfJune2019.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="assessCEOF" type="PythonConfigurationType" factoryName="Python">
+      <module name="duckGeomorph" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$USER_HOME$/anaconda3/bin/python3" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/version1AssessCeofModes.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="atlanticClimate" type="PythonConfigurationType" factoryName="Python">
+      <module name="duckGeomorph" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$USER_HOME$/anaconda3/bin/python3" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/atlanticInterannualClimate.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -90,6 +214,9 @@
       <module name="duckGeomorph" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="$USER_HOME$/anaconda3/envs/cmtb/bin/python" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
@@ -129,6 +256,9 @@
       <module name="duckGeomorph" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="$USER_HOME$/anaconda3/bin/python3" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
@@ -248,16 +378,61 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="eofReconstructionOfSurveys" type="PythonConfigurationType" factoryName="Python">
+      <module name="duckGeomorph" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$USER_HOME$/anaconda3/bin/python3" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/eofAnalysisOfJune2019.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="equilibriumFittingScript" type="PythonConfigurationType" factoryName="Python">
+      <module name="duckGeomorph" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$USER_HOME$/anaconda3/bin/python3" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/outputchk2.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="extractSandbarProfiles" type="PythonConfigurationType" factoryName="Python">
       <module name="duckGeomorph" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="$USER_HOME$/anaconda3/envs/cmtb/bin/python" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/version1ExtractSandbarProfiles.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/vertsion2ExtractSandbarProfiles.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -308,6 +483,48 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="hypotheticalNourishmentProfiles" type="PythonConfigurationType" factoryName="Python">
+      <module name="duckGeomorph" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$USER_HOME$/anaconda3/bin/python3" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/hypotheticalNourishmentProfiles.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="hypotheticalProfiles" type="PythonConfigurationType" factoryName="Python">
+      <module name="duckGeomorph" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$USER_HOME$/anaconda3/bin/python3" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/hypotheticalBeachProfiles.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="latestFRF" type="PythonConfigurationType" factoryName="Python">
       <module name="duckGeomorph" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -321,6 +538,27 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/latestFRFevolution.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="nagsHeadDWT" type="PythonConfigurationType" factoryName="Python">
+      <module name="duckGeomorph" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$USER_HOME$/anaconda3/bin/python3" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/nagsHeadDWT.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -371,16 +609,166 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="originalTransects" type="PythonConfigurationType" factoryName="Python">
+      <module name="duckGeomorph" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$USER_HOME$/anaconda3/envs/cmtb/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/vertsion1ExtractOriginalSanbarProfiles.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="performCEOF" type="PythonConfigurationType" factoryName="Python">
       <module name="duckGeomorph" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="$USER_HOME$/anaconda3/envs/cmtb/bin/python" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/version1ComplexEOFsProcessing.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="processingFinalXbeachLibrary" type="PythonConfigurationType" factoryName="Python">
+      <module name="duckGeomorph" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$USER_HOME$/anaconda3/bin/python3" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/processingFinalXBeachLibrary.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="processingPowerFits" type="PythonConfigurationType" factoryName="Python">
+      <module name="duckGeomorph" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$USER_HOME$/anaconda3/bin/python3" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/plottingSurrogatePredictions.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="processingTides" type="PythonConfigurationType" factoryName="Python">
+      <module name="duckGeomorph" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$USER_HOME$/anaconda3/bin/python3" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/fittingTides.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="processingXbeachLibrary" type="PythonConfigurationType" factoryName="Python">
+      <module name="duckGeomorph" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$USER_HOME$/anaconda3/bin/python3" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/processingLibraryOfXbeach.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pythonClustering" type="PythonConfigurationType" factoryName="Python">
+      <module name="duckGeomorph" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$USER_HOME$/anaconda3/bin/python3" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/version1PythonClustering.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="randomForestClassifier" type="PythonConfigurationType" factoryName="Python">
+      <module name="duckGeomorph" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$USER_HOME$/anaconda3/bin/python3" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/version1RandomForestClassifier.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -431,6 +819,69 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="scratchGPR" type="PythonConfigurationType" factoryName="Python">
+      <module name="duckGeomorph" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$USER_HOME$/anaconda3/bin/python3" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scratchGPR.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="studyMap" type="PythonConfigurationType" factoryName="Python">
+      <module name="duckGeomorph" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$USER_HOME$/anaconda3/bin/python3" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/version1StudyMapOfFRF.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="testPickleMerge" type="PythonConfigurationType" factoryName="Python">
+      <module name="duckGeomorph" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$USER_HOME$/anaconda3/envs/cmtb/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/testPickleMerge.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="testeemd" type="PythonConfigurationType" factoryName="Python">
       <module name="duckGeomorph" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -456,6 +907,9 @@
       <module name="duckGeomorph" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="$USER_HOME$/anaconda3/bin/python3" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
@@ -474,6 +928,9 @@
       <module name="duckGeomorph" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="$USER_HOME$/anaconda3/bin/python3" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
@@ -492,6 +949,9 @@
       <module name="duckGeomorph" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="$USER_HOME$/anaconda3/bin/python3" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
@@ -529,31 +989,50 @@
     </configuration>
     <list>
       <item itemvalue="Python.WISscratch" />
+      <item itemvalue="Python.applyEOFsToObservations" />
+      <item itemvalue="Python.assessCEOF" />
+      <item itemvalue="Python.atlanticClimate" />
+      <item itemvalue="Python.bathyAverageInterp" />
+      <item itemvalue="Python.chordTest" />
+      <item itemvalue="Python.complexClusterCompass" />
+      <item itemvalue="Python.complexClustering" />
+      <item itemvalue="Python.complexDEMs" />
       <item itemvalue="Python.complexImageStack" />
       <item itemvalue="Python.complex_scratch" />
-      <item itemvalue="Python.complexClustering" />
-      <item itemvalue="Python.chordTest" />
-      <item itemvalue="Python.waveClustering" />
-      <item itemvalue="Python.extractSandbarProfiles" />
-      <item itemvalue="Python.performCEOF" />
-      <item itemvalue="Python.transitionMatrix" />
-      <item itemvalue="Python.waveConditionsSeparated" />
-      <item itemvalue="Python.bathyAverageInterp" />
-      <item itemvalue="Python.complexClusterCompass" />
-      <item itemvalue="Python.hierarchialDemo" />
-      <item itemvalue="Python.complexDEMs" />
       <item itemvalue="Python.downloadThredds" />
       <item itemvalue="Python.dunex_transects" />
+      <item itemvalue="Python.eofReconstructionOfSurveys" />
+      <item itemvalue="Python.equilibriumFittingScript" />
+      <item itemvalue="Python.extractSandbarProfiles" />
       <item itemvalue="Python.fabricatedTest" />
+      <item itemvalue="Python.hierarchialDemo" />
+      <item itemvalue="Python.hypotheticalNourishmentProfiles" />
+      <item itemvalue="Python.hypotheticalProfiles" />
       <item itemvalue="Python.latestFRF" />
+      <item itemvalue="Python.nagsHeadDWT" />
       <item itemvalue="Python.nourished_scratch" />
       <item itemvalue="Python.openDAPaccessXarray" />
+      <item itemvalue="Python.originalTransects" />
+      <item itemvalue="Python.performCEOF" />
+      <item itemvalue="Python.processingFinalXbeachLibrary" />
+      <item itemvalue="Python.processingPowerFits" />
+      <item itemvalue="Python.processingTides" />
+      <item itemvalue="Python.processingXbeachLibrary" />
+      <item itemvalue="Python.pythonClustering" />
+      <item itemvalue="Python.randomForestClassifier" />
       <item itemvalue="Python.sandbar1dEvolution" />
+      <item itemvalue="Python.scratchGPR" />
       <item itemvalue="Python.scratch" />
+      <item itemvalue="Python.studyMap" />
+      <item itemvalue="Python.testPickleMerge" />
       <item itemvalue="Python.testeemd" />
+      <item itemvalue="Python.transitionMatrix" />
+      <item itemvalue="Python.waveClustering" />
+      <item itemvalue="Python.waveConditionsSeparated" />
       <item itemvalue="Python.waveScratch" />
     </list>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -578,44 +1057,5 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="158" y="256" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1593181715625">
-      <screen x="0" y="147" width="1920" height="1053" />
-    </state>
-    <state x="2078" y="123" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.120.1920.1080/1920.0.1920.1200@1920.0.1920.1200" timestamp="1588890432352" />
-    <state x="277" y="135" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.27.3360.1053@0.27.3360.1053" timestamp="1584809299393" />
-    <state x="1598" y="111" key="#com.intellij.execution.impl.EditConfigurationsDialog/1440.0.1920.1080/0.27.1440.873@1440.0.1920.1080" timestamp="1589550355723" />
-    <state x="180" y="117" key="#com.intellij.execution.impl.EditConfigurationsDialog/1440.0.1920.1080/67.27.1373.873@67.27.1373.873" timestamp="1589565671104" />
-    <state x="158" y="256" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.120.1920.1080/0.147.1920.1053@0.147.1920.1053" timestamp="1593181715625" />
-    <state x="2078" y="232" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.120.1920.1080/0.147.1920.1053@1920.120.1920.1080" timestamp="1591280379010" />
-    <state x="852" y="556" width="424" height="484" key="FileChooserDialogImpl" timestamp="1593181117362">
-      <screen x="0" y="147" width="1920" height="1053" />
-    </state>
-    <state x="2772" y="466" width="424" height="484" key="FileChooserDialogImpl/0.120.1920.1080/1920.0.1920.1200@1920.0.1920.1200" timestamp="1588890425654" />
-    <state x="1650" y="567" key="FileChooserDialogImpl/0.27.3360.1053@0.27.3360.1053" timestamp="1584804472615" />
-    <state x="1916" y="1107" width="374" height="993" key="FileChooserDialogImpl/1006.0.1853.2160@1006.0.1853.2160" timestamp="1582641203189" />
-    <state x="2292" y="419" width="424" height="484" key="FileChooserDialogImpl/1440.0.1920.1080/0.27.1440.873@1440.0.1920.1080" timestamp="1589550349033" />
-    <state x="676" y="366" width="374" height="392" key="FileChooserDialogImpl/1440.0.1920.1080/67.27.1373.873@67.27.1373.873" timestamp="1589565598067" />
-    <state x="852" y="556" width="424" height="484" key="FileChooserDialogImpl/1920.120.1920.1080/0.147.1920.1053@0.147.1920.1053" timestamp="1593181117362" />
-    <state x="889" y="436" width="424" height="484" key="FileChooserDialogImpl/67.27.1853.1053@67.27.1853.1053" timestamp="1584832181394" />
-    <state width="960" height="545" key="XDebugger.FullValuePopup" timestamp="1591133156131">
-      <screen x="0" y="147" width="1920" height="1053" />
-    </state>
-    <state width="720" height="451" key="XDebugger.FullValuePopup/1440.0.1920.1080/0.27.1440.873@0.27.1440.873" timestamp="1589494778652" />
-    <state width="960" height="558" key="XDebugger.FullValuePopup/1440.0.1920.1080/0.27.1440.873@1440.0.1920.1080" timestamp="1589557779567" />
-    <state width="960" height="545" key="XDebugger.FullValuePopup/1920.120.1920.1080/0.147.1920.1053@0.147.1920.1053" timestamp="1591133156131" />
-    <state x="693" y="398" key="com.intellij.ide.util.TipDialog" timestamp="1586045847076">
-      <screen x="67" y="27" width="3773" height="1053" />
-    </state>
-    <state x="2133" y="398" key="com.intellij.ide.util.TipDialog/0.27.3360.1053@0.27.3360.1053" timestamp="1584723193158" />
-    <state x="1632" y="1478" key="com.intellij.ide.util.TipDialog/1006.0.1853.2160@1006.0.1853.2160" timestamp="1582641043979" />
-    <state x="693" y="398" key="com.intellij.ide.util.TipDialog/67.27.1853.1053@67.27.1853.1053" timestamp="1584832168275" />
-    <state x="693" y="398" key="com.intellij.ide.util.TipDialog/67.27.3773.1053@67.27.3773.1053" timestamp="1586045847076" />
-    <state x="656" y="398" width="672" height="662" key="search.everywhere.popup" timestamp="1592259231404">
-      <screen x="0" y="147" width="1920" height="1053" />
-    </state>
-    <state x="2096" y="257" width="672" height="678" key="search.everywhere.popup/1440.0.1920.1080/0.27.1440.873@1440.0.1920.1080" timestamp="1589383534203" />
-    <state x="656" y="398" width="672" height="662" key="search.everywhere.popup/1920.120.1920.1080/0.147.1920.1053@0.147.1920.1053" timestamp="1592259231404" />
   </component>
 </project>

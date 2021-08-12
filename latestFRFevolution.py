@@ -54,19 +54,22 @@ for i in range(len(files)):
 
 
 # Lets find just the files after January 2017
-recent = np.nonzero((time > DT.datetime(2018,12,1)) & (time < DT.datetime(2019,12,1)))
-subset = files[recent[0][0]:].copy()
+recent = np.nonzero((time > DT.datetime(2017,7,22)) & (time < DT.datetime(2019,4,1)))
+# recent = np.nonzero((time > DT.datetime(2018,5,22)) & (time < DT.datetime(2018,9,1)))
+
+subset = files[recent[0][0]:recent[0][-1]].copy()
 
 
 colormap = plt.cm.gist_ncar
-
+plt.style.use('default')
 fig, ax = plt.subplots(2,1)
 
 ax[0].set_prop_cycle(plt.cycler('color', plt.cm.jet(np.linspace(0, 1, len(subset)))))
 labels = []
 for i in range(len(subset)):
-
     data = getBathy(os.path.join(geomorphdir, subset[i]), lower=1070, upper=1100)
+
+    # data = getBathy(os.path.join(geomorphdir, subset[i]), lower=700, upper=800)
     temp = subset[i].split('_')
     ax[0].plot(data['x'], data['z'], label=temp[1])
 
@@ -76,7 +79,7 @@ ax[0].set_ylim([-8, 4])
 ax[0].set_title('Profile variability in northern edge of property')
 
 # Lets find just the files after January 2018
-recent = np.nonzero((time > DT.datetime(2018, 12, 1)) & (time < DT.datetime(2020, 5, 1)))
+recent = np.nonzero((time > DT.datetime(2020, 5, 1)) & (time < DT.datetime(2020, 12, 1)))
 subset1 = files[recent[0][0]:].copy()
 
 
@@ -136,7 +139,7 @@ ax1.set_ylabel('elevation (m)')
 
 
 #recent2 = np.nonzero((time > DT.datetime(2016, 6, 1)) & (time < DT.datetime(2018, 1, 1)))
-recent2 = np.nonzero((time > DT.datetime(2018, 6, 1)) & (time < DT.datetime(2020, 5, 1)))
+recent2 = np.nonzero((time > DT.datetime(2020, 5, 1)) & (time < DT.datetime(2020, 12, 1)))
 
 subset2 = files[recent2[0][0]:].copy()
 del subset2[37:]
@@ -156,4 +159,4 @@ ax2.set_xlim([50, 600])
 ax2.set_ylim([-6, 4])
 ax2.set_xlabel('cross-shore (m)')
 ax2.set_ylabel('elevation (m)')
-ax2.set_title('Profile Variability since June 2019')
+ax2.set_title('Profile Variability since May 2020')

@@ -10,14 +10,32 @@ from scipy.interpolate import interp1d
 import sandBarTool.morphLib as mL
 
 import pickle
-dbfile = open('sandbarsNorthernTransect.pickle', 'rb')
+# dbfile = open('sandbarsSouthernTransect_referencedMHHW_reallylongWithNegatives.pickle', 'rb')
+dbfile = open('sandbarsSouthernTransect_referencedMHHW_5lineAvg.pickle', 'rb')
+
+#dbfile = open('sandbarsNorthernTransect_referencedMHHW_reallylong.pickle', 'rb')
+
 data = pickle.load(dbfile)
 dbfile.close()
 alllines = data['alllines']
 xinterp = data['xinterp']
 time = data['time']
 
+nanmean = np.nanmean(alllines,axis=0)
+finder = np.where(np.isnan(alllines))
+alllines[finder] = nanmean[finder[1]]
 demean = alllines - np.mean(alllines,axis=0)
+
+
+plt.style.use('default')
+plt.figure()
+for xx in range(len(alllines)):
+    plt.plot(xinterp, alllines[xx,:], color=[0.7,0.7,0.7,1],linewidth=0.5)
+plt.plot(xinterp, np.nanmean(alllines,axis=0),'k-')
+plt.plot(xinterp, np.nanmean(alllines,axis=0) + np.nanstd(alllines,axis=0),'k--')
+plt.plot(xinterp, np.nanmean(alllines,axis=0) - np.nanstd(alllines,axis=0),'k--')
+
+
 
 from scipy.signal import hilbert
 data = (hilbert(demean.T))
@@ -99,20 +117,29 @@ phit2 = phit*180/np.pi
 
 
 
-mode = 2
+mode = 0
 
 fig, ax = plt.subplots(2,2)
 
 ax[0,0].plot(xinterp, S[:,mode],'o')
-ax[0,1].plot(xinterp, theta2[:,mode],'o')
-ax[1,0].plot(time,Rt[:,mode],'o')
+ax[0,0].set_ylabel('Spatial Magnitude (m)')
+ax[0,0].set_xlabel('Cross-shore (m)')
+ax[1,0].plot(xinterp, theta2[:,mode],'o')
+ax[1,0].set_ylabel('Spatial Phase (deg)')
+ax[1,0].set_xlabel('Cross-shore (m)')
+ax[0,1].plot(time,Rt[:,mode],'o')
+ax[0,1].set_ylabel('Temporal Magnitude (m)')
+ax[0,1].set_xlabel('Time')
 ax[1,1].plot(time,phit2[:,mode],'o')
+ax[1,1].set_ylabel('Temporal Phase (deg)')
+ax[1,1].set_xlabel('Time')
 
 
 
 PC1 = Rt[:, mode]*np.sin(phit[:, mode]) + Rt[:, mode]*np.cos(phit[:, mode])
-PC1a = Rt[:, mode]*np.sin(phit[:, mode])
-PC1b = Rt[:, mode]*np.cos(phit[:, mode])
+
+#PC1a = Rt[:, mode]*np.sin(phit[:, mode])
+#PC1b = Rt[:, mode]*np.cos(phit[:, mode])
 #
 # plt.figure()
 # plt.plot(time,PC1,'.')
@@ -126,15 +153,16 @@ percentV = lamda / totalV
 ztemp = 0*np.ones(len(xinterp),)
 timestep = 200
 for mode in range(8):
-    ztemp = ztemp + Rt[timestep,mode]*np.sin(phit[timestep,mode]) * S[:,mode]*np.sin(theta[:,mode]) + Rt[timestep,mode]*np.cos(phit[timestep,mode]) * S[:,mode]*np.cos(theta[:,mode])
+    # ztemp = ztemp + Rt[timestep,mode]*np.sin(phit[timestep,mode]) * S[:,mode]*np.sin(theta[:,mode]) + Rt[timestep,mode]*np.cos(phit[timestep,mode]) * S[:,mode]*np.cos(theta[:,mode])
+    ztemp = ztemp + Rt[timestep,mode]*S[:,mode]*np.cos(phit[timestep,mode] - theta[:,mode])
 
-# Plotting a comparison
-# fig2 = plt.figure()
-# #plt.plot(xinterp,np.mean(alllines,axis=0)+ztemp+ztemp1+ztemp2+ztemp3+ztemp4+ztemp5+ztemp6+ztemp7+ztemp8)
-# plt.plot(xinterp,np.mean(alllines,axis=0)+ztemp)
-# #plt.plot(xinterp,np.mean(alllines,axis=0)+ztemp2)
-# plt.plot(xinterp,np.mean(alllines,axis=0))
-# plt.plot(xinterp,alllines[timestep,:])
+#Plotting a comparison
+fig2 = plt.figure()
+#plt.plot(xinterp,np.mean(alllines,axis=0)+ztemp+ztemp1+ztemp2+ztemp3+ztemp4+ztemp5+ztemp6+ztemp7+ztemp8)
+plt.plot(xinterp,np.mean(alllines,axis=0)+ztemp)
+#plt.plot(xinterp,np.mean(alllines,axis=0)+ztemp2)
+plt.plot(xinterp,np.mean(alllines,axis=0))
+plt.plot(xinterp,alllines[timestep,:])
 
 #plt.plot(xinterp,ztemp)
 #plt.plot(xinterp,ztemp1)
@@ -165,17 +193,24 @@ eofPred4 = np.nan * np.ones((np.shape(alllinesSubset)))
 
 for timestep in range(len(timeind)):
     mode = 0
-    eofPred[timestep, :] = RtSubset[timestep, mode] * np.sin(phitSubset[timestep, mode]) * S[:, mode] * np.sin(theta[:, mode]) + RtSubset[
-            timestep, mode] * np.cos(phitSubset[timestep, mode]) * S[:, mode] * np.cos(theta[:, mode])
+    # eofPred[timestep, :] = RtSubset[timestep, mode] * np.sin(phitSubset[timestep, mode]) * S[:, mode] * np.sin(theta[:, mode]) + RtSubset[
+    #         timestep, mode] * np.cos(phitSubset[timestep, mode]) * S[:, mode] * np.cos(theta[:, mode])
+    eofPred[timestep, :] = RtSubset[timestep, mode]* S[:, mode] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
     mode = 1
-    eofPred2[timestep, :] = RtSubset[timestep, mode] * np.sin(phitSubset[timestep, mode]) * S[:, mode] * np.sin(theta[:, mode]) + RtSubset[
-            timestep, mode] * np.cos(phitSubset[timestep, mode]) * S[:, mode] * np.cos(theta[:, mode])
+    # eofPred2[timestep, :] = RtSubset[timestep, mode] * np.sin(phitSubset[timestep, mode]) * S[:, mode] * np.sin(theta[:, mode]) + RtSubset[
+    #         timestep, mode] * np.cos(phitSubset[timestep, mode]) * S[:, mode] * np.cos(theta[:, mode])
+    eofPred2[timestep, :] = RtSubset[timestep, mode]* S[:, mode] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
+
     mode = 2
-    eofPred3[timestep, :] = RtSubset[timestep, mode] * np.sin(phitSubset[timestep, mode]) * S[:, mode] * np.sin(theta[:, mode]) + RtSubset[
-            timestep, mode] * np.cos(phitSubset[timestep, mode]) * S[:, mode] * np.cos(theta[:, mode])
+    # eofPred3[timestep, :] = RtSubset[timestep, mode] * np.sin(phitSubset[timestep, mode]) * S[:, mode] * np.sin(theta[:, mode]) + RtSubset[
+    #         timestep, mode] * np.cos(phitSubset[timestep, mode]) * S[:, mode] * np.cos(theta[:, mode])
+    eofPred3[timestep, :] = RtSubset[timestep, mode]* S[:, mode] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
+
     mode = 3
-    eofPred4[timestep, :] = RtSubset[timestep, mode] * np.sin(phitSubset[timestep, mode]) * S[:, mode] * np.sin(theta[:, mode]) + RtSubset[
-            timestep, mode] * np.cos(phitSubset[timestep, mode]) * S[:, mode] * np.cos(theta[:, mode])
+    # eofPred4[timestep, :] = RtSubset[timestep, mode] * np.sin(phitSubset[timestep, mode]) * S[:, mode] * np.sin(theta[:, mode]) + RtSubset[
+    #         timestep, mode] * np.cos(phitSubset[timestep, mode]) * S[:, mode] * np.cos(theta[:, mode])
+    eofPred4[timestep, :] = RtSubset[timestep, mode]* S[:, mode] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
+
     # ztemp = 0 * np.ones(len(xinterp), )
     # for mode in range(8):
     #     ztemp = ztemp + RtSubset[timestep, mode] * np.sin(phitSubset[timestep, mode]) * S[:, mode] * np.sin(theta[:, mode]) + RtSubset[
@@ -262,8 +297,8 @@ t2 = -24
 #
 
 
-t1 = 320
-t2 = 540
+t1 = 0
+t2 = -1
 fig, ax = plt.subplots(1,5)
 #plt.set_cmap('RdBu')#bwr')
 plt.set_cmap('RdBu_r')
@@ -274,7 +309,7 @@ fig.colorbar(plt0, ax=ax[0], orientation='horizontal')
 ax[0].set_ylim([time[t1], time[t2]])
 ax[0].set_title('Surveys (dev.)')
 
-plt1 = ax[1].pcolor(xg,tg,eofPred.T, vmin=-1.05, vmax=1.05)
+plt1 = ax[1].pcolor(xg,tg,eofPred.T, vmin=-.75, vmax=0.75)
 ax[1].set_ylim([time[t1], time[t2]])
 fig.colorbar(plt1, ax=ax[1], orientation='horizontal')
 ax[1].set_title('CEOF1 {:.2f}'.format(percentV[0]))
@@ -317,7 +352,7 @@ matlabTime = np.zeros((len(time),))
 for qq in range(len(time)):
     matlabTime[qq] = datetime2matlabdn(time[qq])
 
-morphoPickle = 'ceofsNorthernTransect.pickle'
+morphoPickle = 'ceofsSouthernTransectLatest.pickle'
 output = {}
 output['time'] = time
 output['alllines'] = alllines
@@ -353,5 +388,5 @@ output['phiDegrees'] = phit2
 output['totalV'] = totalV
 output['lamda'] = lamda
 output['percentV'] = percentV
-scipy.io.savemat('ceofsNorthernTransect.mat',output)
+scipy.io.savemat('ceofsSouthernTransectLatest.mat',output)
 

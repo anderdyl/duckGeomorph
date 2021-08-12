@@ -10,9 +10,11 @@ from urllib.request import urlretrieve
 # Everything before "catalog/"
 server_url = 'https://chldata.erdc.dren.mil/thredds/'
 # Everything after "catalog/"
-request_url = 'catalog/wis/Atlantic/ST63218/2005/'
+request_url = 'catalog/wis/Atlantic/ST63222/1980/'
 #request_url = 'catalog/frf/geomorphology/DEMs/surveyDEM/'
-# request_url = 'catalog/frf/oceanography/waves/8m-array/2019/'
+#request_url = 'catalog/frf/oceanography/waves/waverider-26m/2018/'
+#request_url = 'catalog/frf/meteorology/wind/derived/1993/'
+#request_url = 'catalog/frf/oceanography/waterlevel/eopNoaaTide/2020/'
 #request_url = 'catalog/frf/geomorphology/elevationTransects/survey/'
 
 

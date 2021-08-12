@@ -15,8 +15,8 @@ import sandBarTool.morphLib as mL
 
 
 
-geomorphdir = '/media/dylananderson/Elements/filteredFRF_Geomorph/'
-#geomorphdir = '/media/dylananderson/Elements/FRF_Geomorph/'
+#geomorphdir = '/media/dylananderson/Elements/filteredFRF_Geomorph/'
+geomorphdir = '/media/dylananderson/Elements/FRF_Geomorph/'
 
 files = os.listdir(geomorphdir)
 
@@ -90,8 +90,8 @@ import scipy.stats as spstats
 labels = []
 # xinterp = np.arange(108, 608, 2.5)
 #xinterp = np.arange(108, 618, 2.5)
-xinterp = np.arange(95, 560, 5)
-deeperThan = 540
+xinterp = np.arange(0, 900, 2)
+deeperThan = 200
 surveyType = dict()
 noneOnshore = np.empty((len(xinterp),))
 noneOffshore = np.empty((len(xinterp),))
@@ -111,8 +111,8 @@ for i in range(len(subset)):
 
     ### ### Southern Lines
     data1 = getBathy(os.path.join(geomorphdir, subset[i]), lower=-10, upper=20)
-    data2 = getBathy(os.path.join(geomorphdir, subset[i]), lower=20, upper=60)
-    data3 = getBathy(os.path.join(geomorphdir, subset[i]), lower=60, upper=100)
+    # data2 = getBathy(os.path.join(geomorphdir, subset[i]), lower=20, upper=60)
+    # data3 = getBathy(os.path.join(geomorphdir, subset[i]), lower=60, upper=100)
     # ### ### Northern Lines
     # data1 = getBathy(os.path.join(geomorphdir, subset[i]), lower=1070, upper=1100)
     # data2 = getBathy(os.path.join(geomorphdir, subset[i]), lower=1020, upper=1070)
@@ -139,24 +139,24 @@ for i in range(len(subset)):
     crossS = cross[crossind]
     elevsS = elevs[crossind]
 
-    elevs2 = data2['z']
-    cross2 = data2['x']
-    crossind2 = np.argsort(data2['x'])
-    crossS2 = cross2[crossind2]
-    elevsS2 = elevs2[crossind2]
-
-    elevs3 = data3['z']
-    cross3 = data3['x']
-    crossind3 = np.argsort(data3['x'])
-    crossS3 = cross3[crossind3]
-    elevsS3 = elevs3[crossind3]
+    # elevs2 = data2['z']
+    # cross2 = data2['x']
+    # crossind2 = np.argsort(data2['x'])
+    # crossS2 = cross2[crossind2]
+    # elevsS2 = elevs2[crossind2]
+    #
+    # elevs3 = data3['z']
+    # cross3 = data3['x']
+    # crossind3 = np.argsort(data3['x'])
+    # crossS3 = cross3[crossind3]
+    # elevsS3 = elevs3[crossind3]
 
     xSub = np.ma.MaskedArray.filled(crossS, np.nan)
     zSub = np.ma.MaskedArray.filled(elevsS, np.nan)
-    xSub2 = np.ma.MaskedArray.filled(crossS2, np.nan)
-    zSub2 = np.ma.MaskedArray.filled(elevsS2, np.nan)
-    xSub3 = np.ma.MaskedArray.filled(crossS3, np.nan)
-    zSub3 = np.ma.MaskedArray.filled(elevsS3, np.nan)
+    # xSub2 = np.ma.MaskedArray.filled(crossS2, np.nan)
+    # zSub2 = np.ma.MaskedArray.filled(elevsS2, np.nan)
+    # xSub3 = np.ma.MaskedArray.filled(crossS3, np.nan)
+    # zSub3 = np.ma.MaskedArray.filled(elevsS3, np.nan)
     #realValues = ~np.isnan(xSub)
 
     # binnedz, bin_edges, binnumber = spstats.binned_statistic(xSub,zSub, statistic='mean',bins=np.arange(93,578,5))
@@ -174,13 +174,13 @@ for i in range(len(subset)):
     xSubNew = xSub[~np.isnan(xSub)]
     zSubNew = zSub[~np.isnan(xSub)]
 
-    realValues2 = ~np.isnan(xSub2)
-    xSubNew2 = xSub2[~np.isnan(xSub2)]
-    zSubNew2 = zSub2[~np.isnan(xSub2)]
-
-    realValues3 = ~np.isnan(xSub3)
-    xSubNew3 = xSub3[~np.isnan(xSub3)]
-    zSubNew3 = zSub3[~np.isnan(xSub3)]
+    # realValues2 = ~np.isnan(xSub2)
+    # xSubNew2 = xSub2[~np.isnan(xSub2)]
+    # zSubNew2 = zSub2[~np.isnan(xSub2)]
+    #
+    # realValues3 = ~np.isnan(xSub3)
+    # xSubNew3 = xSub3[~np.isnan(xSub3)]
+    # zSubNew3 = zSub3[~np.isnan(xSub3)]
 
 
     #newdata = interpBathy(xSubNew, zSubNew, xinterp)
@@ -198,7 +198,7 @@ for i in range(len(subset)):
 
         if np.nanmax(xSubNew) > deeperThan:
 
-            if np.nanmin(xSubNew) < 115:
+            if np.nanmin(xSubNew) < 125:
 
 
 
@@ -207,153 +207,165 @@ for i in range(len(subset)):
 
                     newdata = interpBathy(xSubNew, zSubNew, xinterp)
                     #newdata = interpBathy2(newdata['x'],newdata['z'],xinterp)
-                    if any(realValues2):
-                        newdata2 = interpBathy(xSubNew2,zSubNew2, xinterp)
-                        #newdata2 = interpBathy2(newdata2['x'], newdata2['z'], xinterp)
-                    else:
-                        newdata2 = []
-                    if any(realValues3):
-                        newdata3 = interpBathy(xSubNew3, zSubNew3, xinterp)
-                        #newdata3 = interpBathy2(newdata3['x'], newdata3['z'], xinterp)
-                    else:
-                        newdata3 = []
+                    # if any(realValues2):
+                    #     newdata2 = interpBathy(xSubNew2,zSubNew2, xinterp)
+                    #     #newdata2 = interpBathy2(newdata2['x'], newdata2['z'], xinterp)
+                    # else:
+                    #     newdata2 = []
+                    # if any(realValues3):
+                    #     newdata3 = interpBathy(xSubNew3, zSubNew3, xinterp)
+                    #     #newdata3 = interpBathy2(newdata3['x'], newdata3['z'], xinterp)
+                    # else:
+                    #     newdata3 = []
                     #newdata = interpBathy2(newdata['x'], newdata['z'], xinterp)
                     #newdata = interpBathy2(xSubNew, zSubNew, xinterp)
 
-                    fig = plt.figure(figsize=(10, 10))
-                    plt.plot(cross, elevs, 'b.')
-                    plt.plot(cross2, elevs2, 'b.')
-                    plt.plot(cross3, elevs3, 'b.')
-                    plt.plot(xinterp,newdata['z'],'r.-')
-                    if any(realValues2) & any(realValues3):
+                    # fig = plt.figure(figsize=(10, 10))
+                    # plt.plot(cross, elevs, 'b.')
+                    # plt.plot(cross2, elevs2, 'b.')
+                    # plt.plot(cross3, elevs3, 'b.')
+                    # plt.plot(xinterp,newdata['z'],'r.-')
+                    # if any(realValues2) & any(realValues3):
+                    #
+                    #     plt.plot(xinterp,newdata2['z'],'m.-')
+                    #     plt.plot(xinterp, newdata3['z'], 'g.-')
+                    #     plt.plot(xinterp,np.nanmean((newdata['z'], newdata2['z'],newdata3['z']), axis=0),'ko-')
+                    #
+                    # else:
+                    #     if any(realValues2):
+                    #         plt.plot(xinterp, newdata2['z'], 'c.-')
+                    #         plt.plot(xinterp, np.nanmean((newdata['z'], newdata2['z']), axis=0), 'k-.')
+                    #
+                    #     elif any(realValues3):
+                    #         plt.plot(xinterp, newdata3['z'], 'y.-')
+                    #         plt.plot(xinterp, np.nanmean((newdata['z'], newdata3['z']), axis=0), 'k--')
+                    #
+                    #     else:
+                    #         plt.plot(xinterp, newdata['z'], 'k-')
 
-                        plt.plot(xinterp,newdata2['z'],'m.-')
-                        plt.plot(xinterp, newdata3['z'], 'g.-')
-                        plt.plot(xinterp,np.nanmean((newdata['z'], newdata2['z'],newdata3['z']), axis=0),'ko-')
+                    # plt.xlim([0, 600])
+                    # plt.ylim([-7, 2])
+                    # plt.title('Survey Date = ' + temp[1][0:4] + '/' + temp[1][4:6] + '/' + temp[1][6:8] + ' Survey Type = ' + file_params[6])
+                    # plt.savefig('/home/dylananderson/projects/duckGeomorph/interpolatedProfiles/Survey_{}'.format(i))
+                    # plt.close()
 
-                    else:
-                        if any(realValues2):
-                            plt.plot(xinterp, newdata2['z'], 'c.-')
-                            plt.plot(xinterp, np.nanmean((newdata['z'], newdata2['z']), axis=0), 'k-.')
-
-                        elif any(realValues3):
-                            plt.plot(xinterp, newdata3['z'], 'y.-')
-                            plt.plot(xinterp, np.nanmean((newdata['z'], newdata3['z']), axis=0), 'k--')
-
-                        else:
-                            plt.plot(xinterp, newdata['z'], 'k-')
-
-                    plt.xlim([0, 600])
-                    plt.ylim([-7, 2])
-                    plt.title('Survey Date = ' + temp[1][0:4] + '/' + temp[1][4:6] + '/' + temp[1][6:8] + ' Survey Type = ' + file_params[6])
-                    plt.savefig('/home/dylananderson/projects/duckGeomorph/interpolatedProfiles/Survey_{}'.format(i))
-                    plt.close()
-
-                    nanValues = np.isnan(newdata['z'])
-
-                    if any(nanValues):
-                        #print('Found a transect with nans {}'.format(i))
-                        print('Trying to extend the lower half of the profile with a linear fit: {}'.format(surveydate))
-                        if count2 == 0:
-                            badlines = newdata['z']
-                            count2 = count2+1
-                            badtime = surveydate
-                        else:
-                            badlines = np.vstack((badlines, newdata['z']))
-                            count2 = count2+1
-                            badtime = np.append(badtime, surveydate)
+                    # nanValues = np.isnan(newdata['z'])
+                    #
+                    # if any(nanValues):
+                    #     #print('Found a transect with nans {}'.format(i))
+                    #     print('Trying to extend the lower half of the profile with a linear fit: {}'.format(surveydate))
+                    #     if count2 == 0:
+                    #         badlines = newdata['z']
+                    #         count2 = count2+1
+                    #         badtime = surveydate
+                    #     else:
+                    #         badlines = np.vstack((badlines, newdata['z']))
+                    #         count2 = count2+1
+                    #         badtime = np.append(badtime, surveydate)
 
                         #print('Threw out a survey with data due to nans: {}'.format(surveydate))
                         #plt.plot(xSub,zSub)
 
 
-                        xindex = np.where((xSubNew>=deeperThan))
+                        # xindex = np.where((xSubNew>=deeperThan))
+                        #
+                        # if len(xindex[0]) > 3:
+                        #
+                        #     xbot = xSubNew[xindex]
+                        #     zbot = zSubNew[xindex]
+                        #     mb = np.polyfit(xbot, zbot, 1)
+                        #     f = np.poly1d(mb)
+                        #     maxXind = np.where((xinterp > np.nanmax(xSubNew)))
+                        #     newX = xinterp[maxXind]
+                        #     newZ = f(newX)
+                        #     xSubNew2 = np.append(xSubNew, newX)
+                        #     zSubNew2 = np.append(zSubNew, newZ)
+                        #     moredata = interpBathy(xSubNew2, zSubNew2, xinterp)
+                        #     #moredata = interpBathy(moredata['x'], moredata['z'], xinterp)
+                        #     #moredata = interpBathy(xSubNew2, moredata['z'], xinterp)
+                        #
+                        #     del xSubNew2, zSubNew2,newZ,newX,f,mb,zbot,xbot
+                        #
+                        #     nanValues2 = np.isnan(moredata['z'])
+                        #
+                        #     if any(nanValues2):
+                        #         print('WHAT HAPPENED AT TRANSECT {}'.format(i))
+                        #         #plt.plot(moredata['x'], moredata['z'], 'r-')
+                        #     else:
+                        #         if count == 0:
+                        #             alllines = moredata['z']
+                        #             time = surveydate
+                        #             count = count + 1
+                        #         else:
+                        #             alllines = np.vstack((alllines, moredata['z']))
+                        #             time = np.append(time, surveydate)
+                        #             count = count + 1
+                        #
+                        #
+                        #         if count3 == 0:
+                        #             extrapolatedlines = newdata['z']
+                        #             count3 = count3 + 1
+                        #             extrapolatedtime = surveydate
+                        #         else:
+                        #             extrapolatedlines = np.vstack((extrapolatedlines, newdata['z']))
+                        #             count3 = count3 + 1
+                        #             extrapolatedtime = np.append(extrapolatedtime, surveydate)
+                        #         #plt.plot(moredata['x'], moredata['z'], 'k-')
+                        #         del moredata
+                        #
+                        #
+                        #
+                        # elif len(xindex[0]) == 3:
+                        #     print('Could not do that: number of points being fit: {}'.format(len(xindex[0])))
+                        #     worstcount = worstcount+1
+                        # else:
+                        #     print('Could not do that: maximum X value in transect is: {}'.format(np.nanmax(xSub)))
+                        #     worstcount = worstcount+1
+                        #     #plt.plot(xSub, zSub, 'r-')
 
-                        if len(xindex[0]) > 3:
-
-                            xbot = xSubNew[xindex]
-                            zbot = zSubNew[xindex]
-                            mb = np.polyfit(xbot, zbot, 1)
-                            f = np.poly1d(mb)
-                            maxXind = np.where((xinterp > np.nanmax(xSubNew)))
-                            newX = xinterp[maxXind]
-                            newZ = f(newX)
-                            xSubNew2 = np.append(xSubNew, newX)
-                            zSubNew2 = np.append(zSubNew, newZ)
-                            moredata = interpBathy(xSubNew2, zSubNew2, xinterp)
-                            #moredata = interpBathy(moredata['x'], moredata['z'], xinterp)
-                            #moredata = interpBathy(xSubNew2, moredata['z'], xinterp)
-
-                            del xSubNew2, zSubNew2,newZ,newX,f,mb,zbot,xbot
-
-                            nanValues2 = np.isnan(moredata['z'])
-
-                            if any(nanValues2):
-                                print('WHAT HAPPENED AT TRANSECT {}'.format(i))
-                                #plt.plot(moredata['x'], moredata['z'], 'r-')
-                            else:
-                                if count == 0:
-                                    alllines = moredata['z']
-                                    time = surveydate
-                                    count = count + 1
-                                else:
-                                    alllines = np.vstack((alllines, moredata['z']))
-                                    time = np.append(time, surveydate)
-                                    count = count + 1
+                    if count == 0:
 
 
-                                if count3 == 0:
-                                    extrapolatedlines = newdata['z']
-                                    count3 = count3 + 1
-                                    extrapolatedtime = surveydate
-                                else:
-                                    extrapolatedlines = np.vstack((extrapolatedlines, newdata['z']))
-                                    count3 = count3 + 1
-                                    extrapolatedtime = np.append(extrapolatedtime, surveydate)
-                                #plt.plot(moredata['x'], moredata['z'], 'k-')
-                                del moredata
-
-
-
-                        elif len(xindex[0]) == 3:
-                            print('Could not do that: number of points being fit: {}'.format(len(xindex[0])))
-                            worstcount = worstcount+1
-                        else:
-                            print('Could not do that: maximum X value in transect is: {}'.format(np.nanmax(xSub)))
-                            worstcount = worstcount+1
-                            #plt.plot(xSub, zSub, 'r-')
-
+                        alllines = newdata['z']
+                        surveyType = file_params[6]
+                        time = surveydate
+                        count = count+1
 
                     else:
-                        if count == 0:
-                            if any(realValues2) & any(realValues3):
-                                avgProf = np.nanmean((newdata['z'],newdata2['z'],newdata3['z']),axis=0)
-                            else:
-                                if any(realValues2):
-                                    avgProf = np.nanmean((newdata['z'], newdata2['z']), axis=0)
-                                elif any(realValues3):
-                                    avgProf = np.nanmean((newdata['z'], newdata3['z']), axis=0)
-                                else:
-                                    avgProf = newdata['z']
-
-                            alllines = avgProf
-                            surveyType = file_params[6]
-                            time = surveydate
-                            count = count+1
-                        else:
-                            if any(realValues2) & any(realValues3):
-                                avgProf = np.nanmean((newdata['z'],newdata2['z'],newdata3['z']),axis=0)
-                            else:
-                                if any(realValues2):
-                                    avgProf = np.nanmean((newdata['z'], newdata2['z']), axis=0)
-                                elif any(realValues3):
-                                    avgProf = np.nanmean((newdata['z'], newdata3['z']), axis=0)
-                                else:
-                                    avgProf = newdata['z']
-                            alllines = np.vstack((alllines, avgProf))
-                            surveyType = np.append(surveyType,file_params[6])
-                            time = np.append(time,surveydate)
-                            count = count+1
+                        alllines = np.vstack((alllines, newdata['z']))
+                        surveyType = np.append(surveyType,file_params[6])
+                        time = np.append(time,surveydate)
+                        count = count+1
+                    # else:
+                    #     if count == 0:
+                    #         if any(realValues2) & any(realValues3):
+                    #             avgProf = np.nanmean((newdata['z'],newdata2['z'],newdata3['z']),axis=0)
+                    #         else:
+                    #             if any(realValues2):
+                    #                 avgProf = np.nanmean((newdata['z'], newdata2['z']), axis=0)
+                    #             elif any(realValues3):
+                    #                 avgProf = np.nanmean((newdata['z'], newdata3['z']), axis=0)
+                    #             else:
+                    #                 avgProf = newdata['z']
+                    #
+                    #         alllines = avgProf
+                    #         surveyType = file_params[6]
+                    #         time = surveydate
+                    #         count = count+1
+                    #     else:
+                    #         if any(realValues2) & any(realValues3):
+                    #             avgProf = np.nanmean((newdata['z'],newdata2['z'],newdata3['z']),axis=0)
+                    #         else:
+                    #             if any(realValues2):
+                    #                 avgProf = np.nanmean((newdata['z'], newdata2['z']), axis=0)
+                    #             elif any(realValues3):
+                    #                 avgProf = np.nanmean((newdata['z'], newdata3['z']), axis=0)
+                    #             else:
+                    #                 avgProf = newdata['z']
+                    #         alllines = np.vstack((alllines, avgProf))
+                    #         surveyType = np.append(surveyType,file_params[6])
+                    #         time = np.append(time,surveydate)
+                    #         count = count+1
 
                         # fig = plt.figure(figsize=(10,10))
                         # plt.plot(cross,elevs,'.')
@@ -379,7 +391,7 @@ for i in range(len(subset)):
                 #     noOnshoreTime = np.append(noOnshoreTime, surveydate)
                 #     count4 = count4 + 1
         else:
-            print('No data deeper than 555 meters at line {}'.format(i))
+            print('No data deeper than 200 meters at line {}'.format(i))
             print('Most offshore point at {}'.format(np.nanmax(xSubNew)))
             #newdata = interpBathy2(xSubNew, zSubNew, xinterp)
 
@@ -513,8 +525,8 @@ for i in range(len(alllines)):
 
 
 # # Plotting all of the lines
-t1 = 100
-t2 = 112
+t1 = 0
+t2 = -1
 subsetOfAllines = alllines[t1:t2]
 fig, ax = plt.subplots(2,1)
 ax[0].set_prop_cycle(plt.cycler('color', plt.cm.jet(np.linspace(0, 1, len(subsetOfAllines)))))
@@ -529,7 +541,7 @@ ax[0].set_title('Cross-shore profile variability')
 plt.set_cmap('RdBu_r')
 
 tg, xg = np.meshgrid(time, xinterp)
-plt0 = ax[1].pcolor(xg,tg,(alllines-np.mean(alllines, axis=0)).T, vmin=-1.8, vmax=1.8)
+plt0 = ax[1].pcolor(xg,tg,(alllines-np.nanmean(alllines, axis=0)).T, vmin=-1.8, vmax=1.8)
 fig.colorbar(plt0, ax=ax[1], orientation='horizontal')
 ax[1].set_ylim([time[t1], time[t2]])
 ax[1].set_title('Surveys (dev.)')
@@ -567,6 +579,21 @@ with open(morphoPickle,'wb') as f:
     pickle.dump(output, f)
 
 
+plt.style.use('default')
+plt.figure()
+ax = plt.subplot2grid((3,3,),(0,0),rowspan=2,colspan=3)
+ax.plot(xinterp, alllines[0, :], color=[0.7, 0.7, 0.7, 1], linewidth=0.5,label='surveys')
+for xx in range(len(alllines)):
+    ax.plot(xinterp, alllines[xx,:], color=[0.7,0.7,0.7,1],linewidth=0.5)
+ax.plot(xinterp, np.nanmean(alllines,axis=0),'k-',label='mean')
+ax.plot(xinterp, np.nanmean(alllines,axis=0) + np.nanstd(alllines,axis=0),'k--',label='std')
+ax.plot(xinterp, np.nanmean(alllines,axis=0) - np.nanstd(alllines,axis=0),'k--')
+ax.legend()
+ax2 = plt.subplot2grid((3,3,),(2,0),rowspan=1,colspan=3)
+ax2.plot(xinterp, np.nanstd(alllines,axis=0),'k--')
+ax2.set_ylabel('std (m)')
+ax2.set_xlabel('xFRF coords. (m)')
+ax.set_ylabel('Elevation relative to NAVD88 (m)')
 
 # import pickle
 # #dbfile = open('oct22wam1571770800FlowFields_unfiltered.pickle', 'rb')

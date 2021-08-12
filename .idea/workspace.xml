@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="144aeda8-086a-4b59-b43a-e83e36ee8dd3" name="Default Changelist" comment="" />
+    <list default="true" id="144aeda8-086a-4b59-b43a-e83e36ee8dd3" name="Default Changelist" comment="updates prior to Alireza's defense">
+      <change beforePath="$PROJECT_DIR$/README.rst" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

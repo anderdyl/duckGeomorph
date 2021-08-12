@@ -1,66 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="144aeda8-086a-4b59-b43a-e83e36ee8dd3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/rGraphicsSettings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/rSettings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/atlanticInterannualClimate.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/eofAnalysisOfJune2019.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fittingTides.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hypotheticalNourishmentProfiles.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mda.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/nagsHeadDWT.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plottingHypotheticalScenarios.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plottingSurrogatePredictions.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/processingFinalXBeachLibrary.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/processingLibraryOfXbeach.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scarp_data_final2/newscarp_data_500_600.pkl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scarp_data_final2/newscarp_data_600_700.pkl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scarp_data_final2/newscarp_data_700_800.pkl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scarp_data_final2/newscarp_data_800_900.pkl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scarp_data_final2/newscarp_data_900_1000.pkl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scarp_data_final2/scarp_data_0_49_DAversion.pkl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scarp_data_final2/scarp_data_100_149_DAversion.pkl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scarp_data_final2/scarp_data_150_199_DAversion.pkl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scarp_data_final2/scarp_data_200_249_DAversion.pkl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scarp_data_final2/scarp_data_250_299_DAversion.pkl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scarp_data_final2/scarp_data_300_349_DAversion.pkl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scarp_data_final2/scarp_data_350_399_DAversion.pkl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scarp_data_final2/scarp_data_400_449_DAversion.pkl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scarp_data_final2/scarp_data_450_499_DAversion.pkl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scarp_data_final2/scarp_data_50_99_DAversion.pkl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scratchGPR.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testPickleMerge.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testTrajectoryClustering.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/version1AssessCeofModes.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/version1PythonClustering.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/version1RandomForestClassifier.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/version1StudyMapOfFRF.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/version1TransitionProbabilities.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/version2WaveConditionsSeparated.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertsion1ExtractOriginalSanbarProfiles.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertsion2ExtractSandbarProfiles.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/duckGeomorph.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/duckGeomorph.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ceofsNorthernTransect.mat" beforeDir="false" afterPath="$PROJECT_DIR$/ceofsNorthernTransect.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ceofsNorthernTransect.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/ceofsNorthernTransect.pickle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ceofsSouthernTransect.mat" beforeDir="false" afterPath="$PROJECT_DIR$/ceofsSouthernTransect.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ceofsSouthernTransect.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/ceofsSouthernTransect.pickle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/downloadThredds.py" beforeDir="false" afterPath="$PROJECT_DIR$/downloadThredds.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/latestFRFevolution.py" beforeDir="false" afterPath="$PROJECT_DIR$/latestFRFevolution.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matlabsSouthernTransectClusters.mat" beforeDir="false" afterPath="$PROJECT_DIR$/matlabsSouthernTransectClusters.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sandBarTool" beforeDir="false" afterPath="$PROJECT_DIR$/sandBarTool" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sandBarTool/morphLib.py" beforeDir="false" afterPath="$PROJECT_DIR$/sandBarTool/morphLib.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sandbarsSouthernTransect.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/sandbarsSouthernTransect.pickle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testbedutils" beforeDir="false" afterPath="$PROJECT_DIR$/testbedutils" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testbedutils/geoprocess.py" beforeDir="false" afterPath="$PROJECT_DIR$/testbedutils/geoprocess.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testbedutils/gridTools.py" beforeDir="false" afterPath="$PROJECT_DIR$/testbedutils/gridTools.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/version1ClusterKmeans.m" beforeDir="false" afterPath="$PROJECT_DIR$/version1ClusterKmeans.m" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/version1ComplexEOFsProcessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/version1ComplexEOFsProcessing.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/version1ExtractSandbarProfiles.py" beforeDir="false" afterPath="$PROJECT_DIR$/version1ExtractSandbarProfiles.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/version1WaveConditionsSeparated.py" beforeDir="false" afterPath="$PROJECT_DIR$/version1WaveConditionsSeparated.py" afterDir="false" />
-    </list>
+    <list default="true" id="144aeda8-086a-4b59-b43a-e83e36ee8dd3" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1044,6 +985,14 @@
       <option name="presentableId" value="Default" />
       <updated>1569512506298</updated>
     </task>
+    <task id="LOCAL-00001" summary="updates prior to Alireza's defense">
+      <created>1628791298826</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1628791298826</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -1057,5 +1006,9 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="updates prior to Alireza's defense" />
+    <option name="LAST_COMMIT_MESSAGE" value="updates prior to Alireza's defense" />
   </component>
 </project>

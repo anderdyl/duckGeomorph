@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="144aeda8-086a-4b59-b43a-e83e36ee8dd3" name="Default Changelist" comment="updates prior to Alireza's defense">
-      <change beforePath="$PROJECT_DIR$/README.rst" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/downloadFromThreddsExample.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stormClimate.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hypotheticalBeachProfiles.py" beforeDir="false" afterPath="$PROJECT_DIR$/hypotheticalBeachProfiles.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hypotheticalNourishmentProfiles.py" beforeDir="false" afterPath="$PROJECT_DIR$/hypotheticalNourishmentProfiles.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plottingSurrogatePredictions.py" beforeDir="false" afterPath="$PROJECT_DIR$/plottingSurrogatePredictions.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,19 +40,19 @@
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/stormClimate.py" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PythonContentEntriesConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/scarp_data_final2" />
       <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/scarp_data_final2" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/testPickles" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.processingPowerFits">
+  <component name="RunManager" selected="Python.stormClimate">
     <configuration name="WISscratch" type="PythonConfigurationType" factoryName="Python">
       <module name="duckGeomorph" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -430,9 +435,6 @@
       <module name="duckGeomorph" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="$USER_HOME$/anaconda3/bin/python3" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
@@ -493,9 +495,6 @@
       <module name="duckGeomorph" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="$USER_HOME$/anaconda3/bin/python3" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
@@ -783,6 +782,24 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="stormClimate" type="PythonConfigurationType" factoryName="Python">
+      <module name="duckGeomorph" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="$USER_HOME$/anaconda3/bin/python3" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/stormClimate.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="studyMap" type="PythonConfigurationType" factoryName="Python">
       <module name="duckGeomorph" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -953,6 +970,7 @@
       <item itemvalue="Python.hypotheticalProfiles" />
       <item itemvalue="Python.latestFRF" />
       <item itemvalue="Python.nagsHeadDWT" />
+      <item itemvalue="Python.stormClimate" />
       <item itemvalue="Python.nourished_scratch" />
       <item itemvalue="Python.openDAPaccessXarray" />
       <item itemvalue="Python.originalTransects" />

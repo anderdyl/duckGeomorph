@@ -633,6 +633,10 @@ ax2b.set_xlabel('Surveys')
 ax2b.set_ylabel('PCs')
 ax2b.set_title('Dunes have grown following the initial nourishment')
 
+
+
+
+asdfg
 # ax3 = plt.subplot2grid((3,3),(2,0),rowspan=1,colspan=3)
 # ax3.plot(x,EOFs[2,:])
 # ax3.set_title('EOF 3')

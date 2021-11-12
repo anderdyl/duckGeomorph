@@ -10,31 +10,35 @@ import scipy.integrate as integrate
 from shapely.geometry import Polygon
 
 
-geomorphdir = '/home/dylananderson/projects/duckGeomorph/scarp_data_full_DAversion/'
-files = os.listdir(geomorphdir)
-files.sort()
-files_path = [os.path.abspath(geomorphdir) for x in os.listdir(geomorphdir)]
-
-
-for i in range(25):
-    dbfile = open(os.path.join(files_path[i+3], files[i+3]), 'rb')
-    scarpPointsTemp = pickle.load(dbfile)
-    dbfile.close()
-    if i == 0:
-        scarpPointsMid = scarpPointsTemp[:,:]
-    else:
-        scarpPointsMid = np.vstack((scarpPointsMid, scarpPointsTemp[:,:]))
-
-scarpPointsMid = scarpPointsMid[:,0,:]
-
-
+# geomorphdir = '/home/dylananderson/projects/duckGeomorph/scarp_data_full_DAversion/'
+# files = os.listdir(geomorphdir)
+# files.sort()
+# files_path = [os.path.abspath(geomorphdir) for x in os.listdir(geomorphdir)]
+#
+#
+# for i in range(25):
+#     dbfile = open(os.path.join(files_path[i+3], files[i+3]), 'rb')
+#     scarpPointsTemp = pickle.load(dbfile)
+#     dbfile.close()
+#     if i == 0:
+#         scarpPointsMid = scarpPointsTemp[:,:]
+#     else:
+#         scarpPointsMid = np.vstack((scarpPointsMid, scarpPointsTemp[:,:]))
 
 import pickle
-fitPickle = 'scarpFits.pickle'
-scarpFits = {}
-scarpFits['fits'] = scarpPointsMid
-with open(fitPickle,'wb') as f:
-    pickle.dump(scarpFits, f)
+with open(r'/home/dylananderson/projects/duckGeomorph/scarpFits.pickle', "rb") as input_file:
+    outputMidPoints = pickle.load(input_file)
+
+scarpPointsMid = outputMidPoints['fits']
+
+
+#
+#
+# fitPickle = 'scarpFits.pickle'
+# scarpFits = {}
+# scarpFits['fits'] = scarpPointsMid
+# with open(fitPickle,'wb') as f:
+#     pickle.dump(scarpFits, f)
 
 
 with open(r'/home/dylananderson/projects/duckGeomorph/scarp_data_full_DAversion/newcase_profiles_0000_0500_revised.pkl', "rb") as input_file:

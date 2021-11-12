@@ -49,6 +49,7 @@ dbfile.close()
 rawX = np.empty((1,307))
 rawZ = np.empty((1,307))
 
+allProfNumbers = []
 allNumbers = []
 counter = 1
 for xx in profileData:
@@ -61,14 +62,18 @@ for xx in profileData:
             rawZ = np.vstack((rawZ,profileData[xx]))
             surveyNum = counter*np.ones((1,len(profileData[xx])))
             allNumbers.append(surveyNum)
+            profileNumbers = np.arange(0,1600)
+            allProfNumbers.append(profileNumbers)
             counter = counter + 1
 
 
 for xx in range(len(allNumbers)):
     if xx == 0:
         numberSurvs = allNumbers[xx]
+        numberProfs = allProfNumbers[xx]
     else:
         numberSurvs = np.hstack((numberSurvs,allNumbers[xx]))
+        numberProfs = np.hstack((numberProfs,allProfNumbers[xx]))
 
 
 rawZ = rawZ[1:,:]
@@ -87,6 +92,7 @@ newX = np.arange(0,1199,1)
 # plt.figure(figsize=(10,10))
 allZs = []
 allNums = []
+allProfNums = []
 for xx in range(len(rawZ)):
     tempXSurvey = rawX
     tempZSurvey = rawZ[xx,:]
@@ -94,6 +100,7 @@ for xx in range(len(rawZ)):
     if len(indexN[0]) > 0:
         tempZSurvey[indexN[0]] = 1.5*np.ones((np.shape(indexN[0])))
     tempNumber = numberSurvs[0][xx]
+    tempProfNumber = numberProfs[xx]
     f2 = interp1d(tempXSurvey, tempZSurvey, kind='linear')
     #if xx == 0:
     zInterpOG = f2(newX)
@@ -139,6 +146,7 @@ for xx in range(len(rawZ)):
 
             allZs.append(zAligned)
             allNums.append(tempNumber)
+            allProfNums.append(tempProfNumber)
 
 
     # to get the front of the dune
@@ -273,12 +281,14 @@ for xx in range(len(allZs)):
         # if xx == 0:
         zDownscaled = f2(x)
         numberS = allNums[xx]
+        numberP = allProfNums[xx]
     else:
         z = allZs[xx]
         f2 = interp1d(newX[0:len(z)], z, kind='linear')
         z2 = f2(x)
         zDownscaled = np.vstack((zDownscaled,z2))
         numberS = np.hstack((numberS,allNums[xx]))
+        numberP = np.hstack((numberP,allProfNums[xx]))
 
 
 
@@ -459,7 +469,7 @@ ax2.plot([0, (x2-x1).days],[0,0],'-',color=[0.5,0.5,0.5],linewidth=0.5)
 ax2.set_xlabel('Surveys')
 ax2.set_ylabel('PCs')
 plt.tight_layout()
-# plt.savefig('EOF1NagsHead.png')
+# plt.savefig('EOF1NagsHead.png')![](EOF6NagsHead.png)
 # plt.close()
 
 import pickle
@@ -470,10 +480,35 @@ plottingEOF1['EOFs'] = EOFs
 plottingEOF1['PCs'] = PCs
 plottingEOF1['uniqueNumbers'] = uniqueNumbers
 plottingEOF1['numberS'] = numberS
+plottingEOF1['numberP'] = numberP
 plottingEOF1['dates'] = dates
 
 with open(eofPickle,'wb') as f:
     pickle.dump(plottingEOF1, f)
+
+
+def datetime2datevec(dtime):
+    'Return matlab date vector from datetimes'
+    return [dtime.year, dtime.month, dtime.day]
+
+mdateVec = [datetime2datevec(x) for x in dates]
+
+nourPCA = dict()
+nourPCA['x'] = x
+nourPCA['EOFs'] = EOFs
+nourPCA['PCs'] = PCs
+nourPCA['pcs1'] = pcs1
+nourPCA['pcs2'] = pcs2
+
+nourPCA['uniqueNumbers'] = uniqueNumbers
+nourPCA['numberS'] = numberS
+nourPCA['numberP'] = numberP
+
+nourPCA['mdateVec'] = mdateVec
+
+import scipy.io
+scipy.io.savemat('nourishmentPCA.mat',nourPCA)
+
 
 
 asdfg
@@ -817,7 +852,58 @@ plt.show()
 
 
 
-#
+dataPred = scipy.io.loadmat('repProfiles.mat')
+repProfiles = dataPred['repProfiles']
+
+pro1 = meanZ + EOFs[0,:]*repProfiles[0,0] + EOFs[1,:]*repProfiles[1,0] + EOFs[2,:]*repProfiles[2,0] + EOFs[3,:]*repProfiles[3,0] + EOFs[4,:]*repProfiles[4,0]+ EOFs[5,:]*repProfiles[5,0]+ EOFs[6,:]*repProfiles[6,0]+ EOFs[7,:]*repProfiles[7,0]+ EOFs[8,:]*repProfiles[8,0]
+pro2 = meanZ + EOFs[0,:]*repProfiles[0,1] + EOFs[1,:]*repProfiles[1,0] + EOFs[2,:]*repProfiles[2,0] + EOFs[3,:]*repProfiles[3,0] + EOFs[4,:]*repProfiles[4,0]+ EOFs[5,:]*repProfiles[5,0]+ EOFs[6,:]*repProfiles[6,0]+ EOFs[7,:]*repProfiles[7,0]+ EOFs[8,:]*repProfiles[8,0]
+pro3 = meanZ + EOFs[0,:]*repProfiles[0,2] + EOFs[1,:]*repProfiles[1,0] + EOFs[2,:]*repProfiles[2,0] + EOFs[3,:]*repProfiles[3,0] + EOFs[4,:]*repProfiles[4,0]+ EOFs[5,:]*repProfiles[5,0]+ EOFs[6,:]*repProfiles[6,0]+ EOFs[7,:]*repProfiles[7,0]+ EOFs[8,:]*repProfiles[8,0]
+pro4 = meanZ + EOFs[0,:]*repProfiles[0,3] + EOFs[1,:]*repProfiles[1,0] + EOFs[2,:]*repProfiles[2,0] + EOFs[3,:]*repProfiles[3,0] + EOFs[4,:]*repProfiles[4,0]+ EOFs[5,:]*repProfiles[5,0]+ EOFs[6,:]*repProfiles[6,0]+ EOFs[7,:]*repProfiles[7,0]+ EOFs[8,:]*repProfiles[8,0]
+pro5 = meanZ + EOFs[0,:]*repProfiles[0,4] + EOFs[1,:]*repProfiles[1,0] + EOFs[2,:]*repProfiles[2,0] + EOFs[3,:]*repProfiles[3,0] + EOFs[4,:]*repProfiles[4,0]+ EOFs[5,:]*repProfiles[5,0]+ EOFs[6,:]*repProfiles[6,0]+ EOFs[7,:]*repProfiles[7,0]+ EOFs[8,:]*repProfiles[8,0]
+pro6 = meanZ + EOFs[0,:]*repProfiles[0,5] + EOFs[1,:]*repProfiles[1,0] + EOFs[2,:]*repProfiles[2,0] + EOFs[3,:]*repProfiles[3,0] + EOFs[4,:]*repProfiles[4,0]+ EOFs[5,:]*repProfiles[5,0]+ EOFs[6,:]*repProfiles[6,0]+ EOFs[7,:]*repProfiles[7,0]+ EOFs[8,:]*repProfiles[8,0]
+pro7 = meanZ + EOFs[0,:]*repProfiles[0,6] + EOFs[1,:]*repProfiles[1,0] + EOFs[2,:]*repProfiles[2,0] + EOFs[3,:]*repProfiles[3,0] + EOFs[4,:]*repProfiles[4,0]+ EOFs[5,:]*repProfiles[5,0]+ EOFs[6,:]*repProfiles[6,0]+ EOFs[7,:]*repProfiles[7,0]+ EOFs[8,:]*repProfiles[8,0]
+pro8 = meanZ + EOFs[0,:]*repProfiles[0,7] + EOFs[1,:]*repProfiles[1,0] + EOFs[2,:]*repProfiles[2,0] + EOFs[3,:]*repProfiles[3,0] + EOFs[4,:]*repProfiles[4,0]+ EOFs[5,:]*repProfiles[5,0]+ EOFs[6,:]*repProfiles[6,0]+ EOFs[7,:]*repProfiles[7,0]+ EOFs[8,:]*repProfiles[8,0]
+
+pro9 = meanZ + EOFs[0,:]*repProfiles[0,8] + EOFs[1,:]*repProfiles[1,0] + EOFs[2,:]*repProfiles[2,0] + EOFs[3,:]*repProfiles[3,0] + EOFs[4,:]*repProfiles[4,0]+ EOFs[5,:]*repProfiles[5,0]+ EOFs[6,:]*repProfiles[6,0]+ EOFs[7,:]*repProfiles[7,0]+ EOFs[8,:]*repProfiles[8,0]
+pro10 = meanZ + EOFs[0,:]*repProfiles[0,9] + EOFs[1,:]*repProfiles[1,0] + EOFs[2,:]*repProfiles[2,0] + EOFs[3,:]*repProfiles[3,0] + EOFs[4,:]*repProfiles[4,0]+ EOFs[5,:]*repProfiles[5,0]+ EOFs[6,:]*repProfiles[6,0]+ EOFs[7,:]*repProfiles[7,0]+ EOFs[8,:]*repProfiles[8,0]
+pro11 = meanZ + EOFs[0,:]*repProfiles[0,10] + EOFs[1,:]*repProfiles[1,0] + EOFs[2,:]*repProfiles[2,0] + EOFs[3,:]*repProfiles[3,0] + EOFs[4,:]*repProfiles[4,0]+ EOFs[5,:]*repProfiles[5,0]+ EOFs[6,:]*repProfiles[6,0]+ EOFs[7,:]*repProfiles[7,0]+ EOFs[8,:]*repProfiles[8,0]
+pro12 = meanZ + EOFs[0,:]*repProfiles[0,11] + EOFs[1,:]*repProfiles[1,0] + EOFs[2,:]*repProfiles[2,0] + EOFs[3,:]*repProfiles[3,0] + EOFs[4,:]*repProfiles[4,0]+ EOFs[5,:]*repProfiles[5,0]+ EOFs[6,:]*repProfiles[6,0]+ EOFs[7,:]*repProfiles[7,0]+ EOFs[8,:]*repProfiles[8,0]
+pro13 = meanZ + EOFs[0,:]*repProfiles[0,12] + EOFs[1,:]*repProfiles[1,0] + EOFs[2,:]*repProfiles[2,0] + EOFs[3,:]*repProfiles[3,0] + EOFs[4,:]*repProfiles[4,0]+ EOFs[5,:]*repProfiles[5,0]+ EOFs[6,:]*repProfiles[6,0]+ EOFs[7,:]*repProfiles[7,0]+ EOFs[8,:]*repProfiles[8,0]
+pro14 = meanZ + EOFs[0,:]*repProfiles[0,13] + EOFs[1,:]*repProfiles[1,0] + EOFs[2,:]*repProfiles[2,0] + EOFs[3,:]*repProfiles[3,0] + EOFs[4,:]*repProfiles[4,0]+ EOFs[5,:]*repProfiles[5,0]+ EOFs[6,:]*repProfiles[6,0]+ EOFs[7,:]*repProfiles[7,0]+ EOFs[8,:]*repProfiles[8,0]
+pro15 = meanZ + EOFs[0,:]*repProfiles[0,14] + EOFs[1,:]*repProfiles[1,0] + EOFs[2,:]*repProfiles[2,0] + EOFs[3,:]*repProfiles[3,0] + EOFs[4,:]*repProfiles[4,0]+ EOFs[5,:]*repProfiles[5,0]+ EOFs[6,:]*repProfiles[6,0]+ EOFs[7,:]*repProfiles[7,0]+ EOFs[8,:]*repProfiles[8,0]
+
+# pro1 = meanZ + EOFs[0,:]*repProfiles[0,0] + EOFs[1,:]*repProfiles[1,0] + EOFs[2,:]*repProfiles[2,0] + EOFs[3,:]*repProfiles[3,0] + EOFs[4,:]*repProfiles[4,0]+ EOFs[5,:]*repProfiles[5,0]+ EOFs[6,:]*repProfiles[6,0]+ EOFs[7,:]*repProfiles[7,0]+ EOFs[8,:]*repProfiles[8,0]
+# pro2 = meanZ + EOFs[0,:]*repProfiles[0,1] + EOFs[1,:]*repProfiles[1,1] + EOFs[2,:]*repProfiles[2,1] + EOFs[3,:]*repProfiles[3,1] + EOFs[4,:]*repProfiles[4,1]+ EOFs[5,:]*repProfiles[5,1]+ EOFs[6,:]*repProfiles[6,1]+ EOFs[7,:]*repProfiles[7,1]+ EOFs[8,:]*repProfiles[8,1]
+# pro3 = meanZ + EOFs[0,:]*repProfiles[0,2] + EOFs[1,:]*repProfiles[1,2] + EOFs[2,:]*repProfiles[2,2] + EOFs[3,:]*repProfiles[3,2] + EOFs[4,:]*repProfiles[4,2]+ EOFs[5,:]*repProfiles[5,2]+ EOFs[6,:]*repProfiles[6,2]+ EOFs[7,:]*repProfiles[7,2]+ EOFs[8,:]*repProfiles[8,2]
+# pro4 = meanZ + EOFs[0,:]*repProfiles[0,3] + EOFs[1,:]*repProfiles[1,3] + EOFs[2,:]*repProfiles[2,3] + EOFs[3,:]*repProfiles[3,3] + EOFs[4,:]*repProfiles[4,3]+ EOFs[5,:]*repProfiles[5,3]+ EOFs[6,:]*repProfiles[6,3]+ EOFs[7,:]*repProfiles[7,3]+ EOFs[8,:]*repProfiles[8,3]
+# pro5 = meanZ + EOFs[0,:]*repProfiles[0,4] + EOFs[1,:]*repProfiles[1,4] + EOFs[2,:]*repProfiles[2,4] + EOFs[3,:]*repProfiles[3,4] + EOFs[4,:]*repProfiles[4,4]+ EOFs[5,:]*repProfiles[5,4]+ EOFs[6,:]*repProfiles[6,4]+ EOFs[7,:]*repProfiles[7,4]+ EOFs[8,:]*repProfiles[8,4]
+# pro6 = meanZ + EOFs[0,:]*repProfiles[0,5] + EOFs[1,:]*repProfiles[1,5] + EOFs[2,:]*repProfiles[2,5] + EOFs[3,:]*repProfiles[3,5] + EOFs[4,:]*repProfiles[4,5]+ EOFs[5,:]*repProfiles[5,5]+ EOFs[6,:]*repProfiles[6,5]+ EOFs[7,:]*repProfiles[7,5]+ EOFs[8,:]*repProfiles[8,5]
+# pro7 = meanZ + EOFs[0,:]*repProfiles[0,6] + EOFs[1,:]*repProfiles[1,6] + EOFs[2,:]*repProfiles[2,6] + EOFs[3,:]*repProfiles[3,6] + EOFs[4,:]*repProfiles[4,6]+ EOFs[5,:]*repProfiles[5,6]+ EOFs[6,:]*repProfiles[6,6]+ EOFs[7,:]*repProfiles[7,6]+ EOFs[8,:]*repProfiles[8,6]
+# pro8 = meanZ + EOFs[0,:]*repProfiles[0,7] + EOFs[1,:]*repProfiles[1,7] + EOFs[2,:]*repProfiles[2,7] + EOFs[3,:]*repProfiles[3,7] + EOFs[4,:]*repProfiles[4,7]+ EOFs[5,:]*repProfiles[5,7]+ EOFs[6,:]*repProfiles[6,7]+ EOFs[7,:]*repProfiles[7,7]+ EOFs[8,:]*repProfiles[8,7]
+
+import matplotlib.cm as cm
+etcolors = cm.viridis(np.linspace(0, 1, 15))
+
+plt.figure()
+plt.plot(x,pro1,'k-',linewidth=2,label=dates[0])
+plt.plot(x,pro2,label=dates[1],color=etcolors[0])
+plt.plot(x,pro3,label=dates[2],color=etcolors[1])
+plt.plot(x,pro4,label=dates[3],color=etcolors[2])
+plt.plot(x,pro5,label=dates[4],color=etcolors[3])
+plt.plot(x,pro6,label=dates[5],color=etcolors[4])
+plt.plot(x,pro7,label=dates[6],color=etcolors[5])
+plt.plot(x,pro8,label=dates[7],color=etcolors[6])
+plt.plot(x,pro9,label=dates[8],color=etcolors[7])
+plt.plot(x,pro10,label=dates[9],color=etcolors[8])
+plt.plot(x,pro11,label=dates[10],color=etcolors[9])
+plt.plot(x,pro12,label=dates[11],color=etcolors[10])
+plt.plot(x,pro13,label=dates[12],color=etcolors[11])
+plt.plot(x,pro14,label=dates[13],color=etcolors[12])
+plt.plot(x,pro15,label=dates[14],color=etcolors[13])
+
+plt.legend()
+
+
 # num = 5100
 # prof7 = meanZ + EOFs[0,:]*PCs[num,0] + EOFs[1,:]*PCs[num,1] + EOFs[2,:]*PCs[num,2] + EOFs[3,:]*PCs[num,3] + EOFs[4,:]*PCs[num,4]+ EOFs[5,:]*PCs[num,5]+ EOFs[6,:]*PCs[num,6]
 # prof7l = meanZ + EOFs[0,:]*PCs[num-15,0] + EOFs[1,:]*PCs[num,1] + EOFs[2,:]*PCs[num,2] + EOFs[3,:]*PCs[num,3] + EOFs[4,:]*PCs[num,4]+ EOFs[5,:]*PCs[num,5]+ EOFs[6,:]*PCs[num,6]

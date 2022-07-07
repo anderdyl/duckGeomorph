@@ -165,22 +165,15 @@ def findSandBarAndTrough1D(xFRF, profile, plotFname=None, **kwargs):
         return None, None
 
 
-# dbfile = open('sandbarsSouthernTransect_referencedMHHW_5lineAvg.pickle', 'rb')
-# # dbfile = open('sandbarsSouthernTransect_referencedMHHW_5lineAvgLonger.pickle', 'rb')
-# data = pickle.load(dbfile)
-# dbfile.close()
-# alllines = data['alllines']
-# xinterp = data['xinterp']
-# time = data['time']
+
 dbfile = open('sandbarsSouthernTransect_referencedMHHW_5lineAvg.pickle', 'rb')
 data = pickle.load(dbfile)
 dbfile.close()
-alllines = data['alllines'][0:-2,:]
-xinterp = data['xinterp']
-time = data['time'][0:-2]
+# alllines = data['alllines']
+# xinterp = data['xinterp']
+# time = data['time']
 
-# dbfile2 = open('ceofsSouthernTransectLatestLonger.pickle', 'rb')
-#
+
 dbfile2 = open('ceofsSouthernTransectLatest.pickle', 'rb')
 data2 = pickle.load(dbfile2)
 dbfile2.close()
@@ -198,36 +191,42 @@ totalVS = data2['totalV']
 lambaS = data2['lamda']
 percentVS = data2['percentV']
 
-# dbfile3 = open('ceofsNorthernTransectLonger.pickle', 'rb')
-# data3 = pickle.load(dbfile3)
-# dbfile3.close()
-#
-# timeN = data3['time']
-# alllinesN = data3['alllines']
-# xinterpN = data3['xinterp']
-# SN = data3['S']
-# RN = data3['Rt']
-# thetaN = data3['thetaRadians']
-# theta2N = data3['thetaDegrees']
-# phitN = data3['phiRadian']
-# phit2N = data3['phiDegrees']
-# totalVN = data3['totalV']
-# lambaN = data3['lamda']
-# percentVN = data3['percentV']
+dbfile3 = open('ceofsNorthernTransect.pickle', 'rb')
+data3 = pickle.load(dbfile3)
+dbfile3.close()
 
-# dbfile = open('sandbarsSouthernTransect_referencedMHHW_5lineAvgLonger.pickle', 'rb')
-#
+timeN = data3['time']
+alllinesN = data3['alllines']
+xinterpN = data3['xinterp']
+SN = data3['S']
+RN = data3['Rt']
+thetaN = data3['thetaRadians']
+theta2N = data3['thetaDegrees']
+phitN = data3['phiRadian']
+phit2N = data3['phiDegrees']
+totalVN = data3['totalV']
+lambaN = data3['lamda']
+percentVN = data3['percentV']
 
 
+dbfile = open('sandbarsSouthernTransect_referencedMHHW_5lineAvg.pickle', 'rb')
+data = pickle.load(dbfile)
+dbfile.close()
+alllines = data['alllines']
+xinterp = data['xinterp']
+time = data['time']
 
-# dbfile2 = open('moveInfoOver.pickle', 'rb')
-# data2 = pickle.load(dbfile2)
-# dbfile2.close()
-# colorsC = data2['colors']
-# flatarrayC = data2['flatarray']
-# orderAngleC = data2['orderAngle']
-# orderAngle2C = data2['orderAngle2']
-# orderC = data2['order']
+
+
+dbfile2 = open('moveInfoOver.pickle', 'rb')
+data2 = pickle.load(dbfile2)
+dbfile2.close()
+
+colorsC = data2['colors']
+flatarrayC = data2['flatarray']
+orderAngleC = data2['orderAngle']
+orderAngle2C = data2['orderAngle2']
+orderC = data2['order']
 
 # for ii in range(len(alllinesS)):
 #
@@ -852,298 +851,240 @@ plt.show()
 # _ = ax.set_ylim(-50, 50)
 
 
-#
-#
-# fig10 = plt.figure(figsize=(10,10))
-# thetaMode1 = -90*np.pi/180
-# # eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
+
+
+fig10 = plt.figure(figsize=(10,10))
+thetaMode1 = -90*np.pi/180
+# eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
+eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1 - thetaS[:,0])
+thetaMode2 = np.arange(0,180,10)
+ax1 = plt.subplot2grid((1,2),(0,0),rowspan=1,colspan=1)
+import matplotlib.cm as cm
+colors = cm.rainbow(np.linspace(0, 1, len(thetaMode2)))
+for ii in range(len(thetaMode2)):
+   eofPred2 = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
+   combined = np.mean(alllinesS,axis=0)+eofPred+eofPred2
+   ax1.plot(xinterp,combined,color=colors[ii,:])
+
+thetaMode1 = 90*np.pi/180
+# eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
+eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1 - thetaS[:,0])
+thetaMode2 = np.arange(0,180,10)
+ax2 = plt.subplot2grid((1,2),(0,1),rowspan=1,colspan=1)
+import matplotlib.cm as cm
+colors = cm.rainbow(np.linspace(0, 1, len(thetaMode2)))
+for ii in range(len(thetaMode2)):
+   eofPred2 = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
+   combined = np.mean(alllinesS,axis=0)+eofPred+eofPred2
+   ax2.plot(xinterp,combined,color=colors[ii,:])
+
+# ax1.plot(xinterp,np.mean(alllinesS,axis=0)+eofPred)
+
+
+
+fig10 = plt.figure(figsize=(10,10))
+thetaMode2 = -90*np.pi/180
+# eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
 # eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1 - thetaS[:,0])
-# thetaMode2 = np.arange(0,180,10)
-# ax1 = plt.subplot2grid((1,2),(0,0),rowspan=1,colspan=1)
-# import matplotlib.cm as cm
-# colors = cm.rainbow(np.linspace(0, 1, len(thetaMode2)))
-# for ii in range(len(thetaMode2)):
-#    eofPred2 = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
-#    combined = np.mean(alllinesS,axis=0)+eofPred+eofPred2
-#    ax1.plot(xinterp,combined,color=colors[ii,:])
-#
-# thetaMode1 = 90*np.pi/180
-# # eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
+eofPred = SS[:,1]*np.nanmean(RS[:,1]) * np.cos(thetaMode2 - thetaS[:,1])
+
+thetaMode1 = np.arange(0,180,10)
+ax1 = plt.subplot2grid((1,2),(0,0),rowspan=1,colspan=1)
+import matplotlib.cm as cm
+colors = cm.rainbow(np.linspace(0, 1, len(thetaMode1)))
+for ii in range(len(thetaMode1)):
+   # = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
+   eofPred = SS[:,0] * np.nanmean(RS[:, 0]) * np.cos(thetaMode1[ii]*np.pi/180 - thetaS[:, 0])
+
+   combined = np.mean(alllinesS,axis=0)+eofPred+eofPred2
+   ax1.plot(xinterp,combined,color=colors[ii,:])
+
+
+
+
+
+
+
+
+fig10 = plt.figure(figsize=(15,10))
+
+thetaMode2 = 150
+# eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
 # eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1 - thetaS[:,0])
-# thetaMode2 = np.arange(0,180,10)
-# ax2 = plt.subplot2grid((1,2),(0,1),rowspan=1,colspan=1)
-# import matplotlib.cm as cm
-# colors = cm.rainbow(np.linspace(0, 1, len(thetaMode2)))
-# for ii in range(len(thetaMode2)):
-#    eofPred2 = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
-#    combined = np.mean(alllinesS,axis=0)+eofPred+eofPred2
-#    ax2.plot(xinterp,combined,color=colors[ii,:])
-#
-# # ax1.plot(xinterp,np.mean(alllinesS,axis=0)+eofPred)
+eofPred2 = SS[:,1]*np.nanmean(RS[:,1]) * np.cos(thetaMode2*np.pi/180 - thetaS[:,1])
+
+thetaMode1 = np.arange(90,280,20)
+ax1c = plt.subplot2grid((2,3),(0,0),rowspan=1,colspan=1)
+import matplotlib.cm as cm
+colors = cm.rainbow(np.linspace(0, 1, len(thetaMode1)))
+for ii in range(len(thetaMode1)):
+   # = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
+   eofPred = SS[:,0] * np.nanmean(RS[:, 0]) * np.cos(thetaMode1[ii]*np.pi/180 - thetaS[:, 0])
+
+   combined = np.mean(alllinesS,axis=0)+eofPred+eofPred2
+   ax1c.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_1$ = {}'.format(thetaMode1[ii]))
+
+ax1c.legend()
+ax1c.set_title(r'Stationary $\phi_2$ = {} + Propagating Offshore Signal'.format(thetaMode2))
+
+thetaMode2 = 0
+# eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
+# eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1 - thetaS[:,0])
+eofPred2 = SS[:,1]*np.nanmean(RS[:,1]) * np.cos(thetaMode2*np.pi/180 - thetaS[:,1])
+
+thetaMode1 = np.arange(-90,100,20)
+ax1 = plt.subplot2grid((2,3),(0,1),rowspan=1,colspan=1)
+import matplotlib.cm as cm
+colors = cm.rainbow(np.linspace(0, 1, len(thetaMode1)))
+for ii in range(len(thetaMode1)):
+   # = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
+   eofPred = SS[:,0] * np.nanmean(RS[:, 0]) * np.cos(thetaMode1[ii]*np.pi/180 - thetaS[:, 0])
+
+   combined = np.mean(alllinesS,axis=0)+eofPred+eofPred2
+   ax1.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_1$ = {}'.format(thetaMode1[ii]))
+
+ax1.legend()
+ax1.set_title(r'Stationary $\phi_2$ = {} + Propagating Offshore Signal'.format(thetaMode2))
 
 
-#
-# fig10 = plt.figure(figsize=(10,10))
-# thetaMode2 = -90*np.pi/180
-# # eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
-# # eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1 - thetaS[:,0])
-# eofPred = SS[:,1]*np.nanmean(RS[:,1]) * np.cos(thetaMode2 - thetaS[:,1])
-#
-# thetaMode1 = np.arange(0,180,10)+180
-# ax1 = plt.subplot2grid((1,2),(0,0),rowspan=1,colspan=1)
-# import matplotlib.cm as cm
-# colors = cm.rainbow(np.linspace(0, 1, len(thetaMode1)))
-# for ii in range(len(thetaMode1)):
-#    # = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
-#    eofPred = SS[:,0] * np.nanmean(RS[:, 0]) * np.cos(thetaMode1[ii]*np.pi/180 - thetaS[:, 0])
-#
-#    combined = np.mean(alllinesS,axis=0)+eofPred+eofPred2
-#    ax1.plot(xinterp,combined,color=colors[ii,:])
+thetaMode2 = 180
+# eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
+# eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1 - thetaS[:,0])
+eofPred2 = SS[:,1]*np.nanmean(RS[:,1]) * np.cos(thetaMode2*np.pi/180 - thetaS[:,1])
+
+thetaMode1 = np.arange(-90,100,20)
+ax1d = plt.subplot2grid((2,3),(0,2),rowspan=1,colspan=1)
+import matplotlib.cm as cm
+colors = cm.rainbow(np.linspace(0, 1, len(thetaMode1)))
+for ii in range(len(thetaMode1)):
+   # = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
+   eofPred = SS[:,0] * np.nanmean(RS[:, 0]) * np.cos(thetaMode1[ii]*np.pi/180 - thetaS[:, 0])
+
+   combined = np.mean(alllinesS,axis=0)+eofPred+eofPred2
+   ax1d.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_1$ = {}'.format(thetaMode1[ii]))
+
+ax1d.legend()
+ax1d.set_title(r'Stationary $\phi_2$ = {} + Propagating Offshore Signal'.format(thetaMode2))
+
+
+thetaMode1 = -90
+# eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
+eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1*np.pi/180 - thetaS[:,0])
+thetaMode2 = np.arange(0,190,20)
+ax1b = plt.subplot2grid((2,3),(1,0),rowspan=1,colspan=1)
+import matplotlib.cm as cm
+colors = cm.rainbow(np.linspace(0, 1, len(thetaMode2)))
+for ii in range(len(thetaMode2)):
+   eofPred2 = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
+   combined = np.mean(alllinesS,axis=0)+eofPred+eofPred2
+   ax1b.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_2$ = {}'.format(thetaMode2[ii]))
+ax1b.legend()
+ax1b.set_title(r'Stationary $\phi_1$ = {} + Propagating Onshore Signal'.format(thetaMode1))
+
+thetaMode1 = 75
+# eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
+eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1*np.pi/180 - thetaS[:,0])
+thetaMode2 = np.arange(-100,50,20)
+ax2 = plt.subplot2grid((2,3),(1,1),rowspan=1,colspan=1)
+import matplotlib.cm as cm
+colors = cm.rainbow(np.linspace(0, 1, len(thetaMode2)))
+for ii in range(len(thetaMode2)):
+   eofPred2 = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
+   combined = np.mean(alllinesS,axis=0)+eofPred+eofPred2
+   ax2.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_2$ = {}'.format(thetaMode2[ii]))
+ax2.legend()
+ax2.set_title(r'Stationary $\phi_1$ = {} + Propagating Onshore Signal'.format(thetaMode1))
+
+thetaMode1 = -10
+# eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
+eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1*np.pi/180 - thetaS[:,0])
+thetaMode2 = np.arange(-70,50,10)
+ax2c = plt.subplot2grid((2,3),(1,2),rowspan=1,colspan=1)
+import matplotlib.cm as cm
+colors = cm.rainbow(np.linspace(0, 1, len(thetaMode2)))
+for ii in range(len(thetaMode2)):
+   eofPred2 = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
+   combined = np.mean(alllinesS,axis=0)+eofPred+eofPred2
+   ax2c.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_2$ = {}'.format(thetaMode2[ii]))
+ax2c.legend()
+ax2c.set_title(r'Stationary $\phi_1$ = {} + Propagating Onshore Signal'.format(thetaMode1))
+
+plt.show()
 
 
 
+fig10 = plt.figure(figsize=(15,10))
 
-#
-#
-# fig10 = plt.figure(figsize=(15,10))
-#
-# thetaMode2 = 150
+
+thetaMode2 =5
+# eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
+# eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1 - thetaS[:,0])
+eofPred2 = SS[:,1]*np.nanmean(RS[:,1]) * np.cos(thetaMode2*np.pi/180 - thetaS[:,1])
+
+thetaMode1 = np.arange(-110,30,10)
+ax1c = plt.subplot2grid((2,3),(0,0),rowspan=1,colspan=1)
+import matplotlib.cm as cm
+colors = cm.rainbow(np.linspace(0, 1, len(thetaMode1)))
+for ii in range(len(thetaMode1)):
+   # = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
+   eofPred = SS[:,0] * np.nanmean(RS[:, 0]) * np.cos(thetaMode1[ii]*np.pi/180 - thetaS[:, 0])
+
+   combined = np.mean(alllinesS,axis=0)+eofPred+eofPred2
+   ax1c.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_1$ = {}'.format(thetaMode1[ii]))
+
+#ax1c.legend()
+ax1c.set_title(r'2a. Stationary $\phi_2$ = {} + Propagating Offshore Signal'.format(thetaMode2))
+
+
+
+thetaMode1 = -90
+# eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
+# eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1 - thetaS[:,0])
+eofPred1 = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1*np.pi/180 - thetaS[:,0])
+
+thetaMode2 = np.arange(0,180,10)
+ax2a = plt.subplot2grid((2,3),(1,0),rowspan=1,colspan=1)
+import matplotlib.cm as cm
+colors = cm.rainbow(np.linspace(0, 1, len(thetaMode2)))
+for ii in range(len(thetaMode2)):
+   # = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
+   eofPred2 = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:,1])
+
+   combined = np.mean(alllinesS,axis=0)+eofPred1+eofPred2
+   ax2a.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_1$ = {}'.format(thetaMode2[ii]))
+
+#ax2a.legend()
+ax2a.set_title(r'2b. Stationary $\phi_1$ = {} + Propagating Onshore Signal'.format(thetaMode1))
+
+
+
+thetaMode2 =15
+# eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
+# eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1 - thetaS[:,0])
+eofPred2 = SS[:,1]*np.nanmean(RS[:,1]) * np.cos(thetaMode2*np.pi/180 - thetaS[:,1])
+
+thetaMode1 = np.arange(10,120,5)
+ax1c = plt.subplot2grid((2,3),(0,1),rowspan=1,colspan=1)
+import matplotlib.cm as cm
+colors = cm.rainbow(np.linspace(0, 1, len(thetaMode1)))
+for ii in range(len(thetaMode1)):
+   # = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
+   eofPred = SS[:,0] * np.nanmean(RS[:, 0]) * np.cos(thetaMode1[ii]*np.pi/180 - thetaS[:, 0])
+
+   combined = np.mean(alllinesS,axis=0)+eofPred+eofPred2
+   ax1c.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_1$ = {}'.format(thetaMode1[ii]))
+
+#ax1c.legend()
+ax1c.set_title(r'3a. Stationary $\phi_2$ = {} + Propagating Offshore Signal'.format(thetaMode2))
+
+
+# thetaMode2 =200
 # # eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
 # # eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1 - thetaS[:,0])
 # eofPred2 = SS[:,1]*np.nanmean(RS[:,1]) * np.cos(thetaMode2*np.pi/180 - thetaS[:,1])
 #
-# thetaMode1 = np.arange(90,280,20)
-# ax1c = plt.subplot2grid((2,3),(0,0),rowspan=1,colspan=1)
-# import matplotlib.cm as cm
-# colors = cm.rainbow(np.linspace(0, 1, len(thetaMode1)))
-# for ii in range(len(thetaMode1)):
-#    # = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
-#    eofPred = SS[:,0] * np.nanmean(RS[:, 0]) * np.cos(thetaMode1[ii]*np.pi/180 - thetaS[:, 0])
-#
-#    combined = np.mean(alllinesS,axis=0)+eofPred+eofPred2
-#    ax1c.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_1$ = {}'.format(thetaMode1[ii]))
-#
-# ax1c.legend()
-# ax1c.set_title(r'Stationary $\phi_2$ = {} + Propagating Offshore Signal'.format(thetaMode2))
-#
-# thetaMode2 = 0
-# # eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
-# # eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1 - thetaS[:,0])
-# eofPred2 = SS[:,1]*np.nanmean(RS[:,1]) * np.cos(thetaMode2*np.pi/180 - thetaS[:,1])
-#
-# thetaMode1 = np.arange(-90,100,20)
-# ax1 = plt.subplot2grid((2,3),(0,1),rowspan=1,colspan=1)
-# import matplotlib.cm as cm
-# colors = cm.rainbow(np.linspace(0, 1, len(thetaMode1)))
-# for ii in range(len(thetaMode1)):
-#    # = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
-#    eofPred = SS[:,0] * np.nanmean(RS[:, 0]) * np.cos(thetaMode1[ii]*np.pi/180 - thetaS[:, 0])
-#
-#    combined = np.mean(alllinesS,axis=0)+eofPred+eofPred2
-#    ax1.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_1$ = {}'.format(thetaMode1[ii]))
-#
-# ax1.legend()
-# ax1.set_title(r'Stationary $\phi_2$ = {} + Propagating Offshore Signal'.format(thetaMode2))
-#
-#
-# thetaMode2 = 180
-# # eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
-# # eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1 - thetaS[:,0])
-# eofPred2 = SS[:,1]*np.nanmean(RS[:,1]) * np.cos(thetaMode2*np.pi/180 - thetaS[:,1])
-#
-# thetaMode1 = np.arange(-90,100,20)
-# ax1d = plt.subplot2grid((2,3),(0,2),rowspan=1,colspan=1)
-# import matplotlib.cm as cm
-# colors = cm.rainbow(np.linspace(0, 1, len(thetaMode1)))
-# for ii in range(len(thetaMode1)):
-#    # = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
-#    eofPred = SS[:,0] * np.nanmean(RS[:, 0]) * np.cos(thetaMode1[ii]*np.pi/180 - thetaS[:, 0])
-#
-#    combined = np.mean(alllinesS,axis=0)+eofPred+eofPred2
-#    ax1d.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_1$ = {}'.format(thetaMode1[ii]))
-#
-# ax1d.legend()
-# ax1d.set_title(r'Stationary $\phi_2$ = {} + Propagating Offshore Signal'.format(thetaMode2))
-#
-#
-# thetaMode1 = -90
-# # eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
-# eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1*np.pi/180 - thetaS[:,0])
-# thetaMode2 = np.arange(0,190,20)
-# ax1b = plt.subplot2grid((2,3),(1,0),rowspan=1,colspan=1)
-# import matplotlib.cm as cm
-# colors = cm.rainbow(np.linspace(0, 1, len(thetaMode2)))
-# for ii in range(len(thetaMode2)):
-#    eofPred2 = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
-#    combined = np.mean(alllinesS,axis=0)+eofPred+eofPred2
-#    ax1b.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_2$ = {}'.format(thetaMode2[ii]))
-# ax1b.legend()
-# ax1b.set_title(r'Stationary $\phi_1$ = {} + Propagating Onshore Signal'.format(thetaMode1))
-#
-# thetaMode1 = 75
-# # eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
-# eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1*np.pi/180 - thetaS[:,0])
-# thetaMode2 = np.arange(-100,50,20)
-# ax2 = plt.subplot2grid((2,3),(1,1),rowspan=1,colspan=1)
-# import matplotlib.cm as cm
-# colors = cm.rainbow(np.linspace(0, 1, len(thetaMode2)))
-# for ii in range(len(thetaMode2)):
-#    eofPred2 = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
-#    combined = np.mean(alllinesS,axis=0)+eofPred+eofPred2
-#    ax2.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_2$ = {}'.format(thetaMode2[ii]))
-# ax2.legend()
-# ax2.set_title(r'Stationary $\phi_1$ = {} + Propagating Onshore Signal'.format(thetaMode1))
-#
-# thetaMode1 = -10
-# # eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
-# eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1*np.pi/180 - thetaS[:,0])
-# thetaMode2 = np.arange(-70,50,10)
-# ax2c = plt.subplot2grid((2,3),(1,2),rowspan=1,colspan=1)
-# import matplotlib.cm as cm
-# colors = cm.rainbow(np.linspace(0, 1, len(thetaMode2)))
-# for ii in range(len(thetaMode2)):
-#    eofPred2 = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
-#    combined = np.mean(alllinesS,axis=0)+eofPred+eofPred2
-#    ax2c.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_2$ = {}'.format(thetaMode2[ii]))
-# ax2c.legend()
-# ax2c.set_title(r'Stationary $\phi_1$ = {} + Propagating Onshore Signal'.format(thetaMode1))
-#
-# plt.show()
-
-
-#
-# fig10 = plt.figure(figsize=(15,10))
-#
-#
-# thetaMode2 =5
-# # eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
-# # eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1 - thetaS[:,0])
-# eofPred2 = SS[:,1]*np.nanmean(RS[:,1]) * np.cos(thetaMode2*np.pi/180 - thetaS[:,1])
-#
-# thetaMode1 = np.arange(-110,30,10)
-# ax1c = plt.subplot2grid((2,3),(0,0),rowspan=1,colspan=1)
-# import matplotlib.cm as cm
-# colors = cm.rainbow(np.linspace(0, 1, len(thetaMode1)))
-# for ii in range(len(thetaMode1)):
-#    # = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
-#    eofPred = SS[:,0] * np.nanmean(RS[:, 0]) * np.cos(thetaMode1[ii]*np.pi/180 - thetaS[:, 0])
-#
-#    combined = np.mean(alllinesS,axis=0)+eofPred+eofPred2
-#    ax1c.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_1$ = {}'.format(thetaMode1[ii]))
-#
-# #ax1c.legend()
-# ax1c.set_title(r'2a. Stationary $\phi_2$ = {} + Propagating Offshore Signal'.format(thetaMode2))
-#
-#
-#
-# thetaMode1 = -90
-# # eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
-# # eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1 - thetaS[:,0])
-# eofPred1 = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1*np.pi/180 - thetaS[:,0])
-#
-# thetaMode2 = np.arange(0,180,10)
-# ax2a = plt.subplot2grid((2,3),(1,0),rowspan=1,colspan=1)
-# import matplotlib.cm as cm
-# colors = cm.rainbow(np.linspace(0, 1, len(thetaMode2)))
-# for ii in range(len(thetaMode2)):
-#    # = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
-#    eofPred2 = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:,1])
-#
-#    combined = np.mean(alllinesS,axis=0)+eofPred1+eofPred2
-#    ax2a.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_1$ = {}'.format(thetaMode2[ii]))
-#
-# #ax2a.legend()
-# ax2a.set_title(r'2b. Stationary $\phi_1$ = {} + Propagating Onshore Signal'.format(thetaMode1))
-#
-#
-#
-# thetaMode2 =15
-# # eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
-# # eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1 - thetaS[:,0])
-# eofPred2 = SS[:,1]*np.nanmean(RS[:,1]) * np.cos(thetaMode2*np.pi/180 - thetaS[:,1])
-#
-# thetaMode1 = np.arange(10,120,5)
-# ax1c = plt.subplot2grid((2,3),(0,1),rowspan=1,colspan=1)
-# import matplotlib.cm as cm
-# colors = cm.rainbow(np.linspace(0, 1, len(thetaMode1)))
-# for ii in range(len(thetaMode1)):
-#    # = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
-#    eofPred = SS[:,0] * np.nanmean(RS[:, 0]) * np.cos(thetaMode1[ii]*np.pi/180 - thetaS[:, 0])
-#
-#    combined = np.mean(alllinesS,axis=0)+eofPred+eofPred2
-#    ax1c.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_1$ = {}'.format(thetaMode1[ii]))
-#
-# #ax1c.legend()
-# ax1c.set_title(r'3a. Stationary $\phi_2$ = {} + Propagating Offshore Signal'.format(thetaMode2))
-#
-#
-# # thetaMode2 =200
-# # # eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
-# # # eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1 - thetaS[:,0])
-# # eofPred2 = SS[:,1]*np.nanmean(RS[:,1]) * np.cos(thetaMode2*np.pi/180 - thetaS[:,1])
-# #
-# # thetaMode1 = np.arange(-40,75,5)
-# # ax1c = plt.subplot2grid((2,3),(1,1),rowspan=1,colspan=1)
-# # import matplotlib.cm as cm
-# # colors = cm.rainbow(np.linspace(0, 1, len(thetaMode1)))
-# # for ii in range(len(thetaMode1)):
-# #    # = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
-# #    eofPred = SS[:,0] * np.nanmean(RS[:, 0]) * np.cos(thetaMode1[ii]*np.pi/180 - thetaS[:, 0])
-# #
-# #    combined = np.mean(alllinesS,axis=0)+eofPred+eofPred2
-# #    ax1c.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_1$ = {}'.format(thetaMode1[ii]))
-# #
-# # #ax1c.legend()
-# # ax1c.set_title(r'3b. Stationary $\phi_2$ = {} + Propagating Offshore Signal'.format(thetaMode2))
-#
-# thetaMode1 = 60
-# # eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
-# # eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1 - thetaS[:,0])
-# eofPred1 = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1*np.pi/180 - thetaS[:,0])
-#
-# thetaMode2 = np.arange(40,140,10)
-# ax2a = plt.subplot2grid((2,3),(1,1),rowspan=1,colspan=1)
-# import matplotlib.cm as cm
-# colors = cm.rainbow(np.linspace(0, 1, len(thetaMode2)))
-# for ii in range(len(thetaMode2)):
-#    # = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
-#    eofPred2 = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:,1])
-#
-#    combined = np.mean(alllinesS,axis=0)+eofPred1+eofPred2
-#    ax2a.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_1$ = {}'.format(thetaMode2[ii]))
-#
-# #ax2a.legend()
-# ax2a.set_title(r'3c. Stationary $\phi_1$ = {} + Propagating Onshore Signal'.format(thetaMode1))
-#
-#
-# thetaMode1 = -90
-# # eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
-# # eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1 - thetaS[:,0])
-# eofPred1 = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1*np.pi/180 - thetaS[:,0])
-#
-# thetaMode2 = np.arange(145,290,10)
-# ax2a = plt.subplot2grid((2,3),(1,2),rowspan=1,colspan=1)
-# import matplotlib.cm as cm
-# colors = cm.rainbow(np.linspace(0, 1, len(thetaMode2)))
-# for ii in range(len(thetaMode2)):
-#    # = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
-#    eofPred2 = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:,1])
-#
-#    combined = np.mean(alllinesS,axis=0)+eofPred1+eofPred2
-#    ax2a.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_1$ = {}'.format(thetaMode2[ii]))
-#
-# #ax2a.legend()
-# ax2a.set_title(r'3c. Stationary $\phi_1$ = {} + Propagating Onshore Signal'.format(thetaMode1))
-#
-#
-#
-# thetaMode2 =25
-# # eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
-# # eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1 - thetaS[:,0])
-# eofPred2 = SS[:,1]*np.nanmean(RS[:,1]) * np.cos(thetaMode2*np.pi/180 - thetaS[:,1])
-#
-# thetaMode1 = np.arange(-0,135,5)
-# ax1c = plt.subplot2grid((2,3),(0,2),rowspan=1,colspan=1)
+# thetaMode1 = np.arange(-40,75,5)
+# ax1c = plt.subplot2grid((2,3),(1,1),rowspan=1,colspan=1)
 # import matplotlib.cm as cm
 # colors = cm.rainbow(np.linspace(0, 1, len(thetaMode1)))
 # for ii in range(len(thetaMode1)):
@@ -1155,10 +1096,70 @@ plt.show()
 #
 # #ax1c.legend()
 # ax1c.set_title(r'3b. Stationary $\phi_2$ = {} + Propagating Offshore Signal'.format(thetaMode2))
-#
-# plt.show()
-#
-#
+
+thetaMode1 = 60
+# eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
+# eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1 - thetaS[:,0])
+eofPred1 = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1*np.pi/180 - thetaS[:,0])
+
+thetaMode2 = np.arange(40,140,10)
+ax2a = plt.subplot2grid((2,3),(1,1),rowspan=1,colspan=1)
+import matplotlib.cm as cm
+colors = cm.rainbow(np.linspace(0, 1, len(thetaMode2)))
+for ii in range(len(thetaMode2)):
+   # = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
+   eofPred2 = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:,1])
+
+   combined = np.mean(alllinesS,axis=0)+eofPred1+eofPred2
+   ax2a.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_1$ = {}'.format(thetaMode2[ii]))
+
+#ax2a.legend()
+ax2a.set_title(r'3c. Stationary $\phi_1$ = {} + Propagating Onshore Signal'.format(thetaMode1))
+
+
+thetaMode1 = -90
+# eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
+# eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1 - thetaS[:,0])
+eofPred1 = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1*np.pi/180 - thetaS[:,0])
+
+thetaMode2 = np.arange(145,290,10)
+ax2a = plt.subplot2grid((2,3),(1,2),rowspan=1,colspan=1)
+import matplotlib.cm as cm
+colors = cm.rainbow(np.linspace(0, 1, len(thetaMode2)))
+for ii in range(len(thetaMode2)):
+   # = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
+   eofPred2 = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:,1])
+
+   combined = np.mean(alllinesS,axis=0)+eofPred1+eofPred2
+   ax2a.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_1$ = {}'.format(thetaMode2[ii]))
+
+#ax2a.legend()
+ax2a.set_title(r'3c. Stationary $\phi_1$ = {} + Propagating Onshore Signal'.format(thetaMode1))
+
+
+
+thetaMode2 =25
+# eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
+# eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1 - thetaS[:,0])
+eofPred2 = SS[:,1]*np.nanmean(RS[:,1]) * np.cos(thetaMode2*np.pi/180 - thetaS[:,1])
+
+thetaMode1 = np.arange(-0,135,5)
+ax1c = plt.subplot2grid((2,3),(0,2),rowspan=1,colspan=1)
+import matplotlib.cm as cm
+colors = cm.rainbow(np.linspace(0, 1, len(thetaMode1)))
+for ii in range(len(thetaMode1)):
+   # = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:, 1])
+   eofPred = SS[:,0] * np.nanmean(RS[:, 0]) * np.cos(thetaMode1[ii]*np.pi/180 - thetaS[:, 0])
+
+   combined = np.mean(alllinesS,axis=0)+eofPred+eofPred2
+   ax1c.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_1$ = {}'.format(thetaMode1[ii]))
+
+#ax1c.legend()
+ax1c.set_title(r'3b. Stationary $\phi_2$ = {} + Propagating Offshore Signal'.format(thetaMode2))
+
+plt.show()
+
+
 
 
 
@@ -1175,7 +1176,7 @@ fig10 = plt.figure(figsize=(15,10))
 thetaMode2 =5
 eofPred2 = SS[:,1]*np.nanmean(RS[:,1]) * np.cos(thetaMode2*np.pi/180 - thetaS[:,1])
 
-thetaMode1 = np.arange(-110,30,10)+180
+thetaMode1 = np.arange(-110,30,10)
 ax1c = plt.subplot2grid((2,3),(0,0),rowspan=1,colspan=1)
 import matplotlib.cm as cm
 colors = cm.rainbow(np.linspace(0, 1, len(thetaMode1)))
@@ -1188,7 +1189,7 @@ ax1c.set_title(r'2a. Stationary $\phi_2$ = {} + Propagating Offshore Signal'.for
 
 thetaMode2 =25
 eofPred2 = SS[:,1]*np.nanmean(RS[:,1]) * np.cos(thetaMode2*np.pi/180 - thetaS[:,1])
-thetaMode1 = np.arange(10,120,5)+180
+thetaMode1 = np.arange(10,120,5)
 ax1c = plt.subplot2grid((2,3),(0,1),rowspan=1,colspan=1)
 import matplotlib.cm as cm
 colors = cm.rainbow(np.linspace(0, 1, len(thetaMode1)))
@@ -1202,7 +1203,7 @@ ax1c.set_title(r'3a. Stationary $\phi_2$ = {} + Propagating Offshore Signal'.for
 
 thetaMode2 = 150
 eofPred2 = SS[:,1]*np.nanmean(RS[:,1]) * np.cos(thetaMode2*np.pi/180 - thetaS[:,1])
-thetaMode1 = np.arange(80,230,10)+180
+thetaMode1 = np.arange(80,230,10)
 ax1d = plt.subplot2grid((2,3),(0,2),rowspan=1,colspan=1)
 import matplotlib.cm as cm
 colors = cm.rainbow(np.linspace(0, 1, len(thetaMode1)))
@@ -1214,7 +1215,7 @@ for ii in range(len(thetaMode1)):
 ax1d.set_title(r'Stationary $\phi_2$ = {} + Propagating Offshore Signal'.format(thetaMode2))
 
 
-thetaMode1 = 60+180
+thetaMode1 = 60
 eofPred1 = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1*np.pi/180 - thetaS[:,0])
 
 thetaMode2 = np.arange(40,140,10)
@@ -1229,7 +1230,7 @@ for ii in range(len(thetaMode2)):
 ax2a.set_title(r'3c. Stationary $\phi_1$ = {} + Propagating Onshore Signal'.format(thetaMode1))
 
 
-thetaMode1 = 75+180
+thetaMode1 = 75
 # eofPred = RtSubset[timestep, mode] * RS[:, 0] * np.cos(phitSubset[timestep, mode] - theta[:, mode])
 eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1*np.pi/180 - thetaS[:,0])
 thetaMode2 = np.arange(-100,50,20)
@@ -1243,7 +1244,7 @@ for ii in range(len(thetaMode2)):
 # ax2.legend()
 ax2.set_title(r'Stationary $\phi_1$ = {} + Propagating Onshore Signal'.format(thetaMode1))
 
-thetaMode1 = -90+180
+thetaMode1 = -90
 eofPred = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1*np.pi/180 - thetaS[:,0])
 thetaMode2 = np.arange(20,190,10)
 ax1b = plt.subplot2grid((2,3),(1,2),rowspan=1,colspan=1)
@@ -1261,65 +1262,66 @@ plt.show()
 
 
 
-#
-# thetaMode1 = -90+180
-# eofPred1 = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1*np.pi/180 - thetaS[:,0])
-# thetaMode2 = np.arange(0,180,10)
-# ax2a = plt.subplot2grid((2,3),(1,0),rowspan=1,colspan=1)
-# import matplotlib.cm as cm
-# colors = cm.rainbow(np.linspace(0, 1, len(thetaMode2)))
-# for ii in range(len(thetaMode2)):
-#    eofPred2 = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:,1])
-#    combined = np.mean(alllinesS,axis=0)+eofPred1+eofPred2
-#    ax2a.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_1$ = {}'.format(thetaMode2[ii]))
-# #ax2a.legend()
-# ax2a.set_title(r'2b. Stationary $\phi_1$ = {} + Propagating Onshore Signal'.format(thetaMode1))
-#
-#
-#
-# thetaMode1 = 60+180
-# eofPred1 = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1*np.pi/180 - thetaS[:,0])
-#
-# thetaMode2 = np.arange(40,140,10)
-# ax2a = plt.subplot2grid((2,3),(1,1),rowspan=1,colspan=1)
-# import matplotlib.cm as cm
-# colors = cm.rainbow(np.linspace(0, 1, len(thetaMode2)))
-# for ii in range(len(thetaMode2)):
-#    eofPred2 = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:,1])
-#    combined = np.mean(alllinesS,axis=0)+eofPred1+eofPred2
-#    ax2a.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_1$ = {}'.format(thetaMode2[ii]))
-# #ax2a.legend()
-# ax2a.set_title(r'3c. Stationary $\phi_1$ = {} + Propagating Onshore Signal'.format(thetaMode1))
-#
-# thetaMode1 = -90+180
-# eofPred1 = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1*np.pi/180 - thetaS[:,0])
-# thetaMode2 = np.arange(145,290,10)
-# ax2a = plt.subplot2grid((2,3),(1,2),rowspan=1,colspan=1)
-# import matplotlib.cm as cm
-# colors = cm.rainbow(np.linspace(0, 1, len(thetaMode2)))
-# for ii in range(len(thetaMode2)):
-#    eofPred2 = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:,1])
-#    combined = np.mean(alllinesS,axis=0)+eofPred1+eofPred2
-#    ax2a.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_1$ = {}'.format(thetaMode2[ii]))
-# #ax2a.legend()
-# ax2a.set_title(r'3c. Stationary $\phi_1$ = {} + Propagating Onshore Signal'.format(thetaMode1))
-#
-#
-# thetaMode2 =25
-# eofPred2 = SS[:,1]*np.nanmean(RS[:,1]) * np.cos(thetaMode2*np.pi/180 - thetaS[:,1])
-# thetaMode1 = np.arange(-0,135,5)+180
-# ax1c = plt.subplot2grid((2,3),(0,2),rowspan=1,colspan=1)
-# import matplotlib.cm as cm
-# colors = cm.rainbow(np.linspace(0, 1, len(thetaMode1)))
-# for ii in range(len(thetaMode1)):
-#    eofPred = SS[:,0] * np.nanmean(RS[:, 0]) * np.cos(thetaMode1[ii]*np.pi/180 - thetaS[:, 0])
-#    combined = np.mean(alllinesS,axis=0)+eofPred+eofPred2
-#    ax1c.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_1$ = {}'.format(thetaMode1[ii]))
-# #ax1c.legend()
-# ax1c.set_title(r'3b. Stationary $\phi_2$ = {} + Propagating Offshore Signal'.format(thetaMode2))
-#
-# plt.show()
-#
+
+thetaMode1 = -90
+eofPred1 = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1*np.pi/180 - thetaS[:,0])
+thetaMode2 = np.arange(0,180,10)
+ax2a = plt.subplot2grid((2,3),(1,0),rowspan=1,colspan=1)
+import matplotlib.cm as cm
+colors = cm.rainbow(np.linspace(0, 1, len(thetaMode2)))
+for ii in range(len(thetaMode2)):
+   eofPred2 = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:,1])
+   combined = np.mean(alllinesS,axis=0)+eofPred1+eofPred2
+   ax2a.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_1$ = {}'.format(thetaMode2[ii]))
+#ax2a.legend()
+ax2a.set_title(r'2b. Stationary $\phi_1$ = {} + Propagating Onshore Signal'.format(thetaMode1))
+
+
+
+thetaMode1 = 60
+eofPred1 = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1*np.pi/180 - thetaS[:,0])
+
+thetaMode2 = np.arange(40,140,10)
+ax2a = plt.subplot2grid((2,3),(1,1),rowspan=1,colspan=1)
+import matplotlib.cm as cm
+colors = cm.rainbow(np.linspace(0, 1, len(thetaMode2)))
+for ii in range(len(thetaMode2)):
+   eofPred2 = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:,1])
+   combined = np.mean(alllinesS,axis=0)+eofPred1+eofPred2
+   ax2a.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_1$ = {}'.format(thetaMode2[ii]))
+#ax2a.legend()
+ax2a.set_title(r'3c. Stationary $\phi_1$ = {} + Propagating Onshore Signal'.format(thetaMode1))
+
+thetaMode1 = -90
+eofPred1 = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode1*np.pi/180 - thetaS[:,0])
+thetaMode2 = np.arange(145,290,10)
+ax2a = plt.subplot2grid((2,3),(1,2),rowspan=1,colspan=1)
+import matplotlib.cm as cm
+colors = cm.rainbow(np.linspace(0, 1, len(thetaMode2)))
+for ii in range(len(thetaMode2)):
+   eofPred2 = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode2[ii]*np.pi/180 - thetaS[:,1])
+   combined = np.mean(alllinesS,axis=0)+eofPred1+eofPred2
+   ax2a.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_1$ = {}'.format(thetaMode2[ii]))
+#ax2a.legend()
+ax2a.set_title(r'3c. Stationary $\phi_1$ = {} + Propagating Onshore Signal'.format(thetaMode1))
+
+
+thetaMode2 =25
+eofPred2 = SS[:,1]*np.nanmean(RS[:,1]) * np.cos(thetaMode2*np.pi/180 - thetaS[:,1])
+thetaMode1 = np.arange(-0,135,5)
+ax1c = plt.subplot2grid((2,3),(0,2),rowspan=1,colspan=1)
+import matplotlib.cm as cm
+colors = cm.rainbow(np.linspace(0, 1, len(thetaMode1)))
+for ii in range(len(thetaMode1)):
+   eofPred = SS[:,0] * np.nanmean(RS[:, 0]) * np.cos(thetaMode1[ii]*np.pi/180 - thetaS[:, 0])
+   combined = np.mean(alllinesS,axis=0)+eofPred+eofPred2
+   ax1c.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_1$ = {}'.format(thetaMode1[ii]))
+#ax1c.legend()
+ax1c.set_title(r'3b. Stationary $\phi_2$ = {} + Propagating Offshore Signal'.format(thetaMode2))
+
+plt.show()
+
+
 
 
 mean1 = np.nanmean(RS[:, 0])
@@ -1464,11 +1466,11 @@ for ii in range(len(angleMode1)):
 
 
 
-# plt.style.use('dark_background')
+plt.style.use('dark_background')
 plt.figure(figsize=(10,6))
 thetaMode2 =60
 eofPred2 = SS[:,1]*np.nanmean(RS[:,1]) * np.cos(thetaMode2*np.pi/180 - thetaS[:,1])
-thetaMode1 = np.arange(25,85,50)+180
+thetaMode1 = np.arange(25,85,50)
 ax1c = plt.subplot2grid((1,1),(0,0),rowspan=1,colspan=1)
 import matplotlib.cm as cm
 colors = cm.rainbow(np.linspace(0, 1, len(thetaMode1)))
@@ -1484,11 +1486,11 @@ plt.show()
 
 
 
-# plt.style.use('dark_background')
+plt.style.use('dark_background')
 plt.figure(figsize=(10,6))
-thetaMode2 =180
+thetaMode2 =30
 eofPred2 = SS[:,1]*np.nanmean(RS[:,1]) * np.cos(thetaMode2*np.pi/180 - thetaS[:,1])
-thetaMode1 = np.arange(220,380,15)+360
+thetaMode1 = np.arange(220,360,15)
 ax1c = plt.subplot2grid((1,1),(0,0),rowspan=1,colspan=1)
 import matplotlib.cm as cm
 colors = cm.rainbow(np.linspace(0, 1, len(thetaMode1)))
@@ -1507,7 +1509,7 @@ plt.show()
 
 
 
-# plt.style.use('dark_background')
+plt.style.use('dark_background')
 plt.figure(figsize=(8,5))
 thetaMode2 =20
 eofPred2 = SS[:,1]*np.nanmean(RS[:,1]) * np.cos(thetaMode2*np.pi/180 - thetaS[:,1])
@@ -1518,7 +1520,7 @@ colors = cm.rainbow(np.linspace(0, 1, len(thetaMode1)+2))
 for ii in range(len(thetaMode1)):
    eofPred = SS[:,0] * np.nanmean(RS[:, 0]) * np.cos(thetaMode1[ii]*np.pi/180 - thetaS[:, 0])
    combined = np.mean(alllinesS,axis=0)+eofPred+eofPred2
-   ax1c.plot(xinterp,combined,color=colors[ii,:],label=r'$\phi_1$ = {}'.format(thetaMode1[ii]),linewidth=2)
+   ax1c.plot(xinterp,combined,color=colors[ii+2,:],label=r'$\phi_1$ = {}'.format(thetaMode1[ii]),linewidth=2)
 #ax1c.legend()
 # ax1c.set_title(r'3b. Stationary $\phi_2$ = {} + Propagating Offshore Signal'.format(thetaMode2))
 # ax1c.set_ylabel('Depth (MHHW, m)')
@@ -1529,21 +1531,18 @@ plt.show()
 
 
 
-# plt.style.use('dark_background')
+plt.style.use('dark_background')
 plt.figure(figsize=(8,5))
 thetaMode2 =-70
 eofPred2 = SS[:,0]*np.nanmean(RS[:,0]) * np.cos(thetaMode2*np.pi/180 - thetaS[:,0])
-thetaMode1 = np.arange(330,350,30)
+thetaMode1 = np.arange(150,170,30)
 ax1c = plt.subplot2grid((1,1),(0,0),rowspan=1,colspan=1)
 import matplotlib.cm as cm
 colors = cm.rainbow(np.linspace(0, 1, len(thetaMode1)+2))
 for ii in range(len(thetaMode1)):
    eofPred = SS[:,1] * np.nanmean(RS[:, 1]) * np.cos(thetaMode1[ii]*np.pi/180 - thetaS[:, 1])
    combined = np.mean(alllinesS,axis=0)+eofPred+eofPred2
-   # ax1c.plot(xinterp,combined,color=colors[(len(colors)-2-ii),:],label=r'$\phi_1$ = {}'.format(thetaMode1[-ii]),linewidth=2)
-
-   ax1c.plot(xinterp,combined,color=colors[ii, :],label=r'$\phi_1$ = {}'.format(thetaMode1[-ii]),linewidth=2)
-
+   ax1c.plot(xinterp,combined,color=colors[(len(colors)-2-ii),:],label=r'$\phi_1$ = {}'.format(thetaMode1[-ii]),linewidth=2)
 #ax1c.legend()
 # ax1c.set_title(r'3b. Stationary $\phi_2$ = {} + Propagating Offshore Signal'.format(thetaMode2))
 # ax1c.set_ylabel('Depth (MHHW, m)')
@@ -1553,34 +1552,6 @@ ax1c.set_ylim([-7, 0])
 plt.show()
 
 
-
-
-
-
-
-
-# plt.style.use('dark_background')
-plt.figure(figsize=(8,5))
-thetaMode2 =-0
-eofPred2 = SS[:,1]*np.nanmean(RS[:,1]) * np.cos(thetaMode2*np.pi/180 - thetaS[:,1])
-thetaMode1 = np.arange(180,360,20)
-ax1c = plt.subplot2grid((1,1),(0,0),rowspan=1,colspan=1)
-import matplotlib.cm as cm
-colors = cm.rainbow(np.linspace(0, 1, len(thetaMode1)+2))
-for ii in range(len(thetaMode1)):
-   eofPred = SS[:,0] * np.nanmean(RS[:, 0]) * np.cos(thetaMode1[ii]*np.pi/180 - thetaS[:, 0])
-   combined = np.mean(alllinesS,axis=0)+eofPred+eofPred2
-   # ax1c.plot(xinterp,combined,color=colors[(len(colors)-2-ii),:],label=r'$\phi_1$ = {}'.format(thetaMode1[-ii]),linewidth=2)
-
-   ax1c.plot(xinterp,combined,color=colors[ii, :],label=r'$\phi_1$ = {}'.format(thetaMode1[-ii]),linewidth=2)
-
-#ax1c.legend()
-# ax1c.set_title(r'3b. Stationary $\phi_2$ = {} + Propagating Offshore Signal'.format(thetaMode2))
-# ax1c.set_ylabel('Depth (MHHW, m)')
-# ax1c.set_xlabel('Cross-shore (m)')
-ax1c.set_xlim([0,500])
-ax1c.set_ylim([-7, 0])
-plt.show()
 
 
 
@@ -1615,8 +1586,8 @@ eofHypo = np.nan * np.ones((len(thetasMode1),len(xinterpS)))
 eofHypo2 = np.nan * np.ones((len(thetasMode1),len(xinterpS)))
 
 for tt in range(len(thetasMode1)):
-   eofHypo[tt,:] = SS[:, 0] * np.nanmean(RS[:, 0]) * np.cos(thetasMode1[tt] * np.pi / 180 - thetaS[:, 0]+180)
-   eofHypo2[tt,:] = SS[:, 1] * np.nanmean(RS[:, 1]) * np.cos(thetasMode2[tt] * np.pi / 180 - thetaS[:, 1])
+   eofHypo[tt,:] = SS[:, 0] * np.nanmean(RS[:, 0]) * np.cos(thetasMode1[tt] * np.pi / 180 - thetaS[:, 0])
+   eofHypo2[tt,:] = SS[:, 1] * np.nanmean(RS[:, 1]) * np.cos(thetasMode1[tt] * np.pi / 180 - thetaS[:, 1])
 
 
 thetag, xintg = np.meshgrid(thetasMode1, xinterpS)
@@ -1739,8 +1710,8 @@ plt.show()
 # thetasMode1 = np.arange(-180,180,2)
 # thetasMode2 = np.arange(-100,260,2)
 
-thetasMode1 = np.arange(-180,360,5)
-thetasMode2 = np.arange(-180,360,5)
+thetasMode1 = np.arange(-270,1000,2)
+thetasMode2 = np.arange(-270,1800,2)
 innerBarX = np.nan*np.ones((len(thetasMode2),len(thetasMode1)))
 outerBarX = np.nan*np.ones((len(thetasMode2),len(thetasMode1)))
 innerBarZ = np.nan*np.ones((len(thetasMode2),len(thetasMode1)))
@@ -1934,9 +1905,6 @@ ax4.set_title('Outer Bar Magnitude')
 ax4c.set_title('Single Bar Magnitude')
 
 plt.tight_layout()
-
-
-
 
 
 plt.figure(figsize=(14,10))
@@ -3765,7 +3733,7 @@ def add_arrow(line, position=None, direction='right', size=15, color=None):
     )
 
 
-wavedir = '/media/dylananderson/Elements/WIS_ST63218/'
+wavedir = '/media/dylananderson/Elements1/WIS_ST63218/'
 
 # Need to sort the files to ensure correct temporal order...
 files = os.listdir(wavedir)
@@ -3877,7 +3845,7 @@ def getArray(file):
     output['t'] = timeW
     return output
 
-wavedir26 = '/media/dylananderson/Elements/26mArrayPlus17/'
+wavedir26 = '/media/dylananderson/Elements/26mArray/'
 # Need to sort the files to ensure correct temporal order...
 files = os.listdir(wavedir26)
 files.sort()
@@ -4058,8 +4026,6 @@ maxMonthBeforeWE = np.nan * np.ones((len(time),))
 for ii in range(len(time)):
     # beforeIndex = np.where((tC > DT.datetime(time5[ii].year,time5[ii].month,time5[ii].day)) & (tC < time5[ii]))
     beforeIndex = np.where((hsOrdinaltime > (timeOrdinal[ii]-30)) & (hsOrdinaltime < (timeOrdinal[ii])))
-    # beforeIndex = np.where((hsOrdinaltime > (time5Ordinal[ii]-30)) & (hsOrdinaltime < (time5Ordinal[ii])))
-
     tempWE = weC[beforeIndex]
     # tempWE = hsCombined[beforeIndex]
 
@@ -4295,7 +4261,7 @@ ax3.plot(tC[int(24*dayAvg/2-1):-int(24*dayAvg/2)],hsSmoother)
 dayAvg = 90
 hsSmoother = moving_average(hsCombined,24*dayAvg)
 ax3.plot(tC[int(24*dayAvg/2-1):-int(24*dayAvg/2)],hsSmoother)
-# ax3.plot(time7,avgMonthBeforeHs,'o-')
+ax3.plot(time7,avgMonthBeforeHs,'o-')
 ax.set_xlim([timeS[2], timeS[-2]])
 ax1.set_xlim([timeS[2], timeS[-2]])
 ax2.set_xlim([timeS[2], timeS[-2]])
@@ -4342,7 +4308,6 @@ for ff in range(len(lowWaves)):
     f = interp1d(x1,y1,kind='linear')
     newy = f(newx)
 
-
     if x1[-1] < 60 and y1[0]>-100:
         lines1 = ax100.plot(newx,newy,'-',linewidth=2,color='red',label='{}'.format(indexedTime[0].year))
         scater = ax100.scatter(x1,y1,mags*40,'k')
@@ -4388,8 +4353,6 @@ ax100 = plt.subplot2grid((1,1),(0,0),rowspan=1,colspan=1)
 con1 = ax100.pcolor(meshTheta1,meshTheta2,doublebar,vmin=0,vmax=1,cmap='Greys')
 coloredlines = cm.rainbow(np.linspace(0,1,len(lowWaves)))
 
-lineSlopes = []
-lineSlopeTimes = []
 for ff in range(len(lowWaves)):
     si = lowWaves[ff][0]
     ei = lowWaves[ff][1]
@@ -4426,8 +4389,6 @@ for ff in range(len(lowWaves)):
     s_map = cm.ScalarMappable(norm=normalize, cmap=colormap)
     colorOfLine = colormap(normalize(slope))
 
-    if x1[-1] < 5 and x1[-1] > 0:
-        x1 = x1+30
     if y1[-1] < -20:
         y1 = y1 + 360
     newx = np.arange(x1[0],x1[-1],1)
@@ -4435,15 +4396,13 @@ for ff in range(len(lowWaves)):
     newy = f(newx)
 
     if indexedTime[0].year < 2005 or indexedTime[0].year > 2008:
-        if indexedTime[0].year < 2021:
+        if indexedTime[0].year < 2018:
             if np.nanmean(mags) > 0.4:
 
                 if x1[-1] < 60 and y1[0]>-100:
 
                     #else:
                     lines1 = ax100.plot(newx,newy,'-',linewidth=2,color=colorOfLine,label='{}'.format(indexedTime[0].year))
-                    lineSlopeTimes.append(indexedTime[0])
-                    lineSlopes.append(slope)
                         # lines1 = ax100.plot(newx,newy,'-',linewidth=2,color='red',label='{}'.format(indexedTime[0].year))
                     #scater = ax100.scatter(x1,y1,mags*50,color=colorOfLine)
                     add_arrow(lines1[0], color='k', size=25)
@@ -4453,16 +4412,12 @@ for ff in range(len(lowWaves)):
                         ## lines1 = ax100.plot(newx,newy,'-',linewidth=2,color='red',label='{}'.format(indexedTime[0].year))
                         #scater = ax100.scatter(x1-360,y1,mags*50,color=colorOfLine)
                         add_arrow(lines1[0], color='k', size=25)
-                        lineSlopeTimes.append(indexedTime[0])
-                        lineSlopes.append(slope)
                     else:
                         if indexedTime[0].year < 2014 and indexedTime[0].year > 1981:
                             if x1[0] < 73 and y1[0] < -65:
                                 print('skipping')
                             else:
                                 lines1 = ax100.plot(newx,newy,'-',linewidth=2,color=colorOfLine,label='{}'.format(indexedTime[0].year))
-                                lineSlopeTimes.append(indexedTime[0])
-                                lineSlopes.append(slope)
                                 ##scater = ax100.scatter(x1, y1, mags * 40, 'k')
                                 #scater = ax100.scatter(x1, y1, mags * 50, color=colorOfLine)
 
@@ -4758,151 +4713,3 @@ ax100.set_title('Non-dimensional Fall Velocity > 9')
 plt.legend()
 plt.show()
 
-
-
-
-timeSubset= time[1:]
-lineSlopeWE = []
-lineSlopeLWP = []
-lineSlopeFV = []
-for hh in range(len(lineSlopeTimes)):
-    tempInd = np.where(lineSlopeTimes[hh] == timeSubset)
-    tempYear = timeSubset[tempInd[0][0]].year
-    tempMonth = timeSubset[tempInd[0][0]].month
-    tempDay = timeSubset[tempInd[0][0]].day
-    # if tempMonth > 3:
-    allWaves = np.where((tC < timeSubset[tempInd[0][0]]) & (tC > datetime(tempYear,tempMonth-1,tempDay)))
-    # else:
-    #     allWaves = np.where((tC < timeSubset[tempInd[0][0]]) & (tC > datetime(tempYear-1,12,tempDay)))
-
-    lineSlopeWE.append(np.mean(weC[allWaves]))
-    lineSlopeLWP.append(np.mean(np.abs(lwpC[allWaves])))
-    lineSlopeFV.append(np.mean(fV[allWaves]))
-
-    # lineSlopeWE.append(np.mean(avgWE[tempInd[0][0]-3:tempInd[0][0]]))
-    # lineSlopeLWP.append(np.mean(avgLWP[tempInd[0][0]-3:tempInd[0][0]]))
-    # lineSlopeFV.append(np.mean(avgFV[tempInd[0][0]-3:tempInd[0][0]]))
-
-
-lowSlopes = np.where((np.array(lineSlopes) < 1))
-highSlopes = np.where((np.array(lineSlopes) > 1))
-
-lowWESlopes = np.mean(np.array(lineSlopeWE)[lowSlopes])
-highWESlopes = np.nanmean(np.array(lineSlopeWE)[highSlopes])
-
-lowLWPSlopes = np.mean(np.array(lineSlopeLWP)[lowSlopes])
-highLWPSlopes = np.nanmean(np.array(lineSlopeLWP)[highSlopes])
-
-lowFVSlopes = np.mean(np.array(lineSlopeFV)[lowSlopes])
-highFVSlopes = np.mean(np.array(lineSlopeFV)[highSlopes])
-
-plt.figure()
-plt.plot(time[1:],avgLWP)
-
-
-
-
-timeSubset= time[1:]
-threeMonthWE = []
-threeMonthLWP = []
-threeMonthFV = []
-for hh in range(len(lineSlopeTimes)):
-    tempInd = np.where(lineSlopeTimes[hh] == timeSubset)
-    tempYear = timeSubset[tempInd[0][0]].year
-    tempMonth = timeSubset[tempInd[0][0]].month
-    tempDay = timeSubset[tempInd[0][0]].day
-    if tempMonth > 3:
-        allWaves1 = np.where((tC < datetime(tempYear,tempMonth-2,tempDay)) & (tC > datetime(tempYear,tempMonth-3,tempDay)))
-        allWaves2 = np.where((tC < datetime(tempYear,tempMonth-1,tempDay)) & (tC > datetime(tempYear,tempMonth-2,tempDay)))
-        allWaves3 = np.where((tC < timeSubset[tempInd[0][0]]) & (tC > datetime(tempYear,tempMonth-1,tempDay)))
-
-    else:
-        allWaves1 = np.where((tC < datetime(tempYear,tempMonth-2,tempDay)) & (tC > datetime(tempYear-1,12,tempDay)))
-        allWaves2 = np.where((tC < datetime(tempYear,tempMonth-1,tempDay)) & (tC > datetime(tempYear,tempMonth-2,tempDay)))
-        allWaves3 = np.where((tC < timeSubset[tempInd[0][0]]) & (tC > datetime(tempYear,tempMonth-1,tempDay)))
-
-    threeMonthWE.append([np.nanmean(weC[allWaves1]),np.nanmean(weC[allWaves2]),np.nanmean(weC[allWaves3])])
-    threeMonthLWP.append([np.nanmean(np.abs(lwpC[allWaves1])),np.nanmean(np.abs(lwpC[allWaves2])),np.nanmean(np.abs(lwpC[allWaves3]))])
-    threeMonthFV.append([np.nanmean(fV[allWaves1]),np.nanmean(fV[allWaves2]),np.nanmean(fV[allWaves3])])
-
-
-
-
-lowSlopes = np.where((np.array(lineSlopes) < 1.2))
-highSlopes = np.where((np.array(lineSlopes) > 1.2))
-
-
-plotTime = [1,2,3]
-plt.figure()
-ax1 = plt.subplot2grid((1,1),(0,0),rowspan=1,colspan=1)
-seasonalMean = np.mean(np.array(threeMonthWE)[highSlopes[0],:],axis=0)
-seasonalStd = np.std(np.array(threeMonthWE)[highSlopes[0],:],axis=0)
-ax1.plot(plotTime,seasonalMean,'o-',label='2 Bars Maintained',color='r')
-ax1.fill_between(plotTime, seasonalMean - seasonalStd, seasonalMean + seasonalStd, color='r', alpha=0.2)
-
-seasonalMean2 = np.mean(np.array(threeMonthWE)[lowSlopes[0],:],axis=0)
-seasonalStd2 = np.std(np.array(threeMonthWE)[lowSlopes[0],:],axis=0)
-ax1.plot(plotTime,seasonalMean2,'o-',label='New Bar Created',color='blue')
-ax1.fill_between(plotTime, seasonalMean2 - seasonalStd2, seasonalMean2 + seasonalStd2, color='blue', alpha=0.2)
-
-ax1.set_xticks([plotTime[0],plotTime[1],plotTime[2]])
-ax1.set_xticklabels(['3-months prior','2-months prior','1-month prior',])
-ax1.legend()
-plt.show()
-
-
-
-
-timeSubset= time[1:]
-threeMonthWE = []
-threeMonthLWP = []
-threeMonthFV = []
-for hh in range(len(lineSlopeTimes)):
-    tempInd = np.where(lineSlopeTimes[hh] == timeSubset)
-    tempYear = timeSubset[tempInd[0][0]].year
-    tempMonth = timeSubset[tempInd[0][0]].month
-    tempDay = timeSubset[tempInd[0][0]].day
-    if tempMonth > 4:
-        allWaves4 = np.where((tC < datetime(tempYear,tempMonth-3,tempDay)) & (tC > datetime(tempYear,tempMonth-4,tempDay)))
-        allWaves1 = np.where((tC < datetime(tempYear,tempMonth-2,tempDay)) & (tC > datetime(tempYear,tempMonth-3,tempDay)))
-        allWaves2 = np.where((tC < datetime(tempYear,tempMonth-1,tempDay)) & (tC > datetime(tempYear,tempMonth-2,tempDay)))
-        allWaves3 = np.where((tC < timeSubset[tempInd[0][0]]) & (tC > datetime(tempYear,tempMonth-1,tempDay)))
-    elif tempMonth == 4:
-        allWaves4 = np.where((tC < datetime(tempYear,tempMonth-3,tempDay)) & (tC > datetime(tempYear-1,12,tempDay)))
-        allWaves1 = np.where((tC < datetime(tempYear,tempMonth-2,tempDay)) & (tC > datetime(tempYear,tempMonth-3,tempDay)))
-        allWaves2 = np.where((tC < datetime(tempYear,tempMonth-1,tempDay)) & (tC > datetime(tempYear,tempMonth-2,tempDay)))
-        allWaves3 = np.where((tC < timeSubset[tempInd[0][0]]) & (tC > datetime(tempYear,tempMonth-1,tempDay)))
-    else:
-        allWaves1 = np.where((tC < datetime(tempYear-1,12,tempDay)) & (tC > datetime(tempYear-1,11,tempDay)))
-        allWaves1 = np.where((tC < datetime(tempYear,tempMonth-2,tempDay)) & (tC > datetime(tempYear-1,12,tempDay)))
-        allWaves2 = np.where((tC < datetime(tempYear,tempMonth-1,tempDay)) & (tC > datetime(tempYear,tempMonth-2,tempDay)))
-        allWaves3 = np.where((tC < timeSubset[tempInd[0][0]]) & (tC > datetime(tempYear,tempMonth-1,tempDay)))
-
-    threeMonthWE.append([np.nanmean(weC[allWaves4]),np.nanmean(weC[allWaves1]),np.nanmean(weC[allWaves2]),np.nanmean(weC[allWaves3])])
-    threeMonthLWP.append([np.nanmean(np.abs(lwpC[allWaves4])),np.nanmean(np.abs(lwpC[allWaves1])),np.nanmean(np.abs(lwpC[allWaves2])),np.nanmean(np.abs(lwpC[allWaves3]))])
-    threeMonthFV.append([np.nanmean(fV[allWaves4]),np.nanmean(fV[allWaves1]),np.nanmean(fV[allWaves2]),np.nanmean(fV[allWaves3])])
-
-
-
-
-lowSlopes = np.where((np.array(lineSlopes) < 1.2))
-highSlopes = np.where((np.array(lineSlopes) > 1.2))
-
-
-plotTime = [1,2,3,4]
-plt.figure()
-ax1 = plt.subplot2grid((1,1),(0,0),rowspan=1,colspan=1)
-seasonalMean = np.mean(np.array(threeMonthWE)[highSlopes[0],:],axis=0)
-seasonalStd = np.std(np.array(threeMonthWE)[highSlopes[0],:],axis=0)
-ax1.plot(plotTime,seasonalMean,'o-',label='2 Bars Maintained',color='r')
-ax1.fill_between(plotTime, seasonalMean - seasonalStd, seasonalMean + seasonalStd, color='r', alpha=0.2)
-
-seasonalMean2 = np.mean(np.array(threeMonthWE)[lowSlopes[0],:],axis=0)
-seasonalStd2 = np.std(np.array(threeMonthWE)[lowSlopes[0],:],axis=0)
-ax1.plot(plotTime,seasonalMean2,'o-',label='New Bar Created',color='blue')
-ax1.fill_between(plotTime, seasonalMean2 - seasonalStd2, seasonalMean2 + seasonalStd2, color='blue', alpha=0.2)
-
-ax1.set_xticks([plotTime[0],plotTime[1],plotTime[2],plotTime[3]])
-ax1.set_xticklabels(['4-months prior','3-months prior','2-months prior','1-month prior',])
-ax1.legend()
-plt.show()

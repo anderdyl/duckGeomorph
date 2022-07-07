@@ -67,6 +67,102 @@ postProfiles1 = np.vstack((outputProfiles['post'],outputProfiles2['post']))
 preProfiles = np.vstack((preProfiles1,outputProfiles3['pre']))
 postProfiles = np.vstack((postProfiles1,outputProfiles3['post']))
 
+ogdist = outputProfiles3['dist']
+
+asdfg
+
+with open(r'nourishmentProfileEOFs2.pickle', "rb") as input_file:
+    outputEOFs = pickle.load(input_file)
+
+zInt = outputEOFs['zInt']
+x = outputEOFs['x']
+dist = x
+originalIPCA = PCA(n_components=9)
+zeroLine = np.zeros((np.shape(dist)))
+
+origPCs = originalIPCA.fit_transform(zInt-np.mean(zInt,axis=0))
+
+
+
+
+xInitial = np.arange(0,70,7)
+xInit2 = np.arange(70,90,2)
+xIM = np.arange(90,100,1)
+xIM2 = np.arange(100,180,0.5)
+xIM3 = np.arange(180,230,1)
+xMiddle = np.arange(230,260,2)
+xMiddle2 = np.arange(260,440,10)
+xME = np.arange(440,840,20)
+
+x = np.hstack((xInitial,xInit2))
+x = np.hstack((x,xIM))
+x = np.hstack((x,xIM2))
+x = np.hstack((x,xIM3))
+x = np.hstack((x,xMiddle))
+x = np.hstack((x,xMiddle2))
+x = np.hstack((x,xME))
+
+
+
+for xx in range(len(postProfiles)):
+    if xx == 0:
+        z = postProfiles[xx,:]
+        f2 = interp1d(ogdist-80, z, kind='linear')
+        zDownscaled = f2(x)
+
+        z1 = preProfiles[xx,:]
+        f3 = interp1d(ogdist-80,z1, kind='linear')
+        zDownscaledPre = f3(x)
+    else:
+        z = postProfiles[xx,:]
+        f2 = interp1d(ogdist-80, z, kind='linear')
+        z2 = f2(x)
+        zDownscaled = np.vstack((zDownscaled,z2))
+
+        z1 = preProfiles[xx,:]
+        f3 = interp1d(ogdist-80,z1, kind='linear')
+        z3 = f3(x)
+        zDownscaledPre = np.vstack((zDownscaledPre,z3))
+
+
+zShort = zDownscaled
+xShort = x
+zShortPre = zDownscaledPre
+
+for zz in range(len(zShort)):
+    f = interp1d(xShort, zShort[zz,:], kind='linear')
+    f2 = interp1d(xShort,  zShortPre[zz,:], kind='linear')
+    if zz == 0:
+        zInt2 = f(x)
+        zInt3 = f2(x)
+    else:
+        zInt2 = np.vstack((zInt2, f(x)))
+        zInt3 = np.vstack((zInt3, f2(x)))
+
+
+
+
+newPCs = originalIPCA.transform(zInt2-np.mean(zInt,axis=0))
+
+newProfs = originalIPCA.inverse_transform(newPCs)+np.mean(zInt,axis=0)
+
+# plt.plot(ogdist,postProfiles[1,:])
+plt.plot(x,zShort[3,:])
+plt.plot(x,newProfs[3,:])
+
+plt.plot(dist,np.mean(zInt,axis=0))
+
+outProfs = dict()
+outProfs['x'] = x
+outProfs['xbPost'] = zShort
+outProfs['xbPostPCs'] = newPCs
+outProfs['zInt'] = zInt
+import scipy.io
+scipy.io.savemat('xBeachPostProfiles.mat',outProfs)
+
+
+
+
 
 dist = outputProfiles['dist']
 zeroLine = np.zeros((np.shape(postProfiles[0,:])))

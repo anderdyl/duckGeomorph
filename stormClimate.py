@@ -425,6 +425,7 @@ hourStormList = []
 indStormList = []
 indNTRStormList = []
 bmuStormList = []
+predWaterList = []
 for xx in range(len(stormHsList)-2):
 
     i1 = stormHsList[xx][0]
@@ -461,6 +462,7 @@ for xx in range(len(stormHsList)-2):
         bmuStormList.append(dwtBMUS[tempBMU])
         hsStormList.append(hsCombined[tempWave])
         ntrStormList.append(residualWaterLevelFRF[tempWaterLevel])
+        predWaterList.append(predictedWaterLevelFRF[tempWaterLevel])
         # hsMaxList = np.append(hsMaxList,np.nanmax(hsCombined[tempWave]))
         # hsMinList = np.append(hsMinList,np.nanmin(hsCombined[tempWave]))
         tpStormList.append(tpCombined[tempWave])
@@ -483,6 +485,7 @@ ntrMaxStorm = []
 tpMaxStorm = []
 timeStorm = []
 timeStormEnd = []
+tideMaxStorm = []
 for x in range(len(hsStormList)):
     tempHs = hsStormList[x]
     tempTp = tpStormList[x]
@@ -498,16 +501,27 @@ for x in range(len(hsStormList)):
     tempDm = dmStormList[x]
     dmAvgStorm.append(np.nanmean(tempDm))
     tempNTR = ntrStormList[x]
+    tempTide = np.where((~np.isnan(predWaterList[x])))
+    #tideMaxStorm.append(predWaterList[x][0:-1:10])
+    if len(tempTide[0]) > 0:
+        predictedWater = predWaterList[x][tempTide[0][0]:-1:10]
+        howLong = len(predictedWater)
+        tideMaxStorm.append(predictedWater[int(howLong/2)])
+    else:
+        tideMaxStorm.append(0)
+
     if len(tempNTR) > 0:
         ntrMaxStorm.append(np.nanmax(tempNTR))
     else:
         ntrMaxStorm.append(np.nan)
 
 
+
 hsStormArray = np.array(hsMaxStorm)
 tpStormArray = np.array(tpMaxStorm)
 dmStormArray = np.array(dmAvgStorm)
 ntrStormArray = np.array(ntrMaxStorm)
+tideStormArray = np.array(tideMaxStorm)
 durationStormArray = np.array(durationHoursStorm)
 timeStormArray = np.array(timeStorm)
 timeStormEndArray = np.array(timeStormEnd)
@@ -519,7 +533,7 @@ filteredDur = durationStormArray[~np.isnan(ntrStormArray)]
 filteredTime = timeStormArray[~np.isnan(ntrStormArray)]
 filteredTimeEnd = timeStormEndArray[~np.isnan(ntrStormArray)]
 filteredNTR = ntrStormArray[~np.isnan(ntrStormArray)]
-
+filteredTide = tideStormArray[~np.isnan(ntrStormArray)]
 
 badNTRs = np.where((filteredNTR > 1.5))
 filteredNTR[badNTRs] = 0.25
@@ -612,6 +626,7 @@ output['filteredHs'] = filteredHs
 output['filteredTp'] = filteredTp
 output['filteredDm'] = filteredDm
 output['filteredNTR'] = filteredNTR
+output['filteredTide'] = filteredTide
 output['filteredDur'] = filteredDur
 output['filteredTime'] = filteredTime
 output['filteredTimeEnd'] = filteredTimeEnd
@@ -634,6 +649,7 @@ filteredOutput['filteredHs'] = filteredHs
 filteredOutput['filteredTp'] = filteredTp
 filteredOutput['filteredDm'] = filteredDm
 filteredOutput['filteredNTR'] = filteredNTR
+filteredOutput['filteredTide'] = filteredTide
 filteredOutput['filteredTimeEnd'] = mdateVecTimeEnd
 filteredOutput['filteredTime'] = mdateVecTime
 filteredOutput['filteredDur'] = filteredDur

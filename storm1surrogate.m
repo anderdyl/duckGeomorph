@@ -64,7 +64,7 @@ for hhh = 1:1600
 
 end
 
-save('storm1Fits.mat','dist1','a1','b1')
+%save('storm1Fits.mat','dist1','a1','b1')
 
 
 
@@ -100,7 +100,7 @@ for hhh = 1:1600
 
 end
 
-save('storm2Fits.mat','dist2','a2','b2')
+%save('storm2Fits.mat','dist2','a2','b2')
 
 
 
@@ -137,7 +137,7 @@ for hhh = 1:1600
 
 end
 
-save('storm3Fits.mat','dist3','a3','b3')
+%save('storm3Fits.mat','dist3','a3','b3')
 
 
 
@@ -177,7 +177,7 @@ for hhh = 1:1600
 
 end
 
-save('storm4Fits.mat','dist4','a4','b4')
+%save('storm4Fits.mat','dist4','a4','b4')
 
 
 

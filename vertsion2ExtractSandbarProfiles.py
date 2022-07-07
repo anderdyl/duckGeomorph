@@ -15,7 +15,7 @@ import sandBarTool.morphLib as mL
 
 
 
-geomorphdir = '/media/dylananderson/Elements/filteredFRF_Geomorph/'
+geomorphdir = '/media/dylananderson/Elements/filteredFRF_GeomorphUpdate/'
 #geomorphdir = '/media/dylananderson/Elements/FRF_Geomorph/'
 
 files = os.listdir(geomorphdir)
@@ -113,6 +113,7 @@ for i in range(len(subset)):
     #data = getBathy(os.path.join(geomorphdir, subset[i]), lower=1070, upper=1100)
     #data = getBathy(os.path.join(geomorphdir, subset[i]), lower=750, upper=950)
     #data = getBathy(os.path.join(geomorphdir, subset[i]), lower=-10, upper=20)
+
     file_params = subset[i].split('_')
 
     ## ### Southern Lines
@@ -143,8 +144,11 @@ for i in range(len(subset)):
     #data = getBathy(os.path.join(geomorphdir, subset[i]), lower=-2, upper=10)
 
     temp = subset[i].split('_')
-
-    surveydate = DT.datetime.strptime(temp[1], '%Y%m%d')
+    if temp[1] == 'geomorphology':
+        temp2 = temp[-1].split('.')
+        surveydate = DT.datetime.strptime(temp2[0], '%Y%m%d')
+    else:
+        surveydate = DT.datetime.strptime(temp[1], '%Y%m%d')
     elevs = data1['z']
     cross = data1['x']
     crossind = np.argsort(data1['x'])
@@ -677,7 +681,10 @@ for i in range(len(subset)):
 
                         alllines = refProf
                             # alllines = avgProf
-                        surveyType = file_params[6]
+                        if file_params[1] == 'geomorphology':
+                            surveyType = 'GPS'
+                        else:
+                            surveyType = file_params[6]
                         time = surveydate
                         maxDiff = tempDiff
                         count = count+1
@@ -921,7 +928,10 @@ for i in range(len(subset)):
 
                         alllines = np.vstack((alllines, refProf))
                             #alllines = np.vstack((alllines, avgProf))
-                        surveyType = np.append(surveyType,file_params[6])
+                        if file_params[1] == 'geomorphology':
+                            surveyType = np.append(surveyType,'GPS')
+                        else:
+                            surveyType = np.append(surveyType,file_params[6])
                         time = np.append(time,surveydate)
                         maxDiff = np.vstack((maxDiff,tempDiff))
 
@@ -1146,7 +1156,7 @@ tg, xg = np.meshgrid(time, xinterp)
 
 
 
-morphoPickle = 'sandbarsSouthernTransect_referencedMHHW_5lineAvg.pickle'
+morphoPickle = 'sandbarsSouthernTransect_referencedMHHW_5lineAvgLonger2.pickle'
 output = {}
 output['time'] = time
 output['alllines'] = alllines

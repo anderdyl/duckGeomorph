@@ -288,9 +288,9 @@ with open(nourishmentFitPickle,'wb') as f:
 #
 
 
-asdfg
 
-profileNumber = 400
+
+profileNumber = 1130
 
 
 dataPred = scipy.io.loadmat('storm1Fits.mat')
@@ -424,7 +424,7 @@ for hh in range(len(surrogates)):
 
 storm1newPCs = originalIPCA.transform(surrogates)
 storm1newProfiles = originalIPCA.inverse_transform(storm1newPCs)
-p5.plot(dist, storm1newProfiles[profileNumber, :], '--', color=[0.7, 0.7, 0.7])
+#p5.plot(dist, storm1newProfiles[profileNumber, :], '--', color=[0.7, 0.7, 0.7])
 
 storm1PCs = dict()
 storm1PCs['storm1PCs'] = storm1newPCs
@@ -565,7 +565,7 @@ for hh in range(len(surrogates2)):
 
 storm2newPCs = originalIPCA.transform(surrogates2)
 storm2newProfiles = originalIPCA.inverse_transform(storm2newPCs)
-p5.plot(dist, storm2newProfiles[profileNumber, :], '--', color=[0.7, 0.7, 0.7])
+#p5.plot(dist, storm2newProfiles[profileNumber, :], '--', color=[0.7, 0.7, 0.7])
 
 storm2PCs = dict()
 storm2PCs['storm2PCs'] = storm2newPCs
@@ -703,7 +703,7 @@ for hh in range(len(surrogates3)):
 
 storm3newPCs = originalIPCA.transform(surrogates3)
 storm3newProfiles = originalIPCA.inverse_transform(storm3newPCs)
-p5.plot(dist, storm3newProfiles[profileNumber, :], '--', color=[0.7, 0.7, 0.7])
+#p5.plot(dist, storm3newProfiles[profileNumber, :], '--', color=[0.7, 0.7, 0.7])
 
 storm3PCs = dict()
 storm3PCs['storm3PCs'] = storm3newPCs
@@ -881,7 +881,8 @@ for hh in range(len(surrogates3)):
 
     if hh == profileNumber:
         plt.plot(predScarp2X,predScarp2Z,label='Surrogate Storm 4')
-        plt.plot(predScarp2XOG,predScarp2ZOG,label='Surrogate on OG')
+        #plt.plot(predScarp2XOG,predScarp2ZOG,label='Surrogate on OG')
+        #plt.plot(predScarp2XOG, predScarp2ZOG, label='Surrogate Storm 4')
         plt.legend()
 
     finterp = interp1d(predScarp2X,predScarp2Z,'cubic')
@@ -899,7 +900,11 @@ for hh in range(len(surrogates3)):
 
 storm4newPCs = originalIPCA.transform(surrogates4)
 storm4newProfiles = originalIPCA.inverse_transform(storm4newPCs)
-p5.plot(dist, storm4newProfiles[profileNumber, :], '--', color=[0.7, 0.7, 0.7])
+#p5.plot(dist, storm4newProfiles[profileNumber, :], '--', color=[0.7, 0.7, 0.7])
+
+p5.plot([50,200],[0,0],color=[0.5, 0.5,0.5])
+p5.set_xlabel('cross-shore (m)')
+p5.set_ylabel('elevation (m)')
 
 storm4PCs = dict()
 storm4PCs['storm4PCs'] = storm4newPCs
@@ -1025,7 +1030,7 @@ plt.legend()
 
 
 
-
+asdfg
 
 
 surroPickle = 'surrogateOf4Storms.pickle'
@@ -1060,7 +1065,7 @@ plt.xlim([0,350])
 plt.ylim([-5,5])
 plt.legend()
 
-asdfg
+
 
 
 

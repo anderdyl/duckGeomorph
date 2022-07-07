@@ -433,7 +433,7 @@ for hh = 1:length(sets)
         Validationdist(1:size,qq) = valdist;
         eval(['gprMdl',num2str(qq),' = gprMdldist;'])
         subplot(2,3,1)
-        eval(['p',num2str(qq),' = scatter(valdist,Resultsdist(:,qq),''filled'');'])
+        eval(['p',num2str(qq),' = scatter(valdist,Resultsdist(:,qq),''filled'',''MarkerEdgeAlpha'',0.5,''MarkerFaceAlpha'',0.5);'])
         hold on
         xlabel('Xbeach (m)')
         ylabel('GPR (m)')          
@@ -451,7 +451,7 @@ for hh = 1:length(sets)
         eval(['gprMdl',num2str(qq),' = gprMdl1;'])
         
         subplot(2,3,2)
-        eval(['p',num2str(qq),' = scatter(vala,Resultsa(:,qq),''filled'');'])
+        eval(['p',num2str(qq),' = scatter(vala,Resultsa(:,qq),''filled'',''MarkerEdgeAlpha'',0.5,''MarkerFaceAlpha'',0.5);'])
         hold on
         xlabel('Xbeach A')
         ylabel('GPR A')
@@ -469,7 +469,7 @@ for hh = 1:length(sets)
         eval(['gprMdl',num2str(qq),' = gprMdl1;'])
         
         subplot(2,3,3)
-        eval(['p',num2str(qq),' = scatter(valb,Resultsb(:,qq),''filled'');'])
+        eval(['p',num2str(qq),' = scatter(valb,Resultsb(:,qq),''filled'',''MarkerEdgeAlpha'',0.5,''MarkerFaceAlpha'',0.5);'])
         hold on
         xlabel('Xbeach B')
         ylabel('GPR B')
@@ -486,9 +486,13 @@ end
 
 subplot(2,3,1)
 [r m2 b2] = regression(Resultsdist(:)',Validationdist(:)');
-title(['xLoc R^{2} = ',num2str(round(r*1000)/1000),''])% with K-fold of ',num2str(size),' with-held from ',num2str(total),''],'color','k')
+%title(['xLoc R^{2} = ',num2str(round(r*1000)/1000),''])% with K-fold of ',num2str(size),' with-held from ',num2str(total),''],'color','k')
+title('{\it D_{s}} K-folding')
+text(15,70,'R^{2} = 0.97','fontweight','bold')
 %plot([0.5 4.5],[0.5 4.5],'w--')
-plot([100 260],[100 260],'k--')
+plot([0 100],[0 100],'k--')
+xlim([0 90])
+ylim([0 90])
 %lg = legend([p1 p2 p3 p4 p5],'1^{st} fold','2^{nd} fold','3^{rd} fold','4^{th} fold','5^{th} fold','location','northwest');
 %ylim([-6 6])
 %xlim([-6 6])
@@ -506,15 +510,20 @@ bar(binrng,counts4)
 bar(binrng,counts3)
 bar(binrng,counts2)
 bar(binrng,counts1)
-xlabel('distance error')
-title('Errors for all folds','color','k')
+xlabel('{\it D_{s}} Error')
+%title('Errors for all folds','color','k')
 
 
 subplot(2,3,2)
 [r m2 b2] = regression(Resultsa(:)',Validationa(:)');
-title(['A R^{2} = ',num2str(round(r*1000)/1000),''])% with K-fold of ',num2str(size),' with-held from ',num2str(total),''],'color','k')
+%title(['A R^{2} = ',num2str(round(r*1000)/1000),''])% with K-fold of ',num2str(size),' with-held from ',num2str(total),''],'color','k')
 %plot([0.5 4.5],[0.5 4.5],'w--')
-plot([-2.5 0.5],[-2.5 0.5],'k--')
+plot([-3 0.5],[-3 0.5],'k--')
+xlim([-3 0.5])
+ylim([-3 0.5])
+text(-2.5,-0.30,'R^{2} = 0.96','fontweight','bold')
+title('{\it A} K-folding')
+
 %lg = legend([p1 p2 p3 p4 p5],'1^{st} fold','2^{nd} fold','3^{rd} fold','4^{th} fold','5^{th} fold','location','northwest');
 %ylim([-6 6])
 %xlim([-6 6])
@@ -532,23 +541,27 @@ bar(binrng,counts4)
 bar(binrng,counts3)
 bar(binrng,counts2)
 bar(binrng,counts1)
-xlabel('A error')
-title('Errors for all folds','color','k')
+xlabel('{\it A} Error')
+%title('Errors for all folds','color','k')
 
 
 subplot(2,3,3)
 [r m2 b2] = regression(Resultsb(:)',Validationb(:)');
-title(['B R^{2} = ',num2str(round(r*1000)/1000),''])% with K-fold of ',num2str(size),' with-held from ',num2str(total),''],'color','k')
-plot([0.0 1.5],[0.0 1.5],'k--')
-xlim([0.0,1.5])
-ylim([0.0,1.5])
+%title(['B R^{2} = ',num2str(round(r*1000)/1000),''])% with K-fold of ',num2str(size),' with-held from ',num2str(total),''],'color','k')
+title('{\it B} K-folding')
+
+plot([0.0 1.2],[0.0 1.2],'k--')
+xlim([0.0,1.1])
+ylim([0.0,1.1])
+text(0.15,0.84,'R^{2} = 0.90','fontweight','bold')
+
 %plot([20 160],[20 160],'k--')
 %lg = legend([p1 p2 p3 p4 p5],'1^{st} fold','2^{nd} fold','3^{rd} fold','4^{th} fold','5^{th} fold','location','northwest');
 %ylim([-6 6])
 %xlim([-6 6])
 subplot(2,3,6)
 errors = Resultsb-Validationb;
-binrng = -0.75:.05:0.75;
+binrng = -0.4:.03:0.4;
 counts1 = histc(errors(:,1),binrng);
 counts2 = histc(errors(:,2),binrng)+counts1;
 counts3 = histc(errors(:,3),binrng)+counts2;
@@ -560,8 +573,23 @@ bar(binrng,counts4)
 bar(binrng,counts3)
 bar(binrng,counts2)
 bar(binrng,counts1)
-xlabel('B error')
-title('Errors for all folds','color','k')
+xlabel('{\it B} Error')
+%title('Errors for all folds','color','k')
+xlim([-0.5 0.5])
+
+
+subplot(2,3,1)
+text(0.025, 0.95,'a)','Units','normalized','FontSize',12,'fontweight','bold')
+subplot(2,3,2)
+text(0.025, 0.95,'b)','Units','normalized','FontSize',12,'fontweight','bold')
+subplot(2,3,3)
+text(0.025, 0.95,'c)','Units','normalized','FontSize',12,'fontweight','bold')
+subplot(2,3,4)
+text(0.025, 0.95,'d)','Units','normalized','FontSize',12,'fontweight','bold')
+subplot(2,3,5)
+text(0.025, 0.95,'e)','Units','normalized','FontSize',12,'fontweight','bold')
+subplot(2,3,6)
+text(0.025, 0.95,'f)','Units','normalized','FontSize',12,'fontweight','bold')
 
 
     errorsdist = Resultsdist-Validationdist;
@@ -579,7 +607,7 @@ squarederrorsb = (errorsb).^2;
 mseb = mean(squarederrorsb);
 RMSEb = sqrt(mseb);
 %%
-
+%{
 
 % sets = [10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,199]; %,24,28,32,36,40,44,48,52,56,60,64,68,72,76,80,84,88,92,96];
 % totals = [50,100,150,200,250,300,350,400,450,500,550,600,650,700,750,800,850,900,950,995]; %,120,140,160,180,200,220,240,260,280,300,320,340,360,380,400,420,440,460,480];
@@ -730,3 +758,4 @@ set(lines,'Color','r')
 ylabel('RMSE')
 xlabel('# used to calibrate')
 title('B')
+%}

@@ -471,6 +471,7 @@ ax2.set_ylabel('PCs')
 plt.tight_layout()
 # plt.savefig('EOF1NagsHead.png')![](EOF6NagsHead.png)
 # plt.close()
+asdfg
 
 import pickle
 eofPickle = 'EOF1forPlotting.pickle'
@@ -512,6 +513,59 @@ scipy.io.savemat('nourishmentPCA.mat',nourPCA)
 
 
 asdfg
+
+
+
+
+
+plt.figure(figsize=(10,10))
+axis1 = plt.subplot2grid((4,1),(0,0),rowspan=2,colspan=1)
+for xx in range(len(zInt)):
+    axis1.plot(x,zInt[xx,:], color=[0.5,0.5,0.5])
+
+axis1.fill_between(x, meanZ+stdZ, meanZ-stdZ, facecolor=[0.75,0.75,0.75], alpha=0.5)
+
+meanZ = np.mean(zInt,axis=0)
+axis1.plot(x,meanZ,'k-',linewidth=3)
+# axis1.set_xlabel('Cross-shore (m)')
+# axis1.set_xlabel('')
+axis1.set_ylabel('Elevation (m)')
+axis1.text(300,6,'All Profiles (black = mean)')
+axis1.set_xlim([0,800])
+axis1.text(0.02,0.95,'a',transform=axis1.transAxes,fontsize=16,fontweight='bold',va='top')
+
+axis2 = plt.subplot2grid((4,1),(2,0),rowspan=1,colspan=1)
+# ax1 = plt.subplot2grid((3,3),(0,0),rowspan=2,colspan=3)
+axis2.plot(x,EOFs[0,:])
+# axis2.set_title('EOF 1')
+# axis2.set_title('')
+axis2.text(360,0.07,'EOF #1')
+axis2.set_xlabel('Cross-shore (m)')
+axis2.set_xlim([0,800])
+axis2.text(0.02,0.95,'b',transform=axis2.transAxes,fontsize=16,fontweight='bold',va='top')
+
+axis3 = plt.subplot2grid((4,1),(3,0),rowspan=1,colspan=1)
+
+data = []
+for tt in uniqueNumbers:
+    indexN = np.where((numberS == tt))
+    temp = PCs[indexN,0]
+    data.append(temp[0])
+    # temp = np.mean(PCs[indexN,0],axis=1)
+    # pcs1[int(tt)] = temp[0]
+x1 = dt.datetime(2010,1,1)
+x2 = dt.datetime(2020,1,1)
+pos = [(yy-x1).days for yy in dates]
+axis3.boxplot(data, positions=pos, widths = 20)
+axis3.set_xlim([0, (x2-x1).days ])
+axis3.set_xticklabels(['{}/{}'.format(ff.month,ff.year) for ff in dates], rotation=45)
+axis3.plot(pos,pcs1,'--',color=[0.2,0.2,0.2])
+axis3.plot([0, (x2-x1).days],[0,0],'-',color=[0.5,0.5,0.5],linewidth=0.5)
+axis3.set_xlabel('Surveys')
+axis3.set_ylabel('PCs')
+axis3.text(0.02,0.95,'c',transform=axis3.transAxes,fontsize=16,fontweight='bold',va='top')
+plt.tight_layout()
+
 
 
 plt.figure(figsize=(12,8))

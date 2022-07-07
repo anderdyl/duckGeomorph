@@ -53,10 +53,10 @@ sortedfu = fu(sortind,:);
 % P1 = sortedtidecon(6,:);
 % Q1 = sortedtidecon(8,:);
 
-consts = 5;%8;%64;
+consts = 64;%5;%8;%64;
 %time_emulator = [datenum(1700,6,1,0,0+ffff*2,0):1/24:datenum(2800,5,31,23,0+ffff*2,0)];
 %time_emulator = [datenum(2018,1,1,0,0,0):1/24:datenum(2018,5,31,23,0,0)];
-time_emulator = [datenum(1980,1,1,0,0,0):1/24:datenum(2100,12,31,23,0,0)];
+time_emulator = [datenum(1980,1,1,0,0,0):1/24:datenum(2122,6,1,0,0,0)];
 %time_emulator = [datenum(1980,1,1,0,0,0):1/24:datenum(2013,12,31,23,0,0)];
 
 
@@ -262,6 +262,12 @@ plot(time_emulator,tsum,'k','linewidth',1.5)
 xlim([datenum(1980,1,1,0,0,0) datenum(1980,2,1,0,0,0)])
 
 
+indexEmulate = find(time_emulator >= datenum(2022,6,1,0,0,0));
+
+synTime = time_emulator(indexEmulate);
+synTide = tsum(indexEmulate);
+
+%{
 
 %%
 clearvars -except newy phases sortedfu sortedtidecon time_emulator ffff
@@ -380,4 +386,4 @@ plot(time_emulator,fourtides)
 % 
 
 
-
+%}

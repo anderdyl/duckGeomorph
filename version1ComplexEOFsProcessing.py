@@ -11,15 +11,31 @@ import sandBarTool.morphLib as mL
 
 import pickle
 # dbfile = open('sandbarsSouthernTransect_referencedMHHW_reallylongWithNegatives.pickle', 'rb')
-dbfile = open('sandbarsSouthernTransect_referencedMHHW_5lineAvg.pickle', 'rb')
+dbfile = open('sandbarsSouthernTransect_referencedMHHW_5lineAvgLonger2.pickle', 'rb')
 
 #dbfile = open('sandbarsNorthernTransect_referencedMHHW_reallylong.pickle', 'rb')
 
 data = pickle.load(dbfile)
 dbfile.close()
-alllines = data['alllines']
-xinterp = data['xinterp']
+alllinesOG = data['alllines']
+xinterpOG = data['xinterp']
 time = data['time']
+
+def interpBathy(xSub, zSub, x):
+    f = interp1d(xSub, zSub, kind='linear', bounds_error=False)
+    newz = f(x)
+    newBathy = dict()
+    newBathy['x'] = x
+    newBathy['z'] = newz
+    return newBathy
+
+xinterp = np.arange(0,510,5)
+alllines = np.nan*np.ones((len(time),len(xinterp)))
+
+for hh in range(len(time)):
+    lowerRes = interpBathy(xinterpOG, alllinesOG[hh,:], xinterp)
+    alllines[hh,:] = lowerRes['z']
+
 
 nanmean = np.nanmean(alllines,axis=0)
 finder = np.where(np.isnan(alllines))
@@ -152,7 +168,7 @@ percentV = lamda / totalV
 
 ztemp = 0*np.ones(len(xinterp),)
 timestep = 200
-for mode in range(8):
+for mode in range(2):
     # ztemp = ztemp + Rt[timestep,mode]*np.sin(phit[timestep,mode]) * S[:,mode]*np.sin(theta[:,mode]) + Rt[timestep,mode]*np.cos(phit[timestep,mode]) * S[:,mode]*np.cos(theta[:,mode])
     ztemp = ztemp + Rt[timestep,mode]*S[:,mode]*np.cos(phit[timestep,mode] - theta[:,mode])
 
@@ -351,27 +367,27 @@ def datetime2matlabdn(dt):
 matlabTime = np.zeros((len(time),))
 for qq in range(len(time)):
     matlabTime[qq] = datetime2matlabdn(time[qq])
-
-morphoPickle = 'ceofsSouthernTransectLatest.pickle'
-output = {}
-output['time'] = time
-output['alllines'] = alllines
-output['xinterp'] = xinterp
-output['S'] = S
-output['Rt'] = Rt
-output['thetaRadians'] = theta
-output['thetaDegrees'] = theta2
-output['phiRadian'] = phit
-output['phiDegrees'] = phit2
-output['totalV'] = totalV
-output['lamda'] = lamda
-output['percentV'] = percentV
-
-
-
-import pickle
-with open(morphoPickle,'wb') as f:
-    pickle.dump(output, f)
+#
+# morphoPickle = 'ceofsSouthernTransectLatestLonger.pickle'
+# output = {}
+# output['time'] = time
+# output['alllines'] = alllines
+# output['xinterp'] = xinterp
+# output['S'] = S
+# output['Rt'] = Rt
+# output['thetaRadians'] = theta
+# output['thetaDegrees'] = theta2
+# output['phiRadian'] = phit
+# output['phiDegrees'] = phit2
+# output['totalV'] = totalV
+# output['lamda'] = lamda
+# output['percentV'] = percentV
+#
+#
+#
+# import pickle
+# with open(morphoPickle,'wb') as f:
+#     pickle.dump(output, f)
 
 
 import scipy.io
@@ -388,5 +404,53 @@ output['phiDegrees'] = phit2
 output['totalV'] = totalV
 output['lamda'] = lamda
 output['percentV'] = percentV
-scipy.io.savemat('ceofsSouthernTransectLatest.mat',output)
+scipy.io.savemat('ceofsSouthernTransectLatestLonger2.mat',output)
+
+
+from scipy.stats import linregress
+
+recon1 = eofPred.T
+recon2 = eofPred2.T
+recon3 = eofPred3.T
+recon4 = eofPred4.T
+
+cumrecon = recon1+recon2
+surveys = (alllines-np.mean(alllines, axis=0)).T# - recon4
+
+plt.figure()
+plt.plot(surveys[0,:],recon1[0,:],'o')
+
+rsquared = np.nan * np.ones((len(xinterp),))
+rvalues = np.nan * np.ones((len(xinterp),))
+slopes = np.nan * np.ones((len(xinterp),))
+intercepts = np.nan * np.ones((len(xinterp),))
+rsquared2 = np.nan * np.ones((len(xinterp),))
+rvalues2 = np.nan * np.ones((len(xinterp),))
+slopes2 = np.nan * np.ones((len(xinterp),))
+intercepts2 = np.nan * np.ones((len(xinterp),))
+
+for hh in range(len(xinterp)):
+    slope, intercept, r, p, se = linregress(surveys[hh,:], cumrecon[hh,:])
+    rsquared[hh] = np.square(r)
+    rvalues[hh] = r
+    slopes[hh] = slope
+    intercepts[hh] = intercept
+    slope2, intercept2, r2, p2, se2 = linregress(surveys[hh,:], recon1[hh,:])
+    rsquared2[hh] = np.square(r2)
+    rvalues2[hh] = r2
+    slopes2[hh] = slope2
+    intercepts2[hh] = intercept2
+
+plt.figure()
+plt.plot(xinterp,rsquared)
+plt.plot(xinterp,rsquared2)
+
+
+
+
+
+
+
+
+
 

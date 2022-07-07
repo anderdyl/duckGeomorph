@@ -8,7 +8,7 @@ from netCDF4 import Dataset
 from glob import glob
 import os
 
-geomorphdir = '/media/dylananderson/Elements/filteredFRF_Geomorph/'
+geomorphdir = '/media/dylananderson/Elements/filteredFRF_GeomorphUpdate/'
 
 files = os.listdir(geomorphdir)
 
@@ -50,12 +50,18 @@ def getBathy(file, lower, upper):
 time = []
 for i in range(len(files)):
     temp = files[i].split('_')
-    time = np.append(time, DT.datetime.strptime(temp[1], '%Y%m%d'))
+    if temp[1] == 'geomorphology':
+        temp2 = temp[-1].split('.')
+        time = np.append(time, DT.datetime.strptime(temp2[0], '%Y%m%d'))
+
+    else:
+        time = np.append(time, DT.datetime.strptime(temp[1], '%Y%m%d'))
 
 
 # Lets find just the files after January 2017
-recent = np.nonzero((time > DT.datetime(2017,7,22)) & (time < DT.datetime(2019,4,1)))
+# recent = np.nonzero((time > DT.datetime(2017,7,22)) & (time < DT.datetime(2019,4,1)))
 # recent = np.nonzero((time > DT.datetime(2018,5,22)) & (time < DT.datetime(2018,9,1)))
+recent = np.nonzero((time > DT.datetime(2019,7,22)) & (time < DT.datetime(2022,5,1)))
 
 subset = files[recent[0][0]:recent[0][-1]].copy()
 
@@ -71,7 +77,11 @@ for i in range(len(subset)):
 
     # data = getBathy(os.path.join(geomorphdir, subset[i]), lower=700, upper=800)
     temp = subset[i].split('_')
-    ax[0].plot(data['x'], data['z'], label=temp[1])
+    if temp[1] == 'geomorphology':
+        temp2 = temp[-1].split('.')
+        ax[0].plot(data['x'], data['z'], label=temp2[0])
+    else:
+        ax[0].plot(data['x'], data['z'], label=temp[1])
 
 ax[0].legend(loc='upper right')
 ax[0].set_xlim([50, 800])
@@ -91,7 +101,11 @@ for i in range(len(subset1)):
 
     data = getBathy(os.path.join(geomorphdir, subset1[i]), lower=720, upper=750)
     temp = subset1[i].split('_')
-    ax[1].plot(data['x'], data['z'], label=temp[1])
+    if temp[1] == 'geomorphology':
+        temp2 = temp[-1].split('.')
+        ax[1].plot(data['x'], data['z'], label=temp2[0])
+    else:
+        ax[1].plot(data['x'], data['z'], label=temp[1])
 
 ax[1].legend(loc='upper right')
 ax[1].set_xlim([50, 800])
@@ -152,7 +166,11 @@ for i in range(len(subset2)):
 
     data = getBathy(os.path.join(geomorphdir, subset2[i]), lower=720, upper=750)
     temp = subset2[i].split('_')
-    ax2.plot(data['x'], data['z'], label=temp[1])
+    if temp[1] == 'geomorphology':
+        temp2 = temp[-1].split('.')
+        ax2.plot(data['x'], data['z'], label=temp2[0])
+    else:
+        ax2.plot(data['x'], data['z'], label=temp[1])
 
 ax2.legend(loc='upper right')
 ax2.set_xlim([50, 600])

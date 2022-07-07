@@ -1189,8 +1189,6 @@ for xx in range(numDWTs):
 
 #plt.style.use('dark_background')
 
-
-
 dist_space = np.linspace(0, 4, 80)
 fig = plt.figure(figsize=(10,10))
 

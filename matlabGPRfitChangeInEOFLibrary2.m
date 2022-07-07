@@ -150,8 +150,6 @@ tbl5.Properties.VariableNames = {'Hs','Tp','Dir','NTR','Dur','EOF1','EOF2','EOF3
 gprMdl5 = fitrgp(tbl5,'target','KernelFunction','ardsquaredexponential','FitMethod','sr','PredictMethod','fic','Standardize',1)
 
 
-
-
 target906 = predictands(casenumbers,6);%-predictors(casenumbers,6);
 design1 = all(calibration,:);
 design1(calibration,18) = target906(calibration);

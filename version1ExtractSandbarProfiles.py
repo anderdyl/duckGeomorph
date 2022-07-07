@@ -15,7 +15,7 @@ import sandBarTool.morphLib as mL
 
 
 
-geomorphdir = '/media/dylananderson/Elements/filteredFRF_Geomorph/'
+geomorphdir = '/media/dylananderson/Elements/filteredFRF_GeomorphUpdate/'
 #geomorphdir = '/media/dylananderson/Elements/FRF_Geomorph/'
 
 files = os.listdir(geomorphdir)
@@ -131,8 +131,11 @@ for i in range(len(subset)):
     #data = getBathy(os.path.join(geomorphdir, subset[i]), lower=-2, upper=10)
 
     temp = subset[i].split('_')
-
-    surveydate = DT.datetime.strptime(temp[1], '%Y%m%d')
+    if temp[1] == 'geomorphology':
+        temp2 = temp[-1].split('.')
+        surveydate = DT.datetime.strptime(temp2[0], '%Y%m%d')
+    else:
+        surveydate = DT.datetime.strptime(temp[1], '%Y%m%d')
     elevs = data1['z']
     cross = data1['x']
     crossind = np.argsort(data1['x'])
@@ -513,8 +516,11 @@ for i in range(len(alllines)):
 
 
 # # Plotting all of the lines
-t1 = 100
-t2 = 112
+# t1 = 100
+# t2 = 112
+t1 = 0
+t2 = -1
+
 subsetOfAllines = alllines[t1:t2]
 fig, ax = plt.subplots(2,1)
 ax[0].set_prop_cycle(plt.cycler('color', plt.cm.jet(np.linspace(0, 1, len(subsetOfAllines)))))
@@ -553,7 +559,9 @@ plt.ylabel('Volumes (m^3/m alongshore)')
 
 tg, xg = np.meshgrid(time, xinterp)
 
-morphoPickle = 'sandbarsOriginalSouthTransect.pickle'
+
+
+morphoPickle = 'sandbarsOriginalSouthTransectLonger2.pickle'
 output = {}
 output['time'] = time
 output['alllines'] = alllines

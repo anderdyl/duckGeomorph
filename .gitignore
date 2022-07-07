@@ -3,12 +3,18 @@
 *.png
 *.tiff
 *.jpeg
+*.eps
+*.xcf
+*.jp2
 
 # any pickle data files
 *.pickle
 *.mat
 *.nc
 *.pkl
+*.avi
+*.csv
+*.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
